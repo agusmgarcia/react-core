@@ -1,0 +1,13 @@
+{
+  "name": "@agusmgarcia/react-core",
+  "version": "0.0.0",
+  "author": "Agus Garcia",
+  "description": "Set of utilities to run, lint, format and build applications and libraries",
+  "peerDependencies": {
+    "sass": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=16",
+    "npm": ">=7"
+  }
+}
