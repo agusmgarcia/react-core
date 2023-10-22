@@ -5,7 +5,17 @@
   "description": "Set of utilities to run, lint, format and build applications and libraries",
   "peerDependencies": {
     "@types/node": ">=16.0.0",
+    "@types/react": "^18.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^13.0.0",
+    "eslint-plugin-react": "^7.0.0",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "eslint-plugin-sort": "^2.10.0",
+    "eslint-plugin-unused-imports": "^2.0.0",
+    "next": "^13.0.0",
     "prettier": "^3.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "sass": "^1.0.0"
   },
   "engines": {
