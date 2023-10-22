@@ -4,6 +4,8 @@
   "author": "Agus Garcia",
   "description": "Set of utilities to run, lint, format and build applications and libraries",
   "peerDependencies": {
+    "@types/node": ">=16.0.0",
+    "prettier": "^3.0.0",
     "sass": "^1.0.0"
   },
   "engines": {
