@@ -3,9 +3,23 @@
   "version": "0.0.0",
   "author": "Agus Garcia",
   "description": "Set of utilities to run, lint, format and build applications and libraries",
+  "scripts": {
+    "prepack": "webpack --mode=production && cpy README.md CHANGELOG.md ../.. --cwd=.github",
+    "postpack": "del README.md CHANGELOG.md"
+  },
+  "bin": {
+    "agusmgarcia-build": "bin/build.js",
+    "agusmgarcia-check": "bin/check.js",
+    "agusmgarcia-format": "bin/format.js",
+    "agusmgarcia-postpack": "bin/postpack.js",
+    "agusmgarcia-prepack": "bin/prepack.js",
+    "agusmgarcia-start": "bin/start.js"
+  },
   "peerDependencies": {
     "@types/node": ">=16.0.0",
     "@types/react": "^18.0.0",
+    "cpy-cli": "^5.0.0",
+    "del-cli": "^5.0.0",
     "eslint": "^8.0.0",
     "eslint-config-next": "^13.0.0",
     "eslint-plugin-react": "^7.0.0",
