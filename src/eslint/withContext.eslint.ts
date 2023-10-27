@@ -217,10 +217,12 @@ const eslintrc_lib = `{
 }
 `;
 
-const eslintIgnore_app = `.next
+const eslintIgnore_app = `.env.local
+.next
 node_modules
 out`;
 
 const eslintIgnore_lib = `bin
 dist
-node_modules`;
+node_modules
+*.tgz`;
