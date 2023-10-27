@@ -33,7 +33,7 @@ const tsconfig_app = `{
     "target": "es5",
     "tsBuildInfoFile": "node_modules/.typescriptcache"
   },
-  "exclude": [".next", "node_modules", "out"],
+  "exclude": [".env.local", ".next", "node_modules", "out"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }
 `;
@@ -60,7 +60,7 @@ const tsconfig_lib = `{
     "target": "es5",
     "tsBuildInfoFile": "node_modules/.typescriptcache"
   },
-  "exclude": ["bin", "dist", "node_modules"],
+  "exclude": ["bin", "dist", "node_modules", "*.tgz"],
   "include": ["**/*.ts", "**/*.tsx"]
 }
 `;
