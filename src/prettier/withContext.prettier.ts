@@ -1,8 +1,10 @@
-import { execute, writeFile } from "../_utils";
+import { execute, isLibrary, writeFile } from "../_utils";
 
 export default async function withContext<TResult>(
   callback: () => TResult | Promise<TResult>,
 ): Promise<TResult> {
+  const library = await isLibrary();
+
   try {
     const configFilePath = await execute("prettier --find-config-path .", false)
       .then((cfg) => cfg.replace("\n", ""))
@@ -22,7 +24,10 @@ export default async function withContext<TResult>(
 
   await Promise.all([
     writeFile(".prettierrc", prettierrc),
-    writeFile(".prettierignore", prettierignore),
+    writeFile(
+      ".prettierignore",
+      !library ? prettierignore_app : prettierIgnore_lib,
+    ),
   ]);
 
   return await callback();
@@ -31,9 +36,10 @@ export default async function withContext<TResult>(
 const prettierrc = `{}
 `;
 
-const prettierignore = `.next
-bin
-dist
+const prettierignore_app = `.next
 node_modules
-out
-*.tgz`;
+out`;
+
+const prettierIgnore_lib = `bin
+dist
+node_modules`;
