@@ -36,10 +36,12 @@ export default async function withContext<TResult>(
 const prettierrc = `{}
 `;
 
-const prettierignore_app = `.next
+const prettierignore_app = `.env.local
+.next
 node_modules
 out`;
 
 const prettierIgnore_lib = `bin
 dist
-node_modules`;
+node_modules
+*.tgz`;
