@@ -10,7 +10,7 @@ export default async function withContext<TResult>(
       !pagesExists ? createFolder("pages") : Promise.resolve(),
     ),
     writeFile(".eslintrc", !library ? eslintrc_app : eslintrc_lib),
-    writeFile(".eslintignore", eslintIgnore),
+    writeFile(".eslintignore", !library ? eslintIgnore_app : eslintIgnore_lib),
   ]);
 
   try {
@@ -217,9 +217,10 @@ const eslintrc_lib = `{
 }
 `;
 
-const eslintIgnore = `.next
-bin
-dist
+const eslintIgnore_app = `.next
 node_modules
-out
-*.tgz`;
+out`;
+
+const eslintIgnore_lib = `bin
+dist
+node_modules`;
