@@ -34,4 +34,6 @@ const prettierrc = `{}
 const prettierignore = `.next
 bin
 dist
-out`;
+node_modules
+out
+*.tgz`;
