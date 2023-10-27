@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.2](https://github.com/agusmgarcia/react-core/tree/v1.0.2)
+
+> 27 October 2023
+
+- **withContext.prettier**: adjust ignore file
+- **withContext.eslint**: adjust ignore file
+
 ## [v1.0.1](https://github.com/agusmgarcia/react-core/tree/v1.0.1)
 
 > 27 October 2023
