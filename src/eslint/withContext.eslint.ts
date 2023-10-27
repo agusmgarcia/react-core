@@ -220,4 +220,6 @@ const eslintrc_lib = `{
 const eslintIgnore = `.next
 bin
 dist
-out`;
+node_modules
+out
+*.tgz`;
