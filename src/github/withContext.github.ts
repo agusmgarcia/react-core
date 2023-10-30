@@ -2,22 +2,15 @@ import { createFolder, exists, isLibrary, writeFile } from "../_utils";
 
 export default async function withContext<TResult>(
   callback: () => TResult | Promise<TResult>,
+  force: boolean,
 ): Promise<TResult> {
   await exists(".github").then((githubExists) =>
     !githubExists ? createFolder(".github") : Promise.resolve(),
   );
 
   await Promise.all([
-    exists(".github/README.md").then((readmeExists) =>
-      !readmeExists
-        ? writeFile(".github/README.md", readme)
-        : Promise.resolve(),
-    ),
-    exists(".github/CHANGELOG.md").then((changelogExists) =>
-      !changelogExists
-        ? writeFile(".github/CHANGELOG.md", changelog)
-        : Promise.resolve(),
-    ),
+    writeFile(".github/README.md", readme, false),
+    writeFile(".github/CHANGELOG.md", changelog, false),
     exists(".github/workflows")
       .then((workflowsExists) =>
         !workflowsExists
@@ -29,6 +22,7 @@ export default async function withContext<TResult>(
         writeFile(
           ".github/workflows/continuous-integration-and-deployment.yml",
           !library ? deployApp : publishLib,
+          force,
         ),
       ),
   ]);

@@ -2,6 +2,7 @@ import { createFolder, exists, isLibrary, remove, writeFile } from "../_utils";
 
 export default async function withContext<TResult>(
   callback: () => TResult | Promise<TResult>,
+  force: boolean,
 ): Promise<TResult> {
   const library = await isLibrary();
 
@@ -9,7 +10,9 @@ export default async function withContext<TResult>(
     exists("pages").then((pagesExists) =>
       !pagesExists ? createFolder("pages") : Promise.resolve(),
     ),
-    !library ? writeFile("next.config.js", nextConfig) : Promise.resolve(),
+    !library
+      ? writeFile("next.config.js", nextConfig, force)
+      : Promise.resolve(),
   ]);
 
   try {

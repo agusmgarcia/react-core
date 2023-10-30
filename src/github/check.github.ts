@@ -1,5 +1,5 @@
 import withContext from "./withContext.github";
 
-export default function check(): Promise<void> {
-  return withContext(() => Promise.resolve());
+export default function check(force: boolean): Promise<void> {
+  return withContext(() => Promise.resolve(), force);
 }

@@ -1,5 +1,5 @@
 import withContext from "./withContext.typescript";
 
-export default function postpack(): Promise<void> {
-  return withContext(() => Promise.resolve());
+export default function postpack(force: boolean): Promise<void> {
+  return withContext(() => Promise.resolve(), force);
 }

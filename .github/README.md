@@ -72,3 +72,9 @@ In your `package.json` file, within the `scripts` section add the following comm
 You can disable `eslint` by providing the `--no-eslint` option to the commands listed above. You can also disable `prettier`, `typescript` and `webpack` by following the same process.
 
 > For example, in case you want to disable `eslint` for the check command, execute: `agusmgarcia-check --no-eslint`
+
+## Force overwritting files
+
+When you run each command for the first time, the corresponding files are created. Then, you are free to change it as your needs. In case you want the file be recreated by the library use the `--force` or `-f` flag.
+
+> For example, `agusmgarcia-check -f`. It will recreate all the files.

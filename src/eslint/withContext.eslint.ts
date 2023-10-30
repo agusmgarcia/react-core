@@ -2,6 +2,7 @@ import { createFolder, exists, isLibrary, remove, writeFile } from "../_utils";
 
 export default async function withContext<TResult>(
   callback: () => TResult | Promise<TResult>,
+  force: boolean,
 ): Promise<TResult> {
   const library = await isLibrary();
 
@@ -9,8 +10,12 @@ export default async function withContext<TResult>(
     exists("pages").then((pagesExists) =>
       !pagesExists ? createFolder("pages") : Promise.resolve(),
     ),
-    writeFile(".eslintrc", !library ? eslintrc_app : eslintrc_lib),
-    writeFile(".eslintignore", !library ? eslintIgnore_app : eslintIgnore_lib),
+    writeFile(".eslintrc", !library ? eslintrc_app : eslintrc_lib, force),
+    writeFile(
+      ".eslintignore",
+      !library ? eslintIgnore_app : eslintIgnore_lib,
+      force,
+    ),
   ]);
 
   try {

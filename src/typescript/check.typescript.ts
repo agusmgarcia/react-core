@@ -3,6 +3,6 @@ import withContext from "./withContext.typescript";
 
 const COMMAND = "tsc --pretty --noEmit";
 
-export default function check(): Promise<void> {
-  return withContext(() => execute(COMMAND, true));
+export default function check(force: boolean): Promise<void> {
+  return withContext(() => execute(COMMAND, true), force);
 }
