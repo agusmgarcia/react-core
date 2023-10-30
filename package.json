@@ -5,7 +5,7 @@
   "description": "Set of utilities to run, lint, format and build applications and libraries",
   "scripts": {
     "prepack": "webpack --mode=production && cpy README.md CHANGELOG.md ../.. --cwd=.github",
-    "postpack": "del README.md CHANGELOG.md"
+    "postpack": "del bin README.md CHANGELOG.md"
   },
   "bin": {
     "agusmgarcia-build": "bin/build.js",
