@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.1.0](https://github.com/agusmgarcia/react-core/tree/v1.1.0)
+
+> 30 October 2023
+
+- add `--force` and `-f` flag.
+
 ## [v1.0.3](https://github.com/agusmgarcia/react-core/tree/v1.0.3)
 
 > 27 October 2023
