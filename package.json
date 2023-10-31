@@ -1,6 +1,6 @@
 {
   "name": "@agusmgarcia/react-core",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "Agus Garcia",
   "description": "Set of utilities to run, lint, format and build applications and libraries",
   "scripts": {

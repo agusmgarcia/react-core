@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.1.1](https://github.com/agusmgarcia/react-core/tree/v1.1.1)
+
+> 31 October 2023
+
+- change `force` by `skip`
+
 ## [v1.1.0](https://github.com/agusmgarcia/react-core/tree/v1.1.0)
 
 > 30 October 2023
