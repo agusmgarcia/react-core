@@ -2,10 +2,15 @@ import { isLibrary, writeFile } from "../_utils";
 
 export default async function withContext<TResult>(
   callback: () => TResult | Promise<TResult>,
-  force: boolean,
+  options: { skip: string[] },
 ): Promise<TResult> {
   const library = await isLibrary();
-  if (library) await writeFile("webpack.config.js", webpackConfig, force);
+  if (library)
+    await writeFile(
+      "webpack.config.js",
+      webpackConfig,
+      options.skip.includes("webpack.config.js"),
+    );
 
   return await callback();
 }

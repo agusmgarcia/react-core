@@ -3,6 +3,6 @@ import withContext from "./withContext.core";
 
 const COMMAND = "next dev";
 
-export default function start(force: boolean): Promise<void> {
-  return withContext(() => execute(COMMAND, true), force);
+export default function start(options: { skip: string[] }): Promise<void> {
+  return withContext(() => execute(COMMAND, true), options);
 }

@@ -4,6 +4,6 @@ import withContext from "./withContext.eslint";
 const COMMAND =
   "next lint --cache --cache-location ./node_modules/.eslintcache --cache-strategy content --dir . --fix";
 
-export default function format(force: boolean): Promise<void> {
-  return withContext(() => execute(COMMAND, true), force);
+export default function format(options: { skip: string[] }): Promise<void> {
+  return withContext(() => execute(COMMAND, true), options);
 }

@@ -2,7 +2,7 @@ import { execute, isLibrary, writeFile } from "../_utils";
 
 export default async function withContext<TResult>(
   callback: () => TResult | Promise<TResult>,
-  force: boolean,
+  options: { skip: string[] },
 ): Promise<TResult> {
   const library = await isLibrary();
 
@@ -24,11 +24,11 @@ export default async function withContext<TResult>(
   }
 
   await Promise.all([
-    writeFile(".prettierrc", prettierrc, force),
+    writeFile(".prettierrc", prettierrc, options.skip.includes(".prettierrc")),
     writeFile(
       ".prettierignore",
       !library ? prettierignore_app : prettierIgnore_lib,
-      force,
+      options.skip.includes(".prettierignore"),
     ),
   ]);
 

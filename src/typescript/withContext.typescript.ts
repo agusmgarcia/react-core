@@ -2,13 +2,13 @@ import { isLibrary, writeFile } from "../_utils";
 
 export default async function withContext<TResult>(
   callback: () => TResult | Promise<TResult>,
-  force: boolean,
+  options: { skip: string[] },
 ): Promise<TResult> {
   const library = await isLibrary();
   await writeFile(
     "tsconfig.json",
     !library ? tsconfig_app : tsconfig_lib,
-    force,
+    options.skip.includes("tsconfig.json"),
   );
 
   return await callback();

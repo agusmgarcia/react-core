@@ -73,8 +73,8 @@ You can disable `eslint` by providing the `--no-eslint` option to the commands l
 
 > For example, in case you want to disable `eslint` for the check command, execute: `agusmgarcia-check --no-eslint`
 
-## Force overwritting files
+## Skip creating or overwritting files
 
-When you run each command for the first time, the corresponding files are created. Then, you are free to change it as your needs. In case you want the file be recreated by the library use the `--force` or `-f` flag.
+Config files are created automatically in order to run commands properly. Those files cannot be changed due they are overwritten every time you execute any command again. In case you want to skip that file of being created or overwritten, use the `--skip` flag.
 
-> For example, `agusmgarcia-check -f`. It will recreate all the files.
+> For example, `agusmgarcia-check --skip=.eslintrc --skip=.prettierignore`. It will ignore `.eslintrc` and `.prettierignore` files of being created or overwritten.
