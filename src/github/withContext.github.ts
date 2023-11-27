@@ -47,6 +47,7 @@ const deployApp = `name: Deploy application
 permissions: write-all
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - v*
@@ -60,6 +61,12 @@ jobs:
       cancel-in-progress: true
 
     steps:
+      - name: Check if the type is 'tag'
+        if: \${{ github.event_name == 'workflow_dispatch' && github.ref_type != 'tag' }}
+        run: |
+          echo "::error file=run-existing-build.yml::Workflow needs to be dispatched from a tag"
+          exit 1
+
       - name: Checkout
         uses: actions/checkout@v3.3.0
 
@@ -96,6 +103,7 @@ jobs:
           NEXT_PUBLIC_APP_VERSION: \${{ steps.get-version-from-tag.outputs.replaced }}
 
       - name: Create release
+        if: \${{ github.event_name != 'workflow_dispatch' }}
         uses: ncipollo/release-action@v1.12.0
         with:
           name: Version \${{ steps.get-version-from-tag.outputs.replaced }}
