@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.2.0](https://github.com/agusmgarcia/react-core/tree/v1.2.0)
+
+> 27 November 2023
+
+- restrict to use node 16
+- **withContext.github**: add support to trigger workflows
+
 ## [v1.1.1](https://github.com/agusmgarcia/react-core/tree/v1.1.1)
 
 > 31 October 2023
