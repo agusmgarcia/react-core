@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.2.1](https://github.com/agusmgarcia/react-core/tree/v1.2.1)
+
+> 30 November 2023
+
+- **execute**: make compatible with windows
+
 ## [v1.2.0](https://github.com/agusmgarcia/react-core/tree/v1.2.0)
 
 > 27 November 2023
