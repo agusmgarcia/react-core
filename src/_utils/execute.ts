@@ -23,6 +23,7 @@ export default function execute(
   return new Promise((resolve, reject) => {
     const [cmd, ...args] = command.split(" ");
     const child = spawn(cmd, args, {
+      shell: process.platform === "win32" ? true : undefined,
       stdio: disassociated === true ? "inherit" : "pipe",
     });
 
