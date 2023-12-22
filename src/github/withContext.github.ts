@@ -64,8 +64,9 @@ jobs:
       - name: Check if the type is 'tag'
         if: \${{ github.event_name == 'workflow_dispatch' && github.ref_type != 'tag' }}
         run: |
-          echo "::error file=run-existing-build.yml::Workflow needs to be dispatched from a tag"
+          echo "::error::Workflow needs to be dispatched from a tag"
           exit 1
+        shell: bash
 
       - name: Checkout
         uses: actions/checkout@v3.3.0
@@ -163,6 +164,19 @@ jobs:
           pattern: v(.*)
           string: \${{ github.ref_name }}
           replace-with: $1
+      
+      - name: Extract version from package
+        id: extract-version-from-package
+        uses: sergeysova/jq-action@v2
+        with:
+          cmd: jq .version package.json -r
+
+      - name: Verify version match
+        if: \${{ steps.get-version-from-tag.outputs.replaced != steps.extract-version-from-package.outputs.value }}
+        run: |
+          echo "::error::Version in the package.json and tag don't match"
+          exit 1
+        shell: bash
 
       - name: Create release
         uses: ncipollo/release-action@v1.12.0
