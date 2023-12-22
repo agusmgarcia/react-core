@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.3.0](https://github.com/agusmgarcia/react-core/tree/v1.3.0)
+
+> 21 December 2023
+
+- **withContext.github**: check whether package matches tag
+
 ## [v1.2.1](https://github.com/agusmgarcia/react-core/tree/v1.2.1)
 
 > 30 November 2023
