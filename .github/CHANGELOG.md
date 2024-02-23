@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.3.1](https://github.com/agusmgarcia/react-core/tree/v1.3.1)
+
+> 22 January 2024
+
+- **withContext.github**: remove empty space
+
 ## [v1.3.0](https://github.com/agusmgarcia/react-core/tree/v1.3.0)
 
 > 21 December 2023
