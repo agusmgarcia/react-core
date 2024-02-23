@@ -164,7 +164,7 @@ jobs:
           pattern: v(.*)
           string: \${{ github.ref_name }}
           replace-with: $1
-      
+
       - name: Extract version from package
         id: extract-version-from-package
         uses: sergeysova/jq-action@v2
