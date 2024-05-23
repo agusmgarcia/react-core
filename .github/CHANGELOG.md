@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.3.2](https://github.com/agusmgarcia/react-core/tree/v1.3.2)
+
+> 23 May 2024
+
+- bump peer dependencies
+- start using Node 20
+
 ## [v1.3.1](https://github.com/agusmgarcia/react-core/tree/v1.3.1)
 
 > 22 January 2024
