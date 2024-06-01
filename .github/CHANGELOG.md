@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.3.3](https://github.com/agusmgarcia/react-core/tree/v1.3.3)
+
+> 1 June 2024
+
+- **withContext.github**: use node version 20
+
 ## [v1.3.2](https://github.com/agusmgarcia/react-core/tree/v1.3.2)
 
 > 23 May 2024
