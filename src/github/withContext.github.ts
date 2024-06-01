@@ -75,7 +75,7 @@ jobs:
         uses: actions/setup-node@v3.6.0
         with:
           cache: npm
-          node-version: 16
+          node-version: 20
           registry-url: https://npm.pkg.github.com
           scope: "@agusmgarcia"
 
@@ -143,7 +143,7 @@ jobs:
         uses: actions/setup-node@v3.6.0
         with:
           cache: npm
-          node-version: 16
+          node-version: 20
           registry-url: https://npm.pkg.github.com
           scope: "@agusmgarcia"
 
