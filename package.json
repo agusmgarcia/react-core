@@ -1,11 +1,13 @@
 {
   "name": "@agusmgarcia/react-core",
   "version": "1.3.3",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "Agus Garcia",
   "description": "Set of utilities to run, lint, format and build applications and libraries",
   "scripts": {
-    "prepack": "webpack --mode=production && cpy README.md CHANGELOG.md ../.. --cwd=.github",
-    "postpack": "del bin README.md CHANGELOG.md"
+    "prepack": "webpack --mode=production && cpy README.md CHANGELOG.md ../.. --cwd=.github && del dist/commands",
+    "postpack": "del bin dist README.md CHANGELOG.md"
   },
   "bin": {
     "agusmgarcia-build": "bin/build.js",

@@ -7,6 +7,43 @@ const packageJSON = require("./package.json");
 /** @type import("webpack").Configuration[] */
 module.exports = [
   {
+    entry: path.resolve(__dirname, "src", "index.ts"),
+    externals: Object.keys(packageJSON.peerDependencies),
+    module: {
+      rules: [
+        {
+          exclude: /node_modules/,
+          test: /\.tsx?$/,
+          use: [
+            {
+              loader: "ts-loader",
+              options: {
+                compilerOptions: {
+                  jsx: "react",
+                },
+              },
+            },
+          ],
+        },
+      ],
+    },
+    name: "source",
+    output: {
+      clean: true,
+      filename: "index.js",
+      globalObject: "this",
+      library: {
+        name: packageJSON.name,
+        type: "umd",
+      },
+      path: path.resolve(__dirname, "dist"),
+      umdNamedDefine: true,
+    },
+    resolve: {
+      extensions: [".js", ".jsx", ".ts", ".tsx"],
+    },
+  },
+  {
     entry: fs
       .readdirSync(path.resolve(__dirname, "src", "commands"))
       .filter((file) => !file.startsWith("_") && file.endsWith(".ts"))
