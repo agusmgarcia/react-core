@@ -17,6 +17,7 @@ export default async function withContext<TResult>(
           options.skip.includes("next.config.js"),
         )
       : Promise.resolve(),
+    writeFile(".nvmrc", nvmrc, false),
   ]);
 
   try {
@@ -38,3 +39,5 @@ module.exports = (phase) => ({
   reactStrictMode: true,
 });
 `;
+
+const nvmrc = "20";
