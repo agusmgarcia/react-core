@@ -19,8 +19,9 @@ const webpackConfig = `const path = require("path");
 
 const packageJSON = require("./package.json");
 
+/** @type import("webpack").Configuration[] */
 module.exports = {
-  entry: path.resolve(__dirname, "./src/index.ts"),
+  entry: path.resolve(__dirname, "src", "index.ts"),
   externals: Object.keys(packageJSON.peerDependencies),
   module: {
     rules: [
@@ -48,7 +49,7 @@ module.exports = {
       name: packageJSON.name,
       type: "umd",
     },
-    path: path.resolve(__dirname, "./dist"),
+    path: path.resolve(__dirname, "dist"),
     umdNamedDefine: true,
   },
   resolve: {

@@ -4,6 +4,7 @@ const webpack = require("webpack");
 
 const packageJSON = require("./package.json");
 
+/** @type import("webpack").Configuration[] */
 module.exports = [
   {
     entry: fs
