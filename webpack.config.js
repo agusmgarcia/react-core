@@ -7,10 +7,15 @@ const packageJSON = require("./package.json");
 module.exports = [
   {
     entry: fs
-      .readdirSync(path.resolve(__dirname, "src"))
+      .readdirSync(path.resolve(__dirname, "src", "commands"))
       .filter((file) => !file.startsWith("_") && file.endsWith(".ts"))
       .reduce((result, file) => {
-        result[file.split(".ts")[0]] = path.resolve(__dirname, "src", file);
+        result[file.split(".ts")[0]] = path.resolve(
+          __dirname,
+          "src",
+          "commands",
+          file,
+        );
         return result;
       }, {}),
     externals: [
@@ -63,10 +68,16 @@ module.exports = [
   {
     dependencies: ["commands"],
     entry: fs
-      .readdirSync(path.resolve(__dirname, "src"))
+      .readdirSync(path.resolve(__dirname, "src", "commands"))
       .filter((file) => !file.startsWith("_") && !file.endsWith(".ts"))
       .reduce((result, file) => {
-        result[file] = path.resolve(__dirname, "src", file, "index.ts");
+        result[file] = path.resolve(
+          __dirname,
+          "src",
+          "commands",
+          file,
+          "index.ts",
+        );
         return result;
       }, {}),
     externals: Object.keys(packageJSON.peerDependencies),
