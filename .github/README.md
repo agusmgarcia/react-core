@@ -47,8 +47,8 @@ In your `package.json` file, within the `scripts` section add the following comm
     "build": "agusmgarcia-build",
     "check": "agusmgarcia-check",
     "format": "agusmgarcia-format",
-    "start": "agusmgarcia-start"
-  }
+    "start": "agusmgarcia-start",
+  },
 }
 ```
 
@@ -62,8 +62,8 @@ In your `package.json` file, within the `scripts` section add the following comm
     "check": "agusmgarcia-check",
     "format": "agusmgarcia-format",
     "postpack": "agusmgarcia-postpack",
-    "prepack": "agusmgarcia-prepack"
-  }
+    "prepack": "agusmgarcia-prepack",
+  },
 }
 ```
 

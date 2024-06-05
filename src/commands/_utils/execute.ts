@@ -69,8 +69,8 @@ export default function execute(
               stderr !== ""
                 ? new Error(stderr)
                 : error !== undefined
-                ? error
-                : new IgnorableError(),
+                  ? error
+                  : new IgnorableError(),
             );
         }
 
