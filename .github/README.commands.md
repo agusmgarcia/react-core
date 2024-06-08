@@ -48,8 +48,6 @@ When running `npm run regenerate` all the pertinent files will be regenerated. H
 - .eslintrc
 - .env
 - .env.local
-- .github/CHANGELOG.md
-- .github/README.md
 - .github/workflows/continuous-integration-and-deployment.yml
 - .nvmrc
 - .prettierignore

@@ -9,16 +9,8 @@ export default async function githubMiddleware(
   await upsertFolder(".github");
 
   await Promise.all([
-    upsertFile(
-      ".github/README.md",
-      readme,
-      regenerate && !ignore.includes(".github/README.md"),
-    ),
-    upsertFile(
-      ".github/CHANGELOG.md",
-      changelog,
-      regenerate && !ignore.includes(".github/CHANGELOG.md"),
-    ),
+    upsertFile(".github/README.md", readme, false),
+    upsertFile(".github/CHANGELOG.md", changelog, false),
     upsertFolder(".github/workflows")
       .then(isLibrary)
       .then((library) =>
