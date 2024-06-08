@@ -16,10 +16,6 @@ export type Output<TData extends ValidData> = {
   data: TData;
   error: unknown;
   initialized: boolean;
-  /**
-   * @deprecated use `loading` instead. This property will be removed in the next major version.
-   */
-  isLoading: boolean;
   loading: boolean;
   reload: () => void;
   setData: (args: TData | ((prevData: TData) => TData)) => void;

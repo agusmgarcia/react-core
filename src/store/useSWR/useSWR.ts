@@ -20,36 +20,26 @@ export default function useSWR<TData extends ValidData = any>(): Output<
 
 export default function useSWR<TData extends ValidData = any>(
   // eslint-disable-next-line unused-imports/no-unused-vars
-  fetcher: Input<TData | undefined>[1],
-): Output<TData | undefined>;
-
-export default function useSWR<TData extends ValidData = any>(
-  // eslint-disable-next-line unused-imports/no-unused-vars
   initialData: Input<TData>[0],
   // eslint-disable-next-line unused-imports/no-unused-vars
   fetcher?: Input<TData>[1],
 ): Output<TData>;
 
 export default function useSWR<TData extends ValidData = any>(
-  initialDataOrFetcherFromProps?:
-    | Input<TData | undefined>[0]
-    | Input<TData | undefined>[1],
-  maybeFetcherFromProps?: Input<TData | undefined>[1],
+  initialDataFromProps?: Input<TData | undefined>[0],
+  fetcherFromProps?: Input<TData | undefined>[1],
 ): Output<TData | undefined> {
   const controllerRef = useRef<AbortController>();
   const id = useId();
 
   const initialState = useMemo<State<TData | undefined>>(
     () => ({
-      data:
-        initialDataOrFetcherFromProps instanceof Function
-          ? undefined
-          : initialDataOrFetcherFromProps,
+      data: initialDataFromProps,
       error: undefined,
       initialized: false,
       loading: false,
     }),
-    [initialDataOrFetcherFromProps],
+    [initialDataFromProps],
   );
 
   const [state, setState] = useState(initialState);
@@ -57,12 +47,10 @@ export default function useSWR<TData extends ValidData = any>(
 
   const fetcher = useCallback(
     async (signal: AbortSignal) =>
-      initialDataOrFetcherFromProps instanceof Function
-        ? await initialDataOrFetcherFromProps(signal)
-        : maybeFetcherFromProps instanceof Function
-          ? await maybeFetcherFromProps(signal)
-          : id,
-    [id, initialDataOrFetcherFromProps, maybeFetcherFromProps],
+      fetcherFromProps instanceof Function
+        ? await fetcherFromProps(signal)
+        : id,
+    [fetcherFromProps, id],
   );
 
   const reload = useCallback<Output<TData | undefined>["reload"]>(
@@ -110,7 +98,6 @@ export default function useSWR<TData extends ValidData = any>(
     data: state.data,
     error: state.error,
     initialized: state.initialized,
-    isLoading: state.loading,
     loading: state.loading,
     reload,
     setData,
