@@ -10,12 +10,13 @@
     "postpack": "del bin dist README.md CHANGELOG.md"
   },
   "bin": {
-    "agusmgarcia-build": "bin/build.js",
-    "agusmgarcia-check": "bin/check.js",
-    "agusmgarcia-format": "bin/format.js",
-    "agusmgarcia-postpack": "bin/postpack.js",
-    "agusmgarcia-prepack": "bin/prepack.js",
-    "agusmgarcia-start": "bin/start.js"
+    "agusmgarcia-react-core-build": "bin/build.js",
+    "agusmgarcia-react-core-check": "bin/check.js",
+    "agusmgarcia-react-core-format": "bin/format.js",
+    "agusmgarcia-react-core-postpack": "bin/postpack.js",
+    "agusmgarcia-react-core-prepack": "bin/prepack.js",
+    "agusmgarcia-react-core-start": "bin/start.js",
+    "agusmgarcia-react-core-regenerate": "bin/regenerate.js"
   },
   "peerDependencies": {
     "@types/eslint": "^8.0.0",
