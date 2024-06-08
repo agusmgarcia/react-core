@@ -50,6 +50,7 @@ When running `npm run regenerate` all the pertinent files will be regenerated. H
 - .env.local
 - .github/workflows/continuous-integration-and-deployment.yml
 - .gitignore
+- .npmignore
 - .nvmrc
 - .prettierignore
 - .prettierrc
