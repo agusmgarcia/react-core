@@ -2,9 +2,9 @@
 
 Set of opinionated commands, utilities and state manager for react applications and libraries.
 
-- [Commands](/.github/README.commands.md)
-- [Store](/.github/README.store.md)
-- [Utilities](/.github/README.utilities.md)
+- [Commands](README.commands.md)
+- [Store](README.store.md)
+- [Utilities](README.utilities.md)
 
 ## Getting started
 

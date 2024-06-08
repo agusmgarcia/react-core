@@ -10,8 +10,8 @@
     "check": "ts-node src/commands/check.ts",
     "format": "ts-node src/commands/format.ts",
     "start": "ts-node src/commands/start.ts",
-    "prepack": "ts-node src/commands/prepack.ts",
-    "postpack": "ts-node src/commands/postpack.ts",
+    "prepack": "ts-node src/commands/prepack.ts && cpy README.commands.md README.store.md README.utilities.md ../.. --cwd=.github",
+    "postpack": "ts-node src/commands/postpack.ts && del README.commands.md README.store.md README.utilities.md",
     "regenerate": "ts-node src/commands/regenerate.ts --ignore=webpack.config.js"
   },
   "bin": {
