@@ -6,27 +6,40 @@ export default async function githubMiddleware(
   regenerate: boolean,
   ignore: string[],
 ): Promise<void> {
-  await upsertFolder(".github");
+  const [library] = await Promise.all([isLibrary(), upsertFolder(".github")]);
 
   await Promise.all([
+    upsertFile(
+      ".gitignore",
+      !library ? gitignore_app : gitignore_lib,
+      regenerate && !ignore.includes(".gitignore"),
+    ),
     upsertFile(".github/README.md", readme, false),
     upsertFile(".github/CHANGELOG.md", changelog, false),
-    upsertFolder(".github/workflows")
-      .then(isLibrary)
-      .then((library) =>
-        upsertFile(
-          ".github/workflows/continuous-integration-and-deployment.yml",
-          !library ? deployApp : publishLib,
-          regenerate &&
-            !ignore.includes(
-              ".github/workflows/continuous-integration-and-deployment.yml",
-            ),
-        ),
+    upsertFolder(".github/workflows").then(() =>
+      upsertFile(
+        ".github/workflows/continuous-integration-and-deployment.yml",
+        !library ? workflow_app : workflow_lib,
+        regenerate &&
+          !ignore.includes(
+            ".github/workflows/continuous-integration-and-deployment.yml",
+          ),
       ),
+    ),
   ]);
 
   await next();
 }
+
+const gitignore_app = `.env.local
+.next
+node_modules
+out`;
+
+const gitignore_lib = `bin
+dist
+node_modules
+*.tgz`;
 
 const readme = "";
 
@@ -37,7 +50,7 @@ All notable changes to this project will be documented in this file.
 ## [v1.0.0](https://github.com/<OWNER>/<NAME>/tree/v1.0.0)
 `;
 
-const deployApp = `name: Deploy application
+const workflow_app = `name: Deploy application
 permissions: write-all
 
 on:
@@ -113,7 +126,7 @@ jobs:
           FIREBASE_TOKEN: \${{ secrets.FIREBASE_TOKEN }}
 `;
 
-const publishLib = `name: Publish library
+const workflow_lib = `name: Publish library
 permissions: write-all
 
 on:
