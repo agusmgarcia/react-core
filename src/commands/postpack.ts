@@ -1,20 +1,12 @@
 import run from "./_run";
-import { postpack as postpack_core } from "./core";
-import { postpack as postpack_eslint } from "./eslint";
-import { postpack as postpack_github } from "./github";
-import { postpack as postpack_prettier } from "./prettier";
-import { postpack as postpack_typescript } from "./typescript";
-import { postpack as postpack_webpack } from "./webpack";
+import { execute, isLibrary } from "./utilities";
 
 export default async function postpack(): Promise<void> {
-  await run({
-    core: postpack_core,
-    eslint: postpack_eslint,
-    github: postpack_github,
-    prettier: postpack_prettier,
-    typescript: postpack_typescript,
-    webpack: postpack_webpack,
-  });
+  if (!(await isLibrary())) return;
+
+  await run(false, () =>
+    execute("del bin dist *.tgz README.md CHANGELOG.md", true),
+  );
 }
 
 postpack();

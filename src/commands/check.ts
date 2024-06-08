@@ -1,20 +1,21 @@
 import run from "./_run";
-import { check as check_core } from "./core";
-import { check as check_eslint } from "./eslint";
-import { check as check_github } from "./github";
-import { check as check_prettier } from "./prettier";
-import { check as check_typescript } from "./typescript";
-import { check as check_webpack } from "./webpack";
+import { execute } from "./utilities";
 
 export default async function check(): Promise<void> {
-  await run({
-    core: check_core,
-    eslint: check_eslint,
-    github: check_github,
-    prettier: check_prettier,
-    typescript: check_typescript,
-    webpack: check_webpack,
-  });
+  await run(
+    false,
+    () =>
+      execute(
+        "next lint --cache-location ./node_modules/.eslintcache --cache-strategy content --dir .",
+        true,
+      ),
+    () =>
+      execute(
+        "prettier . --cache --cache-location ./node_modules/.prettiercache --cache-strategy content --config ./.prettierrc --check",
+        true,
+      ),
+    () => execute("tsc --pretty --noEmit", true),
+  );
 }
 
 check();

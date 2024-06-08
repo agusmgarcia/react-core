@@ -56,14 +56,7 @@ module.exports = [
         );
         return result;
       }, {}),
-    externals: [
-      ...Object.keys(packageJSON.peerDependencies),
-      "./eslint",
-      "./github",
-      "./prettier",
-      "./typescript",
-      "./webpack",
-    ],
+    externals: Object.keys(packageJSON.peerDependencies),
     module: {
       rules: [
         {
@@ -98,57 +91,6 @@ module.exports = [
     plugins: [
       new webpack.BannerPlugin({ banner: "#! /usr/bin/env node", raw: true }),
     ],
-    resolve: {
-      extensions: [".js", ".jsx", ".ts", ".tsx"],
-    },
-    target: "node",
-  },
-  {
-    dependencies: ["commands"],
-    entry: fs
-      .readdirSync(path.resolve(__dirname, "src", "commands"))
-      .filter((file) => !file.startsWith("_") && !file.endsWith(".ts"))
-      .reduce((result, file) => {
-        result[file] = path.resolve(
-          __dirname,
-          "src",
-          "commands",
-          file,
-          "index.ts",
-        );
-        return result;
-      }, {}),
-    externals: Object.keys(packageJSON.peerDependencies),
-    module: {
-      rules: [
-        {
-          exclude: /node_modules/,
-          test: /\.tsx?$/,
-          use: [
-            {
-              loader: "ts-loader",
-              options: {
-                compilerOptions: {
-                  declaration: false,
-                  jsx: "react",
-                },
-              },
-            },
-          ],
-        },
-      ],
-    },
-    name: "modules",
-    output: {
-      filename: "./[name]/index.js",
-      globalObject: "this",
-      library: {
-        name: packageJSON.name,
-        type: "umd",
-      },
-      path: path.resolve(__dirname, "bin"),
-      umdNamedDefine: true,
-    },
     resolve: {
       extensions: [".js", ".jsx", ".ts", ".tsx"],
     },

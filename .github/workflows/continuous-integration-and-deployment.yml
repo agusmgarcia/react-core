@@ -32,6 +32,10 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Lint
+        run: npm run check
+        shell: bash
+
       - name: Get version from tag
         id: get-version-from-tag
         uses: frabert/replace-string-action@v2.4
