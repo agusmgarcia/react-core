@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const webpack = require("webpack");
+const RemovePlugin = require("remove-files-webpack-plugin");
 
 const packageJSON = require("./package.json");
 
@@ -39,6 +40,11 @@ module.exports = [
       path: path.resolve(__dirname, "dist"),
       umdNamedDefine: true,
     },
+    plugins: [
+      new RemovePlugin({
+        after: { include: [path.resolve(__dirname, "dist", "commands")] },
+      }),
+    ],
     resolve: {
       extensions: [".js", ".jsx", ".ts", ".tsx"],
     },

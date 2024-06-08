@@ -6,8 +6,13 @@
   "author": "Agus Garcia",
   "description": "Set of utilities to run, lint, format and build applications and libraries",
   "scripts": {
-    "prepack": "webpack --mode=production && cpy README.md CHANGELOG.md ../.. --cwd=.github && del dist/commands",
-    "postpack": "del bin dist README.md CHANGELOG.md"
+    "build": "ts-node src/commands/build.ts",
+    "check": "ts-node src/commands/check.ts",
+    "format": "ts-node src/commands/format.ts",
+    "start": "ts-node src/commands/start.ts",
+    "prepack": "ts-node src/commands/prepack.ts",
+    "postpack": "ts-node src/commands/postpack.ts",
+    "regenerate": "ts-node src/commands/regenerate.ts --ignore=webpack.config.js"
   },
   "bin": {
     "agusmgarcia-react-core-build": "bin/build.js",
@@ -42,7 +47,9 @@
     "webpack-cli": "^5.0.0"
   },
   "devDependencies": {
-    "@redux-devtools/extension": "3.3.0"
+    "@redux-devtools/extension": "3.3.0",
+    "remove-files-webpack-plugin": "1.5.0",
+    "ts-node": "10.9.2"
   },
   "engines": {
     "node": ">=20"
