@@ -35,25 +35,11 @@ function findThousandSeparator(test: string, decimalSeparator: string): string {
 }
 
 function getFormatter(locale: string, decimals: number) {
-  var __AGUSMGARCIA_REACT_CORE_FORMATTERS__:
-    | Record<
-        string,
-        {
-          decimalSeparator: string;
-          numberFormat: Intl.NumberFormat;
-          pattern: string;
-          regexWithoutSeparator: RegExp;
-          regexWithSeparator: RegExp;
-          thousandSeparator: string;
-        }
-      >
-    | undefined;
-
-  if (__AGUSMGARCIA_REACT_CORE_FORMATTERS__ === undefined)
-    __AGUSMGARCIA_REACT_CORE_FORMATTERS__ = {};
+  if (globalThis.__AGUSMGARCIA_REACT_CORE_FORMATTERS__ === undefined)
+    globalThis.__AGUSMGARCIA_REACT_CORE_FORMATTERS__ = {};
 
   const formatter =
-    __AGUSMGARCIA_REACT_CORE_FORMATTERS__[`${locale}--${decimals}`];
+    globalThis.__AGUSMGARCIA_REACT_CORE_FORMATTERS__[`${locale}--${decimals}`];
   if (formatter !== undefined) return formatter;
 
   const numberFormat = new Intl.NumberFormat(
@@ -77,4 +63,20 @@ function getFormatter(locale: string, decimals: number) {
     regexWithSeparator: new RegExp(patternWithSeparator, "g"),
     thousandSeparator,
   };
+}
+
+declare global {
+  var __AGUSMGARCIA_REACT_CORE_FORMATTERS__:
+    | Record<
+        string,
+        {
+          decimalSeparator: string;
+          numberFormat: Intl.NumberFormat;
+          pattern: string;
+          regexWithoutSeparator: RegExp;
+          regexWithSeparator: RegExp;
+          thousandSeparator: string;
+        }
+      >
+    | undefined;
 }

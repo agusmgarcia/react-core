@@ -40,3 +40,12 @@ export type Output<
     selector: (state: StateOf<TCreateSliceOutputs>) => TSelectedData,
   ) => TSelectedData;
 };
+
+declare global {
+  var __AGUSMGARCIA_REACT_CORE_DEVTOOLS_EXTENSION__:
+    | ReturnType<
+        NonNullable<typeof window.__REDUX_DEVTOOLS_EXTENSION__>["connect"]
+      >
+    | undefined;
+  var __AGUSMGARCIA_REACT_CORE_DEVTOOLS_STATE__: StateOf<Record<string, any>>;
+}
