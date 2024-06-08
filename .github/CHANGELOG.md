@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.0.0](https://github.com/agusmgarcia/react-core/tree/v2.0.0)
+
+> 8 June 2024
+
+- **commands**: include `.gitignore`
+- **commands**: include `.npmignore`
+- **commands**: stop regenerating `README.md` and `CHANGELOG.md` files
+- rename commands
+- add `regenerate` command
+- add `store` module
+- add `utilities` module
+
 ## [v1.3.3](https://github.com/agusmgarcia/react-core/tree/v1.3.3)
 
 > 1 June 2024
