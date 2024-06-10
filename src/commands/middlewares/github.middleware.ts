@@ -36,7 +36,8 @@ const gitignore_app = `.env.local
 node_modules
 out`;
 
-const gitignore_lib = `bin
+const gitignore_lib = `.next
+bin
 dist
 node_modules
 *.tgz`;
