@@ -29,6 +29,14 @@ dates.max("2024-06-15", "2024-06-18", "2024-06-12"); // => "2024-06-18"
 dates.min("2024-06-15", "2024-06-18", "2024-06-12"); // => "2024-06-12"
 ```
 
+## Delay
+
+```typescript
+import { delay } from "@agusmgarcia/react-core";
+
+delay(2000).then(() => console.log("Done"));
+```
+
 ## Empty function
 
 ```typescript

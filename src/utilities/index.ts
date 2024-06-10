@@ -1,5 +1,6 @@
 export * as currencies from "./currencies";
 export * as dates from "./dates";
+export { default as delay } from "./delay";
 export { default as emptyFunction } from "./emptyFunction";
 export * as equals from "./equals";
 export { type default as Func } from "./Func.types";
