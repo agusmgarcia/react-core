@@ -2,10 +2,11 @@ type OnlyId<
   TData extends Record<TIdentifierName, TIdentifierValue>,
   TIdentifierName extends string = "id",
   TIdentifierValue = string,
-> = {
-  [TPropertyName in keyof TData]: TPropertyName extends TIdentifierName
-    ? TData[TPropertyName]
-    : undefined;
+> = Pick<TData, TIdentifierName> &
+  ToPartialUndefined<Omit<TData, TIdentifierName>>;
+
+type ToPartialUndefined<TModel> = {
+  [P in keyof TModel]?: undefined;
 };
 
 export default OnlyId;
