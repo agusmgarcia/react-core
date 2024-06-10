@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.0.2](https://github.com/agusmgarcia/react-core/tree/v2.0.2)
+
+> 10 June 2024
+
+- **.env**: stop being regenerated
+- **.env.local**: stop being regenerated
+- **OnlyId**: mark the rest of the properties as partial
+
 ## [v2.0.1](https://github.com/agusmgarcia/react-core/tree/v2.0.1)
 
 > 10 June 2024
