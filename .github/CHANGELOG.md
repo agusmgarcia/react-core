@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.0.1](https://github.com/agusmgarcia/react-core/tree/v2.0.1)
+
+> 10 June 2024
+
+- **.gitignore**: exclude _.next_ folder
+
 ## [v2.0.0](https://github.com/agusmgarcia/react-core/tree/v2.0.0)
 
 > 8 June 2024
