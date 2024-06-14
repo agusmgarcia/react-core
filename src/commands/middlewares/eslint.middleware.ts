@@ -2,7 +2,7 @@ import { type Func } from "../../utilities";
 import { isLibrary, upsertFile } from "../utilities";
 
 export default async function eslintMiddleware(
-  next: Func<[Promise<void>]>,
+  next: Func<Promise<void>>,
   regenerate: boolean,
   ignore: string[],
 ): Promise<void> {

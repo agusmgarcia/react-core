@@ -2,7 +2,7 @@ import { type Func } from "../../utilities";
 import { execute, isLibrary, upsertFile } from "../utilities";
 
 export default async function prettierMiddleware(
-  next: Func<[Promise<void>]>,
+  next: Func<Promise<void>>,
   regenerate: boolean,
   ignore: string[],
 ): Promise<void> {

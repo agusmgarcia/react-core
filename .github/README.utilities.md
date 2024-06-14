@@ -63,9 +63,21 @@ equals.strict(
 ```typescript
 import { type Func } from "@agusmgarcia/react-core";
 
-type FuncWithoutArgs = Func; // => () => void
-type FuncThatReturnsNumber = Func<[number]>; // => () => number
-type FuncWithStringArgThatReturnsNumber = Func<[string, number]>; // => (args_0: string) => number
+type Func1 = Func; // => () => void
+type Func2 = Func<number>; // => () => number
+type Func3 = Func<number, [arg0: string]>; // => (arg0: string) => number
+```
+
+## Func (old-way)
+
+This is kept for compatibility with versions between `v2.0.0` and `v2.0.2`. It is going to be removed in the next major release.
+
+```typescript
+import { type Func } from "@agusmgarcia/react-core";
+
+type Func1 = Func; // => () => void
+type Func2 = Func<[number]>; // => () => number
+type Func3 = Func<[arg0: string, number]>; // => (arg0: string) => number
 ```
 
 ## Is SSR

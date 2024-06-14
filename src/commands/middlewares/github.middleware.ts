@@ -2,7 +2,7 @@ import { type Func } from "../../utilities";
 import { isLibrary, upsertFile, upsertFolder } from "../utilities";
 
 export default async function githubMiddleware(
-  next: Func<[Promise<void>]>,
+  next: Func<Promise<void>>,
   regenerate: boolean,
   ignore: string[],
 ): Promise<void> {

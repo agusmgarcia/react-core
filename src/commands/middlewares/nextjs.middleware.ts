@@ -8,7 +8,7 @@ import {
 } from "../utilities";
 
 export default async function nextJSMiddleware(
-  next: Func<[Promise<void>]>,
+  next: Func<Promise<void>>,
   regenerate: boolean,
   ignore: string[],
 ): Promise<void> {

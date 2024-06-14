@@ -3,7 +3,7 @@ import * as middlewares from "./middlewares";
 
 export default async function run(
   regenerate: boolean,
-  ...commands: Func<[Promise<void>]>[]
+  ...commands: Func<Promise<void>>[]
 ): Promise<void> {
   const ignore = process.argv
     .filter((flag) => flag.startsWith("--ignore="))
@@ -25,14 +25,10 @@ function concat(
   regenerate: boolean,
   ignore: string[],
   ...middlewares: Func<
-    [
-      next: Func<[Promise<void>]>,
-      regenerate: boolean,
-      ignore: string[],
-      Promise<void>,
-    ]
+    Promise<void>,
+    [next: Func<Promise<void>>, regenerate: boolean, ignore: string[]]
   >[]
-): Func<[callback: Func<[Promise<void>]>, Promise<void>]> {
+): Func<Promise<void>, [callback: Func<Promise<void>>]> {
   return function (callback) {
     let result = callback;
 
