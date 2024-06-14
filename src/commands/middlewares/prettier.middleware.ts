@@ -41,7 +41,9 @@ export default async function prettierMiddleware(
   await next();
 }
 
-const prettierrc = `{}
+const prettierrc = `{
+  "overrides": [{ "files": [".eslintrc"], "options": { "parser": "json" } }]
+}
 `;
 
 const prettierignore_app = `.env.local
