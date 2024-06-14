@@ -1,8 +1,8 @@
-import { type Func } from "../../utilities";
+import { type AsyncFunc } from "../../utilities";
 import { isLibrary, upsertFile, upsertFolder } from "../utilities";
 
 export default async function githubMiddleware(
-  next: Func<Promise<void>>,
+  next: AsyncFunc,
   regenerate: boolean,
   ignore: string[],
 ): Promise<void> {

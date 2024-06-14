@@ -1,8 +1,8 @@
-import { type Func } from "../../utilities";
+import { type AsyncFunc } from "../../utilities";
 import { isLibrary, upsertFile } from "../utilities";
 
 export default async function webpackMiddleware(
-  next: Func<Promise<void>>,
+  next: AsyncFunc,
   regenerate: boolean,
   ignore: string[],
 ): Promise<void> {

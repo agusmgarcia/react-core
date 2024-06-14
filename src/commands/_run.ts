@@ -1,9 +1,9 @@
-import { type Func } from "../utilities";
+import { type AsyncFunc } from "../utilities";
 import * as middlewares from "./middlewares";
 
 export default async function run(
   regenerate: boolean,
-  ...commands: Func<Promise<void>>[]
+  ...commands: AsyncFunc[]
 ): Promise<void> {
   const ignore = process.argv
     .filter((flag) => flag.startsWith("--ignore="))
@@ -24,11 +24,11 @@ export default async function run(
 function concat(
   regenerate: boolean,
   ignore: string[],
-  ...middlewares: Func<
-    Promise<void>,
-    [next: Func<Promise<void>>, regenerate: boolean, ignore: string[]]
+  ...middlewares: AsyncFunc<
+    void,
+    [next: AsyncFunc, regenerate: boolean, ignore: string[]]
   >[]
-): Func<Promise<void>, [callback: Func<Promise<void>>]> {
+): AsyncFunc<void, [callback: AsyncFunc]> {
   return function (callback) {
     let result = callback;
 

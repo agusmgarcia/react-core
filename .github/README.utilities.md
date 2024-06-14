@@ -2,6 +2,16 @@
 
 A set of functions and types that can be used in the consumer projects.
 
+## AsyncFunc
+
+```typescript
+import { type AsyncFunc } from "@agusmgarcia/react-core";
+
+type Func1 = AsyncFunc; // => () => Promise<void>
+type Func2 = AsyncFunc<number>; // => () => Promise<number>
+type Func3 = AsyncFunc<number, [arg0: string]>; // => (arg0: string) => Promise<number>
+```
+
 ## Currencies
 
 ```typescript

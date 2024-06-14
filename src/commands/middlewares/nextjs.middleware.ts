@@ -1,4 +1,4 @@
-import { type Func } from "../../utilities";
+import { type AsyncFunc } from "../../utilities";
 import {
   isLibrary,
   removeFile,
@@ -8,7 +8,7 @@ import {
 } from "../utilities";
 
 export default async function nextJSMiddleware(
-  next: Func<Promise<void>>,
+  next: AsyncFunc,
   regenerate: boolean,
   ignore: string[],
 ): Promise<void> {
