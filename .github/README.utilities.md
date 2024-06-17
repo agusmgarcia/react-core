@@ -131,6 +131,18 @@ import { sorts } from "@agusmgarcia/react-core";
 [false, true].sort(sorts.byBooleanDesc); // => [false, true]
 ```
 
+## Use at bottom
+
+```typescript
+import { useAtBottom } from "@agusmgarcia/react-core";
+import { useRef } from "react";
+
+function useHook() {
+  const elementRef = useRef<HTMLElement>(null);
+  const atBottom = useAtBottom(elementRef); // => true if the element has been scrolled at bottom
+}
+```
+
 ## Use at top
 
 ```typescript
