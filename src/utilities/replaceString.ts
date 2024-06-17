@@ -4,7 +4,7 @@ const multipleValues = /^(.+?)\:(.+?)\/(.+?)$/;
 export default function replaceString(
   message: string,
   replacements: Record<string, string | number | boolean | undefined>,
-) {
+): string {
   return message.replace(searchValue, (original, key) => {
     if (multipleValues.test(key)) {
       const matches = multipleValues.exec(key);
