@@ -131,6 +131,18 @@ import { sorts } from "@agusmgarcia/react-core";
 [false, true].sort(sorts.byBooleanDesc); // => [false, true]
 ```
 
+## Use at top
+
+```typescript
+import { useAtTop } from "@agusmgarcia/react-core";
+import { useRef } from "react";
+
+function useHook() {
+  const elementRef = useRef<HTMLElement>(null);
+  const atTop = useAtTop(elementRef); // => true if the element has been scrolled at top
+}
+```
+
 ## Use media query
 
 ```typescript

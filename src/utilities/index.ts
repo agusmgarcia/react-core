@@ -9,4 +9,5 @@ export { default as isSSR } from "./isSSR";
 export { type default as OnlyId } from "./OnlyId.types";
 export { default as replaceString } from "./replaceString";
 export * as sorts from "./sorts";
+export { default as useElementAtTop } from "./useElementAtTop";
 export { default as useMediaQuery } from "./useMediaQuery";
