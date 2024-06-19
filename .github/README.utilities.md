@@ -75,7 +75,7 @@ import { type OnlyId } from "@agusmgarcia/react-core";
 
 type Person = { id: string; name: string };
 
-type OnlyIdPerson = OnlyId<Person>; // => { id: string, name: undefined }
+type OnlyIdPerson = OnlyId<Person>; // => { id: string, name?: undefined }
 ```
 
 ## Replace string
