@@ -34,7 +34,7 @@ function findThousandSeparator(test: string, decimalSeparator: string): string {
   return "";
 }
 
-function getFormatter(locale: string, decimals: number) {
+function getFormatter(locale: string, decimals: number): Formatter {
   if (globalThis.__AGUSMGARCIA_REACT_CORE_FORMATTERS__ === undefined)
     globalThis.__AGUSMGARCIA_REACT_CORE_FORMATTERS__ = {};
 
@@ -65,18 +65,16 @@ function getFormatter(locale: string, decimals: number) {
   };
 }
 
+type Formatter = {
+  decimalSeparator: string;
+  numberFormat: Intl.NumberFormat;
+  regexWithoutSeparator: RegExp;
+  regexWithSeparator: RegExp;
+  thousandSeparator: string;
+};
+
 declare global {
   var __AGUSMGARCIA_REACT_CORE_FORMATTERS__:
-    | Record<
-        string,
-        {
-          decimalSeparator: string;
-          numberFormat: Intl.NumberFormat;
-          pattern: string;
-          regexWithoutSeparator: RegExp;
-          regexWithSeparator: RegExp;
-          thousandSeparator: string;
-        }
-      >
+    | Record<string, Formatter>
     | undefined;
 }
