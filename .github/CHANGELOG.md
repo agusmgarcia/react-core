@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.1.0](https://github.com/agusmgarcia/react-core/tree/v2.1.0)
+
+> 19 June 2024
+
+- **tailwindcss.middleware** add tailwind support
+- **useElementAtBottom** add utility
+- **useElementAtTop** add utility
+- **AsyncFunc.types** add utility
+- **Func.types** move result and args positions
+- **delay** add utility
+- **prettier.middleware**: adjust `.eslintrc` format
+
 ## [v2.0.2](https://github.com/agusmgarcia/react-core/tree/v2.0.2)
 
 > 10 June 2024
