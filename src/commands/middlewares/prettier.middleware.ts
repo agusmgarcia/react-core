@@ -42,7 +42,8 @@ export default async function prettierMiddleware(
 }
 
 const prettierrc = `{
-  "overrides": [{ "files": [".eslintrc"], "options": { "parser": "json" } }]
+  "overrides": [{ "files": [".eslintrc"], "options": { "parser": "json" } }],
+  "plugins": ["prettier-plugin-tailwindcss"]
 }
 `;
 
