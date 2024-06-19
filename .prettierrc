@@ -1,1 +1,3 @@
-{}
+{
+  "overrides": [{ "files": [".eslintrc"], "options": { "parser": "json" } }]
+}
