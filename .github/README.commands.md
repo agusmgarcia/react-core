@@ -53,6 +53,8 @@ When running `npm run regenerate` all the pertinent files will be regenerated. H
 - .prettierignore
 - .prettierrc
 - next.config.js
+- postcss.config.js
+- tailwind.config.js
 - tsconfig.json
 - webpack.config.js
 
