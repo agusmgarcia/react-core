@@ -101,7 +101,7 @@ import { sorts } from "@agusmgarcia/react-core";
 [false, true].sort(sorts.byBooleanDesc); // => [false, true]
 ```
 
-## Media Query
+## Use media query
 
 ```typescript
 import { useMediaQuery } from "@agusmgarcia/react-core";
