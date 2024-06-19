@@ -80,7 +80,7 @@ type Func3 = Func<number, [arg0: string]>; // => (arg0: string) => number
 
 ## Func (old-way)
 
-This is kept for compatibility with versions between `v2.0.0` and `v2.0.2`. It is going to be removed in the next major release.
+This is kept for compatibility with versions `v2.0.x`. It is going to be removed in the next major release.
 
 ```typescript
 import { type Func } from "@agusmgarcia/react-core";
