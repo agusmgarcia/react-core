@@ -14,11 +14,7 @@ export default async function tailwindcssMiddleware(
         postCSSConfig,
         regenerate && !ignore.includes("postcss.config.js"),
       ),
-      upsertFile(
-        "tailwind.config.js",
-        tailwindConfig,
-        regenerate && !ignore.includes("tailwind.config.js"),
-      ),
+      upsertFile("tailwind.config.js", tailwindConfig, false),
     ]);
   }
 
