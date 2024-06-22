@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.2.0](https://github.com/agusmgarcia/react-core/tree/v2.2.0)
+
+> 22 June 2024
+
+- **webpack.middleware**: add support for commands
+- **tailwindcss.middleware**: prevent overriding `tailwind.config.js` file
+
 ## [v2.1.1](https://github.com/agusmgarcia/react-core/tree/v2.1.1)
 
 > 19 June 2024
