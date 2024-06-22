@@ -6,13 +6,13 @@
   "author": "Agus Garcia",
   "description": "Set of utilities to run, lint, format and build applications and libraries",
   "scripts": {
-    "build": "ts-node src/commands/build.ts",
-    "check": "ts-node src/commands/check.ts",
-    "format": "ts-node src/commands/format.ts",
-    "start": "ts-node src/commands/start.ts",
-    "prepack": "ts-node src/commands/prepack.ts && cpy README.commands.md README.store.md README.utilities.md ../.. --cwd=.github",
-    "postpack": "ts-node src/commands/postpack.ts && del README.commands.md README.store.md README.utilities.md",
-    "regenerate": "ts-node src/commands/regenerate.ts --ignore=webpack.config.js"
+    "build": "ts-node src/_bin/build.ts",
+    "check": "ts-node src/_bin/check.ts",
+    "format": "ts-node src/_bin/format.ts",
+    "start": "ts-node src/_bin/start.ts",
+    "prepack": "ts-node src/_bin/prepack.ts && cpy README.commands.md README.store.md README.utilities.md ../.. --cwd=.github",
+    "postpack": "ts-node src/_bin/postpack.ts && del README.commands.md README.store.md README.utilities.md",
+    "regenerate": "ts-node src/_bin/regenerate.ts"
   },
   "bin": {
     "agusmgarcia-react-core-build": "bin/build.js",
@@ -42,7 +42,7 @@
     "prettier-plugin-tailwindcss": "0.6.x",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "sass": "^1.0.0",
+    "remove-files-webpack-plugin": "^1.0.0",
     "tailwindcss": "^3.0.0",
     "ts-loader": "^9.0.0",
     "typescript": "^5.0.0",
@@ -52,7 +52,6 @@
   },
   "devDependencies": {
     "@redux-devtools/extension": "3.3.0",
-    "remove-files-webpack-plugin": "1.5.0",
     "ts-node": "10.9.2"
   },
   "engines": {
