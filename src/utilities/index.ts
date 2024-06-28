@@ -1,4 +1,5 @@
 export { type default as AsyncFunc } from "./AsyncFunc.types";
+export { default as blockUntil } from "./blockUntil";
 export * as currencies from "./currencies";
 export * as dates from "./dates";
 export { default as delay } from "./delay";
