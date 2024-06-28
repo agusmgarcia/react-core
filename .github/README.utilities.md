@@ -12,6 +12,16 @@ type Func2 = AsyncFunc<number>; // => () => Promise<number>
 type Func3 = AsyncFunc<number, [arg0: string]>; // => (arg0: string) => Promise<number>
 ```
 
+## Block until
+
+```typescript
+import { blockUntil } from "@agusmgarcia/react-core";
+
+const controller = new AbortController();
+blockUntil(controller.signal).then(() => console.log("Continue"));
+setTimeout(() => controller.abort(), 3000);
+```
+
 ## Currencies
 
 ```typescript
