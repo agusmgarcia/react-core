@@ -2,7 +2,7 @@
 
 A set of functions and types that can be used in the consumer projects.
 
-## AsyncFunc
+## Async func
 
 ```typescript
 import { type AsyncFunc } from "@agusmgarcia/react-core";
@@ -80,7 +80,7 @@ type Func3 = Func<number, [arg0: string]>; // => (arg0: string) => number
 
 ## Func (old-way)
 
-This is kept for compatibility with versions `v2.0.x`. It is going to be removed in the next major release.
+This is kept for compatibility with versions `v2.x.x`. It is going to be removed in the next major release.
 
 ```typescript
 import { type Func } from "@agusmgarcia/react-core";
