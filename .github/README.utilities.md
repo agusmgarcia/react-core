@@ -2,7 +2,7 @@
 
 A set of functions and types that can be used in the consumer projects.
 
-## AsyncFunc
+## Async func
 
 ```typescript
 import { type AsyncFunc } from "@agusmgarcia/react-core";
