@@ -93,7 +93,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: \${{ secrets.GITHUB_TOKEN }}
 
-      - name: Lint
+      - name: Check
         run: npm run check
         shell: bash
 
@@ -161,7 +161,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: \${{ secrets.GITHUB_TOKEN }}
 
-      - name: Lint
+      - name: Check
         run: npm run check
         shell: bash
 
