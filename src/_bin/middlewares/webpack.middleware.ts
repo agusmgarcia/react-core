@@ -1,4 +1,5 @@
-import { type AsyncFunc } from "../../utilities";
+import { type AsyncFunc } from "#src/utilities";
+
 import { isLibrary, upsertFile } from "../utilities";
 
 export default async function webpackMiddleware(
@@ -18,8 +19,9 @@ export default async function webpackMiddleware(
 
 const webpackConfig = `const fs = require("fs");
 const path = require("path");
-const webpack = require("webpack");
 const RemovePlugin = require("remove-files-webpack-plugin");
+const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
+const webpack = require("webpack");
 
 const packageJSON = require("./package.json");
 
@@ -64,6 +66,7 @@ module.exports = [
     ],
     resolve: {
       extensions: [".js", ".jsx", ".ts", ".tsx"],
+      plugins: [new TsconfigPathsPlugin()],
     },
   },
   {
@@ -117,6 +120,7 @@ module.exports = [
     ],
     resolve: {
       extensions: [".js", ".jsx", ".ts", ".tsx"],
+      plugins: [new TsconfigPathsPlugin()],
     },
     target: "node",
   },

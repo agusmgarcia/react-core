@@ -1,4 +1,5 @@
-import { type AsyncFunc } from "../../utilities";
+import { type AsyncFunc } from "#src/utilities";
+
 import { isLibrary, upsertFile } from "../utilities";
 
 export default async function typescriptMiddleware(
@@ -47,6 +48,7 @@ const tsconfig_app = `{
 const tsconfig_lib = `{
   "compilerOptions": {
     "allowJs": true,
+    "baseUrl": "./",
     "declaration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -58,6 +60,9 @@ const tsconfig_lib = `{
     "moduleResolution": "node",
     "noEmit": false,
     "noImplicitOverride": true,
+    "paths": {
+      "#src/*": ["src/*"]
+    },
     "outDir": "./dist",
     "resolveJsonModule": true,
     "rootDir": "./src",

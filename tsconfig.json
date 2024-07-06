@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "allowJs": true,
+    "baseUrl": "./",
     "declaration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -12,6 +13,9 @@
     "moduleResolution": "node",
     "noEmit": false,
     "noImplicitOverride": true,
+    "paths": {
+      "#src/*": ["src/*"]
+    },
     "outDir": "./dist",
     "resolveJsonModule": true,
     "rootDir": "./src",

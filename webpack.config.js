@@ -1,7 +1,8 @@
 const fs = require("fs");
 const path = require("path");
-const webpack = require("webpack");
 const RemovePlugin = require("remove-files-webpack-plugin");
+const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
+const webpack = require("webpack");
 
 const packageJSON = require("./package.json");
 
@@ -46,6 +47,7 @@ module.exports = [
     ],
     resolve: {
       extensions: [".js", ".jsx", ".ts", ".tsx"],
+      plugins: [new TsconfigPathsPlugin()],
     },
   },
   {
@@ -99,6 +101,7 @@ module.exports = [
     ],
     resolve: {
       extensions: [".js", ".jsx", ".ts", ".tsx"],
+      plugins: [new TsconfigPathsPlugin()],
     },
     target: "node",
   },

@@ -1,4 +1,5 @@
-import { type AsyncFunc } from "../../utilities";
+import { type AsyncFunc } from "#src/utilities";
+
 import { isLibrary, upsertFile } from "../utilities";
 
 export default async function eslintMiddleware(

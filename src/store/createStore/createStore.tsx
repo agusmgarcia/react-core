@@ -4,7 +4,8 @@ import {
   useContextSelector,
 } from "use-context-selector";
 
-import { equals } from "../../utilities";
+import { equals } from "#src/utilities";
+
 import { type CreateSliceTypes } from "../createSlice";
 import registerDevtools from "./createStore.devtools";
 import { type Input, type Output, type StateOf } from "./createStore.types";

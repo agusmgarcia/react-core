@@ -1,4 +1,5 @@
-import { type AsyncFunc } from "../utilities";
+import { type AsyncFunc } from "#src/utilities";
+
 import * as middlewares from "./middlewares";
 
 export default async function run(
