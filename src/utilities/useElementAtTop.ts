@@ -10,7 +10,7 @@ export default function useElementAtTop<TElement extends HTMLElement>(
     const element = elementRef.current;
     if (element === null) return;
 
-    const handleScroll = (e: TElement): void => setAtTop(e.scrollTop === 0);
+    const handleScroll = (e: TElement): void => setAtTop(e.scrollTop < 1);
 
     function listen(event: Event) {
       const target = event.target;
