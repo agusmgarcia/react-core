@@ -5,6 +5,7 @@ Set of opinionated commands to run, check, format and build react applications a
 - Eslint
 - NextJS
 - Prettier
+- TailwindCSS
 - Typescript
 - Webpack
 
