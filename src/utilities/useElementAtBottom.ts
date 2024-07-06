@@ -11,7 +11,9 @@ export default function useElementAtBottom<TElement extends HTMLElement>(
     if (element === null) return;
 
     const handleScroll = (e: TElement): void =>
-      setAtBottom(e.scrollTop === e.scrollHeight - e.offsetHeight);
+      setAtBottom(
+        Math.abs(e.scrollTop - (e.scrollHeight - e.offsetHeight)) < 1,
+      );
 
     function listen(event: Event) {
       const target = event.target;
