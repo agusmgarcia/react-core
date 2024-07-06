@@ -12,7 +12,8 @@
     "start": "ts-node src/_bin/start.ts",
     "prepack": "ts-node src/_bin/prepack.ts && cpy README.commands.md README.store.md README.utilities.md ../.. --cwd=.github",
     "postpack": "ts-node src/_bin/postpack.ts && del README.commands.md README.store.md README.utilities.md",
-    "regenerate": "ts-node src/_bin/regenerate.ts"
+    "regenerate": "ts-node src/_bin/regenerate.ts",
+    "test": "ts-node src/_bin/test.ts"
   },
   "bin": {
     "agusmgarcia-react-core-build": "bin/build.js",
@@ -21,10 +22,13 @@
     "agusmgarcia-react-core-postpack": "bin/postpack.js",
     "agusmgarcia-react-core-prepack": "bin/prepack.js",
     "agusmgarcia-react-core-start": "bin/start.js",
-    "agusmgarcia-react-core-regenerate": "bin/regenerate.js"
+    "agusmgarcia-react-core-regenerate": "bin/regenerate.js",
+    "agusmgarcia-react-core-test": "bin/test.js"
   },
   "peerDependencies": {
+    "@testing-library/react": "^16.0.0",
     "@types/eslint": "^8.0.0",
+    "@types/jest": "^29.0.0",
     "@types/node": "^20.0.0",
     "@types/react": "^18.0.0",
     "autoprefixer": "^10.0.0",
@@ -36,6 +40,8 @@
     "eslint-plugin-simple-import-sort": "^12.0.0",
     "eslint-plugin-sort": "^3.0.0",
     "eslint-plugin-unused-imports": "^3.0.0",
+    "jest": "^29.0.0",
+    "jest-environment-jsdom": "^29.0.0",
     "next": "^14.0.0",
     "postcss": "^8.0.0",
     "prettier": "^3.0.0",

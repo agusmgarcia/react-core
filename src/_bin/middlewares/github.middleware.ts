@@ -105,6 +105,10 @@ jobs:
         run: npm run check
         shell: bash
 
+      - name: Test
+        run: npm test
+        shell: bash
+
       - name: Build
         run: npm run build
         shell: bash
@@ -184,6 +188,10 @@ jobs:
 
       - name: Check
         run: npm run check
+        shell: bash
+
+      - name: Test
+        run: npm test
         shell: bash
 
       - name: Create release

@@ -1,5 +1,6 @@
 **/.*
 src
+jest.config.js
 package-lock.json
 tsconfig.json
 webpack.config.js

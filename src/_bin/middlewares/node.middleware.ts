@@ -25,6 +25,7 @@ const nvmrc = "20";
 
 const npmignore = `**/.*
 src
+jest.config.js
 package-lock.json
 tsconfig.json
 webpack.config.js`;

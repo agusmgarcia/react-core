@@ -1,5 +1,6 @@
 export { default as eslintMiddleware } from "./eslint.middleware";
 export { default as githubMiddleware } from "./github.middleware";
+export { default as jestMiddleware } from "./jest.middleware";
 export { default as nextjsMiddleware } from "./nextjs.middleware";
 export { default as nodeMiddleware } from "./node.middleware";
 export { default as prettierMiddleware } from "./prettier.middleware";

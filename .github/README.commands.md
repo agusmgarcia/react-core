@@ -3,6 +3,7 @@
 Set of opinionated commands to run, check, format and build react applications and libraries. It uses the following packages:
 
 - Eslint
+- Jest
 - NextJS
 - Prettier
 - TailwindCSS
@@ -37,6 +38,7 @@ Then, place add the following commands within the scripts section of the _packag
     "postpack": "agusmgarcia-react-core-postpack",
     "prepack": "agusmgarcia-react-core-prepack",
     "regenerate": "agusmgarcia-react-core-regenerate",
+    "test": "agusmgarcia-react-core-test",
   },
 }
 ```
@@ -53,6 +55,7 @@ When running `npm run regenerate` all the pertinent files will be regenerated. H
 - .nvmrc
 - .prettierignore
 - .prettierrc
+- jest.config.ts
 - next.config.js
 - postcss.config.js
 - tsconfig.json

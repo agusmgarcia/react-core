@@ -57,6 +57,10 @@ jobs:
         run: npm run check
         shell: bash
 
+      - name: Test
+        run: npm test
+        shell: bash
+
       - name: Create release
         uses: ncipollo/release-action@v1
         with:
