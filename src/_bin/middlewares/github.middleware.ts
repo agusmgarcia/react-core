@@ -77,10 +77,10 @@ jobs:
         shell: bash
 
       - name: Checkout
-        uses: actions/checkout@v3.3.0
+        uses: actions/checkout@v4
 
       - name: Setup Node
-        uses: actions/setup-node@v3.6.0
+        uses: actions/setup-node@v4
         with:
           cache: npm
           node-version: 20
@@ -99,7 +99,7 @@ jobs:
 
       - name: Get version from tag
         id: get-version-from-tag
-        uses: frabert/replace-string-action@v2.4
+        uses: frabert/replace-string-action@v2
         with:
           pattern: v(.*)
           replace-with: $1
@@ -113,7 +113,7 @@ jobs:
 
       - name: Create release
         if: \${{ github.event_name != 'workflow_dispatch' }}
-        uses: ncipollo/release-action@v1.12.0
+        uses: ncipollo/release-action@v1
         with:
           name: Version \${{ steps.get-version-from-tag.outputs.replaced }}
           tag: \${{ github.ref_name }}
@@ -145,10 +145,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.3.0
+        uses: actions/checkout@v4
 
       - name: Setup Node
-        uses: actions/setup-node@v3.6.0
+        uses: actions/setup-node@v4
         with:
           cache: npm
           node-version: 20
@@ -167,7 +167,7 @@ jobs:
 
       - name: Get version from tag
         id: get-version-from-tag
-        uses: frabert/replace-string-action@v2.4
+        uses: frabert/replace-string-action@v2
         with:
           pattern: v(.*)
           string: \${{ github.ref_name }}
@@ -187,7 +187,7 @@ jobs:
         shell: bash
 
       - name: Create release
-        uses: ncipollo/release-action@v1.12.0
+        uses: ncipollo/release-action@v1
         with:
           name: Version \${{ steps.get-version-from-tag.outputs.replaced }}
           tag: \${{ github.ref_name }}
