@@ -76,6 +76,14 @@ jobs:
           exit 1
         shell: bash
 
+      - name: Get version from tag
+        id: get-version-from-tag
+        uses: frabert/replace-string-action@v2
+        with:
+          pattern: v(.*)
+          replace-with: $1
+          string: \${{ github.ref_name }}
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -96,14 +104,6 @@ jobs:
       - name: Check
         run: npm run check
         shell: bash
-
-      - name: Get version from tag
-        id: get-version-from-tag
-        uses: frabert/replace-string-action@v2
-        with:
-          pattern: v(.*)
-          replace-with: $1
-          string: \${{ github.ref_name }}
 
       - name: Build
         run: npm run build
@@ -144,8 +144,29 @@ jobs:
       cancel-in-progress: true
 
     steps:
+      - name: Get version from tag
+        id: get-version-from-tag
+        uses: frabert/replace-string-action@v2
+        with:
+          pattern: v(.*)
+          string: \${{ github.ref_name }}
+          replace-with: $1
+
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Extract version from package
+        id: extract-version-from-package
+        uses: sergeysova/jq-action@v2
+        with:
+          cmd: jq .version package.json -r
+
+      - name: Verify versions match
+        if: \${{ steps.get-version-from-tag.outputs.replaced != steps.extract-version-from-package.outputs.value }}
+        run: |
+          echo "::error::Version in the package.json and tag don't match"
+          exit 1
+        shell: bash
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -163,27 +184,6 @@ jobs:
 
       - name: Check
         run: npm run check
-        shell: bash
-
-      - name: Get version from tag
-        id: get-version-from-tag
-        uses: frabert/replace-string-action@v2
-        with:
-          pattern: v(.*)
-          string: \${{ github.ref_name }}
-          replace-with: $1
-
-      - name: Extract version from package
-        id: extract-version-from-package
-        uses: sergeysova/jq-action@v2
-        with:
-          cmd: jq .version package.json -r
-
-      - name: Verify version match
-        if: \${{ steps.get-version-from-tag.outputs.replaced != steps.extract-version-from-package.outputs.value }}
-        run: |
-          echo "::error::Version in the package.json and tag don't match"
-          exit 1
         shell: bash
 
       - name: Create release
