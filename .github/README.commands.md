@@ -49,7 +49,8 @@ When running `npm run regenerate` all the pertinent files will be regenerated. H
 
 - .eslintignore
 - .eslintrc
-- .github/workflows/continuous-integration-and-deployment.yml
+- .github/workflows/deploy-app.yml
+- .github/workflows/publish-lib.yml
 - .gitignore
 - .npmignore
 - .nvmrc

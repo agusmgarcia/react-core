@@ -1,6 +1,6 @@
 import { type AsyncFunc } from "#src/utilities";
 
-import { isLibrary, upsertFile, upsertFolder } from "../utilities";
+import { isLibrary, removeFile, upsertFile, upsertFolder } from "../utilities";
 
 export default async function githubMiddleware(
   next: AsyncFunc,
@@ -17,16 +17,19 @@ export default async function githubMiddleware(
     ),
     upsertFile(".github/README.md", readme, false),
     upsertFile(".github/CHANGELOG.md", changelog, false),
-    upsertFolder(".github/workflows").then(() =>
-      upsertFile(
-        ".github/workflows/continuous-integration-and-deployment.yml",
-        !library ? workflow_app : workflow_lib,
-        regenerate &&
-          !ignore.includes(
-            ".github/workflows/continuous-integration-and-deployment.yml",
-          ),
+    upsertFolder(".github/workflows")
+      .then(() => (!library ? "deploy-app.yml" : "publish-lib.yml"))
+      .then((workflowName) => `.github/workflows/${workflowName}`)
+      .then((fileName) =>
+        upsertFile(
+          fileName,
+          !library ? deploy_app : publish_lib,
+          regenerate && !ignore.includes(fileName),
+        ),
       ),
-    ),
+    Promise.resolve(
+      ".github/workflows/continuous-integration-and-deployment.yml",
+    ).then((f) => (!ignore.includes(f) ? removeFile(f) : Promise.resolve())),
   ]);
 
   await next();
@@ -52,7 +55,7 @@ All notable changes to this project will be documented in this file.
 ## [v1.0.0](https://github.com/<OWNER>/<NAME>/tree/v1.0.0)
 `;
 
-const workflow_app = `name: Deploy application
+const deploy_app = `name: Deploy application
 permissions: write-all
 
 on:
@@ -124,15 +127,20 @@ jobs:
           tag: \${{ github.ref_name }}
           token: \${{ secrets.GITHUB_TOKEN }}
 
-      - name: Deploy
-        uses: w9jds/firebase-action@v2.2.2
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
         with:
-          args: deploy
-        env:
-          FIREBASE_TOKEN: \${{ secrets.FIREBASE_TOKEN }}
+          if-no-files-found: error
+          name: github-pages
+          path: out
+          overwrite: true
+          retention-days: 1
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
 `;
 
-const workflow_lib = `name: Publish library
+const publish_lib = `name: Publish library
 permissions: write-all
 
 on:
