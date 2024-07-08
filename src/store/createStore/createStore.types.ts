@@ -1,3 +1,5 @@
+import { type Func } from "#src/utilities";
+
 import { type CreateSliceTypes } from "../createSlice";
 
 export type HooksOf<
@@ -32,12 +34,17 @@ export type Input<
 export type Output<
   TCreateSliceOutputs extends Record<string, CreateSliceTypes.Output<any, any>>,
 > = {
-  StoreProvider: (props: {
-    children?: React.ReactNode;
-    initials?: InitialsOf<TCreateSliceOutputs>;
-  }) => JSX.Element;
+  StoreProvider: Func<
+    JSX.Element,
+    [
+      props: {
+        children?: React.ReactNode;
+        initials?: InitialsOf<TCreateSliceOutputs>;
+      },
+    ]
+  >;
   useSelector: <TSelectedData>(
-    selector: (state: StateOf<TCreateSliceOutputs>) => TSelectedData,
+    selector: Func<TSelectedData, [state: StateOf<TCreateSliceOutputs>]>,
   ) => TSelectedData;
 };
 

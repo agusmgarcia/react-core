@@ -1,5 +1,7 @@
 import { spawn } from "child_process";
 
+import { type Func } from "#src/utilities";
+
 export default function execute(
   // eslint-disable-next-line unused-imports/no-unused-vars
   command: string,
@@ -25,7 +27,7 @@ export default function execute(
       stdio: disassociated === true ? "inherit" : "pipe",
     });
 
-    const listeners = new Array<() => void>();
+    const listeners = new Array<Func>();
 
     let stdout = "";
     let stderr = "";

@@ -1,3 +1,5 @@
+import { type AsyncFunc, type Func } from "#src/utilities";
+
 export type ValidData = boolean | number | object | null | string | undefined;
 
 export type State<TData extends ValidData> = {
@@ -9,7 +11,9 @@ export type State<TData extends ValidData> = {
 
 export type Input<TData extends ValidData> = [
   initialData: TData,
-  fetcher: (signal: AbortSignal) => TData | Promise<TData>,
+  fetcher:
+    | Func<TData, [signal: AbortSignal]>
+    | AsyncFunc<TData, [signal: AbortSignal]>,
 ];
 
 export type Output<TData extends ValidData> = {
@@ -17,6 +21,6 @@ export type Output<TData extends ValidData> = {
   error: unknown;
   initialized: boolean;
   loading: boolean;
-  reload: () => void;
-  setData: (args: TData | ((prevData: TData) => TData)) => void;
+  reload: Func;
+  setData: Func<void, [args: TData | Func<TData, [prevData: TData]>]>;
 };
