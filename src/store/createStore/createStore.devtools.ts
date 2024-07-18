@@ -3,7 +3,7 @@ import type {} from "@redux-devtools/extension";
 import { equals, isSSR } from "#src/utilities";
 
 import { type CreateSliceTypes } from "../createSlice";
-import { StateOf } from "./createStore.types";
+import { type StateOf } from "./createStore.types";
 
 export default function registerDevtools<
   TCreateSliceOutputs extends Record<string, CreateSliceTypes.Output<any, any>>,

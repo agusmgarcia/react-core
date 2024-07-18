@@ -40,6 +40,7 @@ const eslintrc_app = `{
     {
       "files": ["**/*.d.ts"],
       "rules": {
+        "@typescript-eslint/consistent-type-imports": "off",
         "import/first": "off",
         "import/newline-after-import": "off",
         "import/no-duplicates": "off",
@@ -61,10 +62,12 @@ const eslintrc_app = `{
       }
     }
   ],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "sourceType": "module"
   },
   "plugins": [
+    "@typescript-eslint",
     "import",
     "react",
     "simple-import-sort",
@@ -72,6 +75,14 @@ const eslintrc_app = `{
     "unused-imports"
   ],
   "rules": {
+    "@typescript-eslint/consistent-type-imports": [
+      "error",
+      {
+        "prefer": "type-imports",
+        "disallowTypeAnnotations": true,
+        "fixStyle": "inline-type-imports"
+      }
+    ],
     "import/first": "error",
     "import/newline-after-import": "error",
     "import/no-duplicates": "error",
@@ -136,6 +147,7 @@ const eslintrc_lib = `{
     {
       "files": ["**/*.d.ts"],
       "rules": {
+        "@typescript-eslint/consistent-type-imports": "off",
         "import/first": "off",
         "import/newline-after-import": "off",
         "import/no-duplicates": "off",
@@ -157,10 +169,12 @@ const eslintrc_lib = `{
       }
     }
   ],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "sourceType": "module"
   },
   "plugins": [
+    "@typescript-eslint",
     "import",
     "react",
     "simple-import-sort",
@@ -169,6 +183,14 @@ const eslintrc_lib = `{
   ],
   "rules": {
     "@next/next/no-html-link-for-pages": "off",
+    "@typescript-eslint/consistent-type-imports": [
+      "error",
+      {
+        "prefer": "type-imports",
+        "disallowTypeAnnotations": true,
+        "fixStyle": "inline-type-imports"
+      }
+    ],
     "import/first": "error",
     "import/newline-after-import": "error",
     "import/no-duplicates": "error",

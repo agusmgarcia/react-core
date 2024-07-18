@@ -13,6 +13,7 @@
     {
       "files": ["**/*.d.ts"],
       "rules": {
+        "@typescript-eslint/consistent-type-imports": "off",
         "import/first": "off",
         "import/newline-after-import": "off",
         "import/no-duplicates": "off",
@@ -34,10 +35,12 @@
       }
     }
   ],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "sourceType": "module"
   },
   "plugins": [
+    "@typescript-eslint",
     "import",
     "react",
     "simple-import-sort",
@@ -46,6 +49,14 @@
   ],
   "rules": {
     "@next/next/no-html-link-for-pages": "off",
+    "@typescript-eslint/consistent-type-imports": [
+      "error",
+      {
+        "prefer": "type-imports",
+        "disallowTypeAnnotations": true,
+        "fixStyle": "inline-type-imports"
+      }
+    ],
     "import/first": "error",
     "import/newline-after-import": "error",
     "import/no-duplicates": "error",
