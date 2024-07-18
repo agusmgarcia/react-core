@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.3.0](https://github.com/agusmgarcia/react-core/tree/v2.3.0)
+
+> 17 July 2024
+
+- separate workflows in two
+- add `tsconfig-paths` resolver
+- add `test` command
+- **block**: add utility
+- **useElementAtBottom**: add some margins
+- **useElementAtTop**: add some margins
+- **github.middleware**: re-organize steps
+- **github.middleware**: bump actions versions
+- **github.middleware**: rename `Lint` by `Check`
+
 ## [v2.2.0](https://github.com/agusmgarcia/react-core/tree/v2.2.0)
 
 > 22 June 2024
