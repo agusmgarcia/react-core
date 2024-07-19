@@ -20,7 +20,7 @@ export default async function webpackMiddleware(
 const webpackConfig = `const fs = require("fs");
 const path = require("path");
 const RemovePlugin = require("remove-files-webpack-plugin");
-const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
+const getCustomTransformers = require("ts-transform-paths").default;
 const webpack = require("webpack");
 
 const packageJSON = require("./package.json");
@@ -42,6 +42,7 @@ module.exports = [
                 compilerOptions: {
                   jsx: "react",
                 },
+                getCustomTransformers,
               },
             },
           ],
@@ -65,8 +66,8 @@ module.exports = [
       }),
     ],
     resolve: {
+      alias: { "#src": path.resolve(__dirname, "src") },
       extensions: [".js", ".jsx", ".ts", ".tsx"],
-      plugins: [new TsconfigPathsPlugin()],
     },
   },
   {
@@ -119,8 +120,8 @@ module.exports = [
       new webpack.BannerPlugin({ banner: "#! /usr/bin/env node", raw: true }),
     ],
     resolve: {
+      alias: { "#src": path.resolve(__dirname, "src") },
       extensions: [".js", ".jsx", ".ts", ".tsx"],
-      plugins: [new TsconfigPathsPlugin()],
     },
     target: "node",
   },
