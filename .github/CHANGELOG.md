@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.4.0](https://github.com/agusmgarcia/react-core/tree/v2.4.0)
+
+> 19 July 2024
+
+- **eslint.middleware**: add consistent type import rule
+- adjust paths resolver for libraries
+
 ## [v2.3.0](https://github.com/agusmgarcia/react-core/tree/v2.3.0)
 
 > 17 July 2024
