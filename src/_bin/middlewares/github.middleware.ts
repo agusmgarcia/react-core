@@ -127,13 +127,14 @@ jobs:
           tag: \${{ github.ref_name }}
           token: \${{ secrets.GITHUB_TOKEN }}
 
+      - name: Configure pages
+        uses: actions/configure-pages@v5
+
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-pages-artifact@v3
         with:
-          if-no-files-found: error
           name: github-pages
           path: out
-          overwrite: true
           retention-days: 1
 
       - name: Deploy to GitHub Pages
