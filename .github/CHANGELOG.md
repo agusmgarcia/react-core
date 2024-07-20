@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.4.1](https://github.com/agusmgarcia/react-core/tree/v2.4.1)
+
+> 20 July 2024
+
+- **github.middleware**: adjust deployment steps
+
 ## [v2.4.0](https://github.com/agusmgarcia/react-core/tree/v2.4.0)
 
 > 19 July 2024
