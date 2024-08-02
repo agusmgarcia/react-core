@@ -144,8 +144,9 @@ import { sorts } from "@agusmgarcia/react-core";
 ## Use at bottom
 
 ```typescript
-import { useAtBottom } from "@agusmgarcia/react-core";
 import { useRef } from "react";
+
+import { useAtBottom } from "@agusmgarcia/react-core";
 
 function useHook() {
   const elementRef = useRef<HTMLElement>(null);
@@ -156,8 +157,9 @@ function useHook() {
 ## Use at top
 
 ```typescript
-import { useAtTop } from "@agusmgarcia/react-core";
 import { useRef } from "react";
+
+import { useAtTop } from "@agusmgarcia/react-core";
 
 function useHook() {
   const elementRef = useRef<HTMLElement>(null);
