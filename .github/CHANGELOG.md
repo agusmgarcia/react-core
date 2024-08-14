@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.5.0](https://github.com/agusmgarcia/react-core/tree/v2.5.0)
+
+> 14 August 2024
+
+- **capitalize**: add utility
+- **isChildOf**: add utility
+- **isParentOf**: add utility
+- **jest.middleware**: adjust jest config file generation
+
 ## [v2.4.2](https://github.com/agusmgarcia/react-core/tree/v2.4.2)
 
 > 20 July 2024
