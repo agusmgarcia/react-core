@@ -6,6 +6,7 @@ export { default as delay } from "./delay";
 export { default as emptyFunction } from "./emptyFunction";
 export * as equals from "./equals";
 export { type default as Func } from "./Func.types";
+export { default as isChildOf } from "./isChildOf";
 export { default as isParentOf } from "./isParentOf";
 export { default as isSSR } from "./isSSR";
 export { type default as OnlyId } from "./OnlyId.types";

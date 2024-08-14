@@ -100,6 +100,16 @@ type Func2 = Func<[number]>; // => () => number
 type Func3 = Func<[arg0: string, number]>; // => (arg0: string) => number
 ```
 
+## Is child of
+
+```typescript
+import { isChildOf } from "@agusmgarcia/react-core";
+
+const child = document.getElementById("element1");
+const potentialParent = document.getElementById("element2");
+return isChildOf(potentialParent, child);
+```
+
 ## Is parent of
 
 ```typescript
