@@ -22,6 +22,14 @@ blockUntil(controller.signal).then(() => console.log("Continue"));
 setTimeout(() => controller.abort(), 3000);
 ```
 
+## Capitalize
+
+```typescript
+import { capitalize } from "@agusmgarcia/react-core";
+
+capitalize("foo"); // => "Foo"
+```
+
 ## Currencies
 
 ```typescript
