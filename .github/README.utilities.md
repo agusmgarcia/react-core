@@ -207,6 +207,18 @@ function useHook() {
 }
 ```
 
+## Use focus tracker
+
+```typescript
+import { useFocusTracker } from "@agusmgarcia/react-core";
+import { useRef } from "react";
+
+function useHook() {
+  const ref = useRef<HTMLElement>(null);
+  const focus = useFocusTracker(ref); // => true if the element or its children have been focused.
+}
+```
+
 ## Use media query
 
 ```typescript
