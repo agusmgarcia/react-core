@@ -181,15 +181,15 @@ function useHook() {
 }
 ```
 
-## Use at top
+## Use element at top
 
 ```typescript
-import { useAtTop } from "@agusmgarcia/react-core";
+import { useElementAtTop } from "@agusmgarcia/react-core";
 import { useRef } from "react";
 
 function useHook() {
-  const elementRef = useRef<HTMLElement>(null);
-  const atTop = useAtTop(elementRef); // => true if the element has been scrolled at top
+  const ref = useRef<HTMLElement>(null);
+  const atTop = useElementAtTop(ref); // => true if the element has been scrolled at top
 }
 ```
 

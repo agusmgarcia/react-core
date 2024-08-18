@@ -10,19 +10,20 @@ export default function useElementAtTop<TElement extends HTMLElement>(
     const element = elementRef.current;
     if (element === null) return;
 
-    const handleScroll = (e: TElement): void => setAtTop(e.scrollTop < 1);
+    const set = (e: TElement): void => setAtTop(e.scrollTop < 1);
 
-    function listen(event: Event) {
+    function handle(event: Event) {
       const target = event.target;
       if (target === null) return;
       if (!("scrollTop" in target)) return;
       if (typeof target.scrollTop !== "number") return;
-      handleScroll(target as TElement);
+      set(target as TElement);
     }
 
-    handleScroll(element);
-    element.addEventListener("scroll", listen);
-    return () => element.removeEventListener("scroll", listen);
+    set(element);
+
+    element.addEventListener("scroll", handle);
+    return () => element.removeEventListener("scroll", handle);
   }, [elementRef]);
 
   return atTop;
