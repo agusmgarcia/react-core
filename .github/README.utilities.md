@@ -136,6 +136,20 @@ import { isSSR } from "@agusmgarcia/react-core";
 isSSR(); // => 'true' if server side and 'false' for client
 ```
 
+## Merge refs
+
+```tsx
+import { mergeRefs } from "@agusmgarcia/react-core";
+import { useRef } from "react";
+
+function Component() {
+  const ref1 = useRef<HTMLDivElement>(null);
+  const ref2 = useRef<HTMLDivElement>(null);
+
+  return <div ref={mergeRefs(ref1, ref2)} />;
+}
+```
+
 ## Only Id
 
 ```typescript

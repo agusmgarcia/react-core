@@ -10,6 +10,7 @@ export { type default as Func } from "./Func.types";
 export { default as isChildOf } from "./isChildOf";
 export { default as isParentOf } from "./isParentOf";
 export { default as isSSR } from "./isSSR";
+export { default as mergeRefs } from "./mergeRefs";
 export { type default as OnlyId } from "./OnlyId.types";
 export { default as replaceString } from "./replaceString";
 export * as sorts from "./sorts";
