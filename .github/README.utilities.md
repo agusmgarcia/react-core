@@ -207,6 +207,21 @@ function useHook() {
 }
 ```
 
+## Use checked tracker
+
+```typescript
+import { useCheckedTracker } from "@agusmgarcia/react-core";
+import { useRef } from "react";
+
+function useHook() {
+  const ref = useRef<HTMLInputElement>(null);
+  const value = useCheckedTracker(ref, {
+    checked: undefined,
+    defaultChecked: true,
+  }); // => the current value of the element.
+}
+```
+
 ## Use focus tracker
 
 ```typescript
@@ -226,5 +241,20 @@ import { useMediaQuery } from "@agusmgarcia/react-core";
 
 function useHook() {
   const isTablet = useMediaQuery("(max-width: 767.98px)"); // => boolean
+}
+```
+
+## Use value tracker
+
+```typescript
+import { useValueTracker } from "@agusmgarcia/react-core";
+import { useRef } from "react";
+
+function useHook() {
+  const ref = useRef<HTMLInputElement>(null);
+  const value = useValueTracker(ref, {
+    defaultValue: "John",
+    value: undefined,
+  }); // => the current value of the element.
 }
 ```
