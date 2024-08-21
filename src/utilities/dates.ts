@@ -54,8 +54,16 @@ export function formatDate(
 }
 
 export function getCurrentDate(timeZone?: string): string {
-  const tmp = new Date(new Date().toLocaleString(undefined, { timeZone }));
-  return formatDate(tmp, "yyyy-MM-dd");
+  const [month, date, year] = new Date()
+    .toLocaleDateString("en-US", {
+      day: "2-digit",
+      month: "2-digit",
+      timeZone,
+      year: "numeric",
+    })
+    .split("/");
+
+  return `${year}-${month}-${date}`;
 }
 
 export function getFirstDateOfMonth(date: string): string {
