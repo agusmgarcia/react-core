@@ -1,19 +1,19 @@
 export function addDays(date: string, days: number): string {
   const tmp = new Date(date);
   tmp.setUTCDate(tmp.getUTCDate() + days);
-  return formatDate(tmp, "yyyy-MM-dd");
+  return toString(tmp);
 }
 
 export function addMonths(date: string, months: number): string {
   const tmp = new Date(date);
   tmp.setUTCMonth(tmp.getUTCMonth() + months);
-  return formatDate(tmp, "yyyy-MM-dd");
+  return toString(tmp);
 }
 
 export function addYears(date: string, years: number): string {
   const tmp = new Date(date);
   tmp.setUTCFullYear(tmp.getUTCFullYear() + years);
-  return formatDate(tmp, "yyyy-MM-dd");
+  return toString(tmp);
 }
 
 export function clamp(date: string, minDate: string, maxDate: string): string {
@@ -27,6 +27,11 @@ export function differenceInDays(endDate: string, startDate: string): number {
   return Math.ceil(diffTime / 86_400_000);
 }
 
+/**
+ * @deprecated This method is going to be deleted in the next major version.
+ * Use toDateString instead.
+ */
+// TODO: delete this method in the next major version.
 export function formatDate(
   date: Date | string,
   format: "dd" | "ii" | "MM" | "yyyy" | "yyyy-MM-dd",
@@ -78,7 +83,7 @@ export function getFirstDateOfMonth(date: string): string {
     ),
   );
 
-  return formatDate(tmp, "yyyy-MM-dd");
+  return toString(tmp);
 }
 
 export function getLastDateOfMonth(date: string): string {
@@ -95,4 +100,28 @@ export function min(date: string, ...dates: string[]): string {
   let result = date;
   for (const aux of dates) if (aux < result) result = aux;
   return result;
+}
+
+export function toDateString(
+  date: string,
+  locale?: string,
+  options?: Omit<
+    Intl.DateTimeFormatOptions,
+    | "hour"
+    | "hour12"
+    | "hourCycle"
+    | "minute"
+    | "second"
+    | "timeZone"
+    | "timeZoneName"
+  >,
+): string {
+  return new Date(date).toLocaleDateString(locale, {
+    ...options,
+    timeZone: "UTC",
+  });
+}
+
+function toString(date: Date): string {
+  return `${date.getUTCFullYear()}-${(date.getUTCMonth() + 1).toString().padStart(2, "0")}-${date.getUTCDate().toString().padStart(2, "0")}`;
 }
