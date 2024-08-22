@@ -53,12 +53,16 @@ export function formatDate(
   }
 }
 
-export function getCurrentDate(timeZone?: string): string {
+export function getCurrentDate(
+  timeZone?: Intl.DateTimeFormatOptions["timeZone"],
+  timeZoneName?: Intl.DateTimeFormatOptions["timeZoneName"],
+): string {
   const [month, date, year] = new Date()
     .toLocaleDateString("en-US", {
       day: "2-digit",
       month: "2-digit",
       timeZone,
+      timeZoneName,
       year: "numeric",
     })
     .split("/");
