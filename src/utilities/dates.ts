@@ -1,3 +1,5 @@
+const dateRegexp = /(\d\d\d\d)-(\d\d)-(\d\d)/;
+
 export function addDays(date: string, days: number): string {
   const tmp = new Date(date);
   tmp.setUTCDate(tmp.getUTCDate() + days);
@@ -75,10 +77,21 @@ export function getCurrentDate(
   return `${year}-${month}-${date}`;
 }
 
+export function getDate(date: string): number {
+  return +date.replace(
+    dateRegexp,
+    (_: string, _year: string, _month: string, date: string) => date,
+  );
+}
+
+export function getDayOfTheWeek(date: string): number {
+  return new Date(date).getUTCDay();
+}
+
 export function getFirstDateOfMonth(date: string): string {
   const tmp = new Date(
     date.replace(
-      /(\d\d\d\d)-(\d\d)-\d\d/g,
+      dateRegexp,
       (_: string, year: string, month: string) => `${year}-${month}-01`,
     ),
   );
@@ -88,6 +101,20 @@ export function getFirstDateOfMonth(date: string): string {
 
 export function getLastDateOfMonth(date: string): string {
   return addDays(addMonths(getFirstDateOfMonth(date), 1), -1);
+}
+
+export function getMonth(date: string): number {
+  return +date.replace(
+    dateRegexp,
+    (_: string, _year: string, month: string, _date: string) => month,
+  );
+}
+
+export function getYear(date: string): number {
+  return +date.replace(
+    dateRegexp,
+    (_: string, year: string, _month: string, _date: string) => year,
+  );
 }
 
 export function max(date: string, ...dates: string[]): string {
