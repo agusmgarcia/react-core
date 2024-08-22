@@ -44,21 +44,21 @@ currencies.toNumber("20.00"); // => 20
 ```typescript
 import { dates } from "@agusmgarcia/react-core";
 
-dates.addDays("2024-06-01", 1); // => "2024-06-02"
-dates.addMonths("2024-06-01", 1); // => "2024-07-01"
-dates.addYears("2024-06-01", 1); // => "2025-06-01"
-dates.clamp("2024-06-15", "2024-06-18", "2024-06-12"); // => "2024-06-15"
-dates.differenceInDays("2024-06-02", "2024-06-01"); // => 1
-dates.getCurrentDate(); // => "2024-06-01"
-dates.getDate("2024-06-15"); // => 15
-dates.getDateOfTheWeek("2024-06-15"); // => 6
-dates.getFirstDateOfMonth("2024-06-15"); // => "2024-06-01"
-dates.getLastDateOfMonth("2024-06-15"); // => "2024-06-30"
-dates.getMonth("2024-06-15"); // => 6
-dates.getYear("2024-06-15"); // => 2024
-dates.max("2024-06-15", "2024-06-18", "2024-06-12"); // => "2024-06-18"
-dates.min("2024-06-15", "2024-06-18", "2024-06-12"); // => "2024-06-12"
-dates.toDateString("2024-06-02", "en-US", { day: "2-digit" }); // => "02"
+dates.addDays("1995-06-17", 1); // => "1995-06-18"
+dates.addMonths("1995-06-17", 1); // => "1995-07-17"
+dates.addYears("1995-06-17", 1); // => "1996-06-17"
+dates.clamp("1995-06-17", "1995-06-18", "1995-06-12"); // => "1995-06-17"
+dates.differenceInDays("1995-06-17", "1995-05-30"); // => 17
+dates.getCurrentDate(); // => the current date considering the timeZone
+dates.getDate("1995-06-17"); // => 17
+dates.getDateOfTheWeek("1995-06-17"); // => 1
+dates.getFirstDateOfMonth("1995-06-17"); // => "1995-06-01"
+dates.getLastDateOfMonth("1995-06-17"); // => "1995-06-30"
+dates.getMonth("1995-06-17"); // => 6
+dates.getYear("1995-06-17"); // => 1995
+dates.max("1995-06-17", "1995-06-18", "1995-06-12"); // => "1995-06-18"
+dates.min("1995-06-17", "1995-06-18", "1995-06-12"); // => "1995-06-12"
+dates.toDateString("1995-06-17", "en-US", { day: "2-digit" }); // => "02"
 ```
 
 ## Delay
