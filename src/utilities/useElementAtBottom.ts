@@ -18,8 +18,8 @@ export default function useElementAtBottom<TElement extends HTMLElement>(
     function handle(event: Event) {
       const target = event.target;
       if (target === null) return;
-      if (!("scrollBottom" in target)) return;
-      if (typeof target.scrollBottom !== "number") return;
+      if (!("scrollTop" in target)) return;
+      if (typeof target.scrollTop !== "number") return;
       if (!("scrollHeight" in target)) return;
       if (typeof target.scrollHeight !== "number") return;
       if (!("offsetHeight" in target)) return;
