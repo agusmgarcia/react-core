@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.6.0](https://github.com/agusmgarcia/react-core/tree/v2.6.0)
+
+> 24 August 2024
+
+- **dates**: add ability to get date, month and year
+- **dates**: add toDateString
+- **useValueTracker**: add utility
+- **useFocusTracker**: add utility
+- **mergeRefs**: add utility
+- **getCurrentDate**: add timeZoneName parameter
+- **getCurrentDate**: consider timeZone
+- **useElementAtBottom**: adjust logic to detect scenario
+
 ## [v2.5.0](https://github.com/agusmgarcia/react-core/tree/v2.5.0)
 
 > 14 August 2024
