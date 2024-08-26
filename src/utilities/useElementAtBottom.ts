@@ -5,6 +5,7 @@ export default function useElementAtBottom<TElement extends HTMLElement>(
   defaultAtBottom = false,
 ): boolean {
   const [atBottom, setAtBottom] = useState(defaultAtBottom);
+  const [resize, setResize] = useState(false);
 
   useEffect(() => {
     const element = elementRef.current;
@@ -31,6 +32,15 @@ export default function useElementAtBottom<TElement extends HTMLElement>(
 
     element.addEventListener("scroll", handle);
     return () => element.removeEventListener("scroll", handle);
+  }, [elementRef, resize]);
+
+  useEffect(() => {
+    const element = elementRef.current;
+    if (element === null) return;
+
+    const observer = new ResizeObserver(() => setResize((prev) => !prev));
+    observer.observe(element);
+    return () => observer.unobserve(element);
   }, [elementRef]);
 
   return atBottom;
