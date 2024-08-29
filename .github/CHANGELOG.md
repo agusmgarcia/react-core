@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.6.1](https://github.com/agusmgarcia/react-core/tree/v2.6.1)
+
+> 29 August 2024
+
+- **useFocusTracker**: separate focusin vs focusout handlers
+- **useValueTracker**: use input instead of change event
+- **useElementAtTop**: consider element beign resized
+- **useElementAtBottom**: consider element beign resized
+
 ## [v2.6.0](https://github.com/agusmgarcia/react-core/tree/v2.6.0)
 
 > 24 August 2024
