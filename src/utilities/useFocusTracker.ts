@@ -12,20 +12,30 @@ export default function useFocusTracker<TElement extends Element>(
     const element = elementRef.current;
     if (element === null) return;
 
-    const handle = () =>
-      setFocus(
-        element === document.activeElement ||
-          isParentOf(document.activeElement, element),
-      );
-
-    handle();
+    const handle = () => setFocus(true);
 
     element.addEventListener("focusin", handle);
+    return () => element.removeEventListener("focusin", handle);
+  }, [elementRef]);
+
+  useEffect(() => {
+    const element = elementRef.current;
+    if (element === null) return;
+
+    const handle = () => setFocus(false);
+
     element.addEventListener("focusout", handle);
-    return () => {
-      element.removeEventListener("focusout", handle);
-      element.removeEventListener("focusin", handle);
-    };
+    return () => element.removeEventListener("focusout", handle);
+  }, [elementRef]);
+
+  useEffect(() => {
+    const element = elementRef.current;
+    if (element === null) return;
+
+    setFocus(
+      element === document.activeElement ||
+        isParentOf(document.activeElement, element),
+    );
   }, [elementRef]);
 
   return focus;
