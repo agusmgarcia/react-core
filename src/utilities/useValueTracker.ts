@@ -77,5 +77,16 @@ function useCheckedOrValueTracker<
     return () => element.removeEventListener("input", handle);
   }, [elementRef, propertyName]);
 
+  useEffect(() => {
+    const element = elementRef.current;
+    if (element === null) return;
+
+    const handle = () => setValue((element as any)[propertyName]);
+    handle();
+
+    element.addEventListener("change", handle);
+    return () => element.removeEventListener("change", handle);
+  }, [elementRef, propertyName]);
+
   return value as any;
 }
