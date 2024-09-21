@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 
 import isParentOf from "./isParentOf";
 
+/**
+ * @deprecated This method is going to be deleted in the next major version.
+ */
 export default function useFocusTracker<TElement extends Element>(
   elementRef: React.RefObject<TElement>,
   defaultFocus = false,
