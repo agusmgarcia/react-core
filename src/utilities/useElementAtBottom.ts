@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 
 export default function useElementAtBottom<TElement extends HTMLElement>(
   elementRef: React.RefObject<TElement>,
-  defaultAtBottom = false,
+  initialValue = false,
 ): boolean {
-  const [atBottom, setAtBottom] = useState(defaultAtBottom);
+  const [atBottom, setAtBottom] = useState(initialValue);
   const [resize, setResize] = useState(false);
 
   useEffect(() => {
