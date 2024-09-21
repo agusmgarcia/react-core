@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.7.0](https://github.com/agusmgarcia/react-core/tree/v2.7.0)
+
+> 20 September 2024
+
+- **useMediaQuery**: add initial value
+
 ## [v2.6.1](https://github.com/agusmgarcia/react-core/tree/v2.6.1)
 
 > 29 August 2024
