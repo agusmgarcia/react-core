@@ -11,6 +11,9 @@ type DefaultValues<TName extends "checked" | "value"> = Record<
     TName extends "checked" ? boolean : string
   >;
 
+/**
+ * @deprecated This method is going to be deleted in the next major version.
+ */
 export function useValueTracker<
   TElement extends HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
 >(
@@ -20,6 +23,9 @@ export function useValueTracker<
   return useCheckedOrValueTracker(elementRef, "value", props);
 }
 
+/**
+ * @deprecated This method is going to be deleted in the next major version.
+ */
 export function useCheckedTracker<TElement extends HTMLInputElement>(
   elementRef: React.RefObject<TElement>,
   props: Partial<DefaultValues<"checked">> | undefined,
