@@ -213,6 +213,8 @@ function useHook() {
 
 ## Use checked tracker
 
+This is kept for compatibility with versions `v2.x.x`. It is going to be removed in the next major release.
+
 ```typescript
 import { useCheckedTracker } from "@agusmgarcia/react-core";
 import { useRef } from "react";
@@ -227,6 +229,8 @@ function useHook() {
 ```
 
 ## Use focus tracker
+
+This is kept for compatibility with versions `v2.x.x`. It is going to be removed in the next major release.
 
 ```typescript
 import { useFocusTracker } from "@agusmgarcia/react-core";
@@ -249,6 +253,8 @@ function useHook() {
 ```
 
 ## Use value tracker
+
+This is kept for compatibility with versions `v2.x.x`. It is going to be removed in the next major release.
 
 ```typescript
 import { useValueTracker } from "@agusmgarcia/react-core";
