@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 
 export default function useElementAtTop<TElement extends HTMLElement>(
   elementRef: React.RefObject<TElement>,
-  defaultAtTop = true,
+  initialValue = true,
 ): boolean {
-  const [atTop, setAtTop] = useState(defaultAtTop);
+  const [atTop, setAtTop] = useState(initialValue);
   const [resize, setResize] = useState(false);
 
   useEffect(() => {
