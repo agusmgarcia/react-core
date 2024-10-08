@@ -1,5 +1,7 @@
 const dateRegexp = /(\d\d\d\d)-(\d\d)-(\d\d)/;
 
+const maxDaysPerMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
 export function addDays(date: string, days: number): string {
   const tmp = new Date(date);
   tmp.setUTCDate(tmp.getUTCDate() + days);
@@ -117,6 +119,10 @@ export function getYear(date: string): number {
   );
 }
 
+function isLeap(year: number): boolean {
+  return !(year % 4 || (!(year % 100) && year % 400));
+}
+
 export function max(date: string, ...dates: string[]): string {
   let result = date;
   for (const aux of dates) if (aux > result) result = aux;
@@ -151,4 +157,18 @@ export function toDateString(
 
 function toString(date: Date): string {
   return `${date.getUTCFullYear()}-${(date.getUTCMonth() + 1).toString().padStart(2, "0")}-${date.getUTCDate().toString().padStart(2, "0")}`;
+}
+
+export function validate(date: string): boolean {
+  const matches = dateRegexp.exec(date);
+  if (matches === null) return false;
+
+  const year = +matches[1];
+  const month = +matches[2];
+  const day = +matches[3];
+
+  if (day <= 0) return false;
+  if (month <= 0 || month > 12) return false;
+  if (month === 2 && isLeap(year)) return day <= 29;
+  return day <= maxDaysPerMonth[month - 1];
 }
