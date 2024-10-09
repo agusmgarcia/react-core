@@ -91,6 +91,17 @@ equals.strict(
 ); // => true
 ```
 
+## Finds
+
+```typescript
+import { finds } from "@agusmgarcia/react-core";
+
+const array = [17, 6, 95];
+
+array.find(finds.first); // => 17
+array.find(finds.single); // => throws error
+```
+
 ## Func
 
 ```typescript
