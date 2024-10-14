@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.8.0](https://github.com/agusmgarcia/react-core/tree/v2.8.0)
+
+> 14 October 2024
+
+- **finds**: add utility
+- **dates**: add validate feature
+- **useElementAtTop**: use devicePixelRatio as unit
+- **useElementAtBottom**: use devicePixelRatio as unit
+
 ## [v2.7.0](https://github.com/agusmgarcia/react-core/tree/v2.7.0)
 
 > 20 September 2024
