@@ -13,7 +13,8 @@ export default function useElementAtBottom<TElement extends HTMLElement>(
 
     const set = (e: TElement): void =>
       setAtBottom(
-        Math.abs(e.scrollTop - (e.scrollHeight - e.offsetHeight)) < 1,
+        Math.abs(e.scrollTop - (e.scrollHeight - e.offsetHeight)) <
+          window.devicePixelRatio,
       );
 
     function handle(event: Event) {
