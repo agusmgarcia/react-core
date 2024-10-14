@@ -11,7 +11,8 @@ export default function useElementAtTop<TElement extends HTMLElement>(
     const element = elementRef.current;
     if (element === null) return;
 
-    const set = (e: TElement): void => setAtTop(e.scrollTop < 1);
+    const set = (e: TElement): void =>
+      setAtTop(e.scrollTop < window.devicePixelRatio);
 
     function handle(event: Event) {
       const target = event.target;
