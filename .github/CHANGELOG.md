@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.8.1](https://github.com/agusmgarcia/react-core/tree/v2.8.1)
+
+> 16 October 2024
+
+- adjust engine compatibility to minimum
+
 ## [v2.8.0](https://github.com/agusmgarcia/react-core/tree/v2.8.0)
 
 > 14 October 2024
