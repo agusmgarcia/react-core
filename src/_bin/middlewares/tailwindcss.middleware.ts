@@ -30,7 +30,7 @@ const postCSSConfig = `module.exports = {
 };
 `;
 
-const tailwindConfig = `/** @type {import('tailwindcss').Config} */
+const tailwindConfig = `/** @type import('tailwindcss').Config */
 module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
