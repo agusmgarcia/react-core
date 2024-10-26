@@ -29,7 +29,7 @@ const eslintrc_app = `{
   "env": {
     "es6": true
   },
-  "extends": ["next/core-web-vitals"],
+  "extends": ["next/core-web-vitals", "plugin:tailwindcss/recommended"],
   "overrides": [
     {
       "files": ["**/*.types.ts"],
@@ -118,6 +118,13 @@ const eslintrc_app = `{
       "error",
       { "caseSensitive": false, "natural": true }
     ],
+    "tailwindcss/classnames-order": "error",
+    "tailwindcss/enforces-negative-arbitrary-values": "error",
+    "tailwindcss/enforces-shorthand": "error",
+    "tailwindcss/no-arbitrary-value": "off",
+    "tailwindcss/no-custom-classname": "error",
+    "tailwindcss/no-contradicting-classname": "error",
+    "tailwindcss/no-unnecessary-arbitrary-value": "error",
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
       "error",
