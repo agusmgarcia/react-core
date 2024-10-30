@@ -29,7 +29,11 @@ const eslintrc_app = `{
   "env": {
     "es6": true
   },
-  "extends": ["next/core-web-vitals", "plugin:tailwindcss/recommended"],
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:boundaries/strict",
+    "plugin:tailwindcss/recommended"
+  ],
   "overrides": [
     {
       "files": ["**/*.types.ts"],
@@ -41,6 +45,11 @@ const eslintrc_app = `{
       "files": ["**/*.d.ts"],
       "rules": {
         "@typescript-eslint/consistent-type-imports": "off",
+        "boundaries/element-types": "off",
+        "boundaries/entry-point": "off",
+        "boundaries/no-private": "off",
+        "boundaries/no-unknown": "off",
+        "boundaries/no-unknown-files": "off",
         "import/first": "off",
         "import/newline-after-import": "off",
         "import/no-duplicates": "off",
@@ -68,6 +77,7 @@ const eslintrc_app = `{
   },
   "plugins": [
     "@typescript-eslint",
+    "boundaries",
     "import",
     "react",
     "simple-import-sort",
@@ -83,6 +93,53 @@ const eslintrc_app = `{
         "fixStyle": "inline-type-imports"
       }
     ],
+    "boundaries/element-types": [
+      "error",
+      {
+        "default": "disallow",
+        "rules": [
+          {
+            "from": ["root"],
+            "allow": ["public", "root", "pages", "store", "utils"]
+          },
+          {
+            "from": ["api"],
+            "allow": ["public", "api", "utils"]
+          },
+          {
+            "from": ["components"],
+            "allow": ["public", "components", "utils"]
+          },
+          {
+            "from": ["fragments"],
+            "allow": ["public", "components", "fragments", "store", "utils"]
+          },
+          {
+            "from": ["pages"],
+            "allow": [
+              "public",
+              "components",
+              "fragments",
+              "pages",
+              "store",
+              "utils"
+            ]
+          },
+          {
+            "from": ["store"],
+            "allow": ["public", "api", "store", "utils"]
+          },
+          {
+            "from": ["utils"],
+            "allow": ["public", "utils"]
+          }
+        ]
+      }
+    ],
+    "boundaries/entry-point": "error",
+    "boundaries/no-private": "error",
+    "boundaries/no-unknown": "error",
+    "boundaries/no-unknown-files": "error",
     "import/first": "error",
     "import/newline-after-import": "error",
     "import/no-duplicates": "error",
@@ -133,6 +190,57 @@ const eslintrc_app = `{
         "argsIgnorePattern": "^_",
         "vars": "all",
         "varsIgnorePattern": "^_"
+      }
+    ]
+  },
+  "settings": {
+    "boundaries/include": [
+      "./pages/**/*",
+      "./package.json",
+      "./public/**/*",
+      "./src/**/*",
+      "./tailwind.config.js"
+    ],
+    "boundaries/elements": [
+      {
+        "mode": "full",
+        "pattern": ["./package.json", "./public/**/*", "./tailwind.config.js"],
+        "type": "public"
+      },
+      {
+        "mode": "full",
+        "pattern": ["./pages/**/*"],
+        "type": "root"
+      },
+      {
+        "mode": "full",
+        "pattern": ["./src/api/**/*"],
+        "type": "api"
+      },
+      {
+        "mode": "full",
+        "pattern": ["./src/components/**/*"],
+        "type": "components"
+      },
+      {
+        "mode": "full",
+        "pattern": ["./src/fragments/**/*"],
+        "type": "fragments"
+      },
+      {
+        "mode": "full",
+        "pattern": ["./src/pages/**/*"],
+        "type": "pages"
+      },
+      {
+        "mode": "full",
+        "pattern": ["./src/store/**/*"],
+        "type": "store"
+      },
+      {
+        "mode": "full",
+        "pattern": ["./src/utils/**/*"],
+        "type": "utils"
       }
     ]
   }
