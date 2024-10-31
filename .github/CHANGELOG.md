@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.9.0](https://github.com/agusmgarcia/react-core/tree/v2.9.0)
+
+> 30 October 2024
+
+- **github.middleware**: remove scope
+- **eslint.middleware**: add `eslint-plugin-boundaries` for app
+- **eslint.middleware**: add `eslint-plugin-tailwindcss`
+- **tailwindcss.middleware**: adjust `tailwind.config.js` file
+- **nextjs.middleware**: adjust `nextjs.config.js` file
+
 ## [v2.8.1](https://github.com/agusmgarcia/react-core/tree/v2.8.1)
 
 > 16 October 2024
