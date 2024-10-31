@@ -9,6 +9,7 @@ export * as equals from "./equals";
 export * as finds from "./finds";
 export { type default as Func } from "./Func.types";
 export { default as isChildOf } from "./isChildOf";
+export { default as isOnlyId } from "./isOnlyId";
 export { default as isParentOf } from "./isParentOf";
 export { default as isSSR } from "./isSSR";
 export { default as mergeRefs } from "./mergeRefs";

@@ -135,6 +135,15 @@ const potentialParent = document.getElementById("element2");
 return isChildOf(potentialParent, child);
 ```
 
+## Is only id
+
+```typescript
+import { isOnlyId } from "@agusmgarcia/react-core";
+
+isOnlyId({ id: "3" }); // => true
+isOnlyId({ id: "3", name: "John" }); // => false
+```
+
 ## Is parent of
 
 ```typescript
