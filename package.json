@@ -10,8 +10,8 @@
     "check": "ts-node src/_bin/check.ts",
     "format": "ts-node src/_bin/format.ts",
     "start": "ts-node src/_bin/start.ts",
-    "prepack": "ts-node src/_bin/prepack.ts && cpy README.commands.md README.store.md README.utilities.md ../.. --cwd=.github",
-    "postpack": "ts-node src/_bin/postpack.ts && del README.commands.md README.store.md README.utilities.md",
+    "prepack": "ts-node src/_bin/prepack.ts ../.. --cwd=.github",
+    "postpack": "ts-node src/_bin/postpack.ts",
     "regenerate": "ts-node src/_bin/regenerate.ts",
     "test": "ts-node src/_bin/test.ts"
   },
