@@ -5,6 +5,7 @@ import isParentOf from "./isParentOf";
 /**
  * @deprecated This method is going to be deleted in the next major version.
  */
+// TODO: delete this file.
 export default function useFocusTracker<TElement extends Element>(
   elementRef: React.RefObject<TElement>,
   defaultFocus = false,

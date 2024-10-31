@@ -113,7 +113,7 @@ type Func2 = Func<number>; // => () => number
 type Func3 = Func<number, [arg0: string]>; // => (arg0: string) => number
 ```
 
-## Func (old-way)
+## Func (old-way) <!-- // TODO: remove it in the nextj major release -->
 
 This is kept for compatibility with versions `v2.x.x`. It is going to be removed in the next major release.
 
@@ -258,7 +258,7 @@ function useHook() {
 }
 ```
 
-## Use checked tracker
+## Use checked tracker <!-- // TODO: remove it in the nextj major release -->
 
 This is kept for compatibility with versions `v2.x.x`. It is going to be removed in the next major release.
 
@@ -275,7 +275,7 @@ function useHook() {
 }
 ```
 
-## Use focus tracker
+## Use focus tracker <!-- // TODO: remove it in the nextj major release -->
 
 This is kept for compatibility with versions `v2.x.x`. It is going to be removed in the next major release.
 
@@ -299,7 +299,7 @@ function useHook() {
 }
 ```
 
-## Use value tracker
+## Use value tracker <!-- // TODO: remove it in the nextj major release -->
 
 This is kept for compatibility with versions `v2.x.x`. It is going to be removed in the next major release.
 

@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 
 import capitalize from "./capitalize";
 
+// TODO: delete this entire file.
+
 type DefaultValues<TName extends "checked" | "value"> = Record<
   TName,
   TName extends "checked" ? boolean : string
