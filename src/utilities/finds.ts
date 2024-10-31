@@ -16,3 +16,12 @@ export function single<TElement>(
 
   return index === 0;
 }
+
+export function singleOrDefault<TElement>(
+  _element: TElement,
+  index: number,
+  array: TElement[],
+): boolean {
+  if (array.length > 1) return false;
+  return index === 0;
+}

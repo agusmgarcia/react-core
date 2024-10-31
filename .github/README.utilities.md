@@ -100,6 +100,7 @@ const array = [17, 6, 95];
 
 array.find(finds.first); // => 17
 array.find(finds.single); // => throws error
+array.find(finds.singleOrDefault); // => undefined
 ```
 
 ## Func
