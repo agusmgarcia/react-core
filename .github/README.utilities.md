@@ -256,20 +256,3 @@ function useHook() {
   const isTablet = useMediaQuery("(max-width: 767.98px)"); // => boolean
 }
 ```
-
-## Use value tracker <!-- // TODO: remove it in the nextj major release -->
-
-This is kept for compatibility with versions `v2.x.x`. It is going to be removed in the next major release.
-
-```typescript
-import { useValueTracker } from "@agusmgarcia/react-core";
-import { useRef } from "react";
-
-function useHook() {
-  const ref = useRef<HTMLInputElement>(null);
-  const value = useValueTracker(ref, {
-    defaultValue: "John",
-    value: undefined,
-  }); // => the current value of the element.
-}
-```
