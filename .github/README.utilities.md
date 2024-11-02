@@ -126,18 +126,6 @@ type Func2 = Func<number>; // => () => number
 type Func3 = Func<number, [arg0: string]>; // => (arg0: string) => number
 ```
 
-## Func (old-way) <!-- // TODO: remove it in the nextj major release -->
-
-This is kept for compatibility with versions `v2.x.x`. It is going to be removed in the next major release.
-
-```typescript
-import { type Func } from "@agusmgarcia/react-core";
-
-type Func1 = Func; // => () => void
-type Func2 = Func<[number]>; // => () => number
-type Func3 = Func<[arg0: string, number]>; // => (arg0: string) => number
-```
-
 ## Is child of
 
 ```typescript
