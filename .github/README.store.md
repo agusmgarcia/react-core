@@ -1,155 +1,62 @@
 # Store
 
-A hook oriented react state manager.
+An opinionated react state manager based on hooks. It provides tools to create global and server state.
 
-## Example
+## Global state
 
-### Define a slice
+This is the information that is going to be consumed globally across the app. It is handled by `createGlobalState` function from the library.
+
+### Example
+
+In this scenario, the form search state is stored globally. This is the way is must be defined.
 
 ```ts
-// ./store/PeopleSlice.ts
+// ./store/global/PeopleFormSearch.ts
 
-import { createSlice, useSWR } from "@agusmgarcia/react-core";
-import { useCallback } from "react";
+import { createGlobalState, type Func } from "@agusmgarcia/react-core";
 
-export type Person = {
-  id: string;
+export type PeopleFormSearch = {
+  asc: boolean;
+  clear: Func;
   name: string;
-  surname: string;
+  setAsc: Func<void, [asc: boolean]>;
+  setName: Func<void, [name: string]>;
 };
 
-const PeopleSlice = createSlice(() => {
-  const fetchPeople = useCallback(
-    (signal: AbortSignal): Person[] =>
-      fetch("/api/people", { signal }).then((result) => result.json()),
-    [],
-  );
-
-  const { data, loading, setData, reload } = useSWR(fetchPeople);
-
-  const editName = useCallback(
-    (id: string, name: string) => {
-      setData((ppl) => ppl.map((p) => (p.id === id ? { ...p, name } : p)));
-
-      try {
-        await fetch(`/api/people/${id}`, {
-          body: JSON.stringify({ name }),
-          method: "PATCH",
-        });
-      } finally {
-        reload();
-      }
-    },
-    [setData, reload],
-  );
-
-  return { data, editName, loading };
-});
-
-export default PeopleSlice;
+export default createGlobalState<PeopleFormSearch>(
+  () => ({
+    asc: false,
+    clear: (ctx) => ctx.set({ asc: false, name: "" }),
+    name: "",
+    setAsc: (asc, ctx) => ctx.set((prev) => ({ ...prev, asc })),
+    setName: (name, ctx) => ctx.set((prev) => ({ ...prev, name })),
+  }),
+  "form-search", // This is an optional argument used by redux-devtools.
+);
 ```
 
-### Create the store
+This is the way it must be consumed:
 
 ```ts
 // ./store/index.ts
 
-import { createStore } from "@agusmgarcia/react-core";
+import usePeopleFormSearchSelector, {
+  type PeopleFormSearch,
+} from "./PeopleFormSearch.ts";
 
-import PeopleSlice from "./PeopleSlice";
-
-export { type Person } from "./PeopleSlice";
-
-const { useStore, ...reactStore } = createStore(
-  {
-    people: PeopleSlice,
-  },
-  {
-    devtools: true,
-  },
-);
-
-export const StoreProvider = reactStore.StoreProvider;
-
-export function usePeople() {
+export function usePeopleFormSearch() {
   return {
-    editPersonName: useStore((store) => store.people.editName),
-    isPeopleLoading: useStore((store) => store.people.loading),
-    people: useStore((store) => store.people.data),
+    clearFormSearch: usePeopleFormSearchSelector((state) => state.clear),
+    formSearch: usePeopleFormSearchSelector(
+      (state) => ({ asc: state.asc, name: state.name }),
+      true,
+    ),
+    setFormSearchAsc: usePeopleFormSearchSelector((state) => state.setAsc),
+    setFormSearchName: usePeopleFormSearchSelector((state) => state.setName),
   };
 }
 ```
 
-### Wrap the main component with the created store provider
+## Server state
 
-```tsx
-// ./index.tsx
-
-import React from "react";
-import ReactDOM from "react-dom";
-
-import App from "./components/App";
-import { StoreProvider } from "./store";
-
-ReactDOM.render(
-  <React.StrictMode>
-    <StoreProvider>
-      <App />
-    </StoreProvider>
-  </React.StrictMode>,
-  document.getElementById("root"),
-);
-```
-
-### Access the store within components
-
-```tsx
-// ./components/App/index.tsx
-
-import React from "react";
-
-import { usePeople } from "./store";
-
-export default function App() {
-  const { editPersonName, isPeopleLoading, people } = usePeople();
-
-  return (
-    <div>
-      <h1>PEOPLE</h1>
-      {!isPeopleLoading ? (
-        <div>
-          {people.map((p) => (
-            <div key={p.id}>
-              <h2>{people.name}</h2>
-              <h2>{people.surname}</h2>
-              <button onClick={() => editPersonName(p.id, "Foo")}>
-                Change name
-              </button>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div>Loading...</div>
-      )}
-    </div>
-  );
-}
-```
-
-## Types
-
-### useSWR
-
-#### Input
-
-- `initialData`: the initial state
-- `fetcher()`: function to get new data
-
-#### Output
-
-- `data`: data for the given key resolved by fetcher (or undefined if not loaded).
-- `error`: error thrown by fetcher (or undefined).
-- `initialized`: whether the slice has been initialized.
-- `loading`: if there's a request or revalidation loading.
-- `reload()`: function to refetch data.
-- `setData(newData)`: function to mutate the cached data.
+The state that is populated from an API or an external resource. It also handles automatic revalidation.
