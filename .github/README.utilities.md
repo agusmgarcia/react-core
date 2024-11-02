@@ -247,23 +247,6 @@ function useHook() {
 }
 ```
 
-## Use checked tracker <!-- // TODO: remove it in the nextj major release -->
-
-This is kept for compatibility with versions `v2.x.x`. It is going to be removed in the next major release.
-
-```typescript
-import { useCheckedTracker } from "@agusmgarcia/react-core";
-import { useRef } from "react";
-
-function useHook() {
-  const ref = useRef<HTMLInputElement>(null);
-  const value = useCheckedTracker(ref, {
-    checked: undefined,
-    defaultChecked: true,
-  }); // => the current value of the element.
-}
-```
-
 ## Use focus tracker <!-- // TODO: remove it in the nextj major release -->
 
 This is kept for compatibility with versions `v2.x.x`. It is going to be removed in the next major release.

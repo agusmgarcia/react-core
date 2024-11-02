@@ -25,16 +25,6 @@ export function useValueTracker<
   return useCheckedOrValueTracker(elementRef, "value", props);
 }
 
-/**
- * @deprecated This method is going to be deleted in the next major version.
- */
-export function useCheckedTracker<TElement extends HTMLInputElement>(
-  elementRef: React.RefObject<TElement>,
-  props: Partial<DefaultValues<"checked">> | undefined,
-): boolean {
-  return useCheckedOrValueTracker(elementRef, "checked", props);
-}
-
 function useCheckedOrValueTracker<
   TElement extends HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
   TName extends "checked" | "value",
