@@ -20,6 +20,5 @@ export * as sorts from "./sorts";
 export { default as StorageCache } from "./StorageCache";
 export { default as useElementAtBottom } from "./useElementAtBottom";
 export { default as useElementAtTop } from "./useElementAtTop";
-export { default as useFocusTracker } from "./useFocusTracker";
 export { default as useMediaQuery } from "./useMediaQuery";
 export * from "./useValueTracker";
