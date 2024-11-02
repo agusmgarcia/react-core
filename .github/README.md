@@ -1,9 +1,8 @@
 # React Core
 
-Set of opinionated commands, utilities and state manager for react applications and libraries.
+Set of opinionated commands and utilities for react applications and libraries.
 
 - [Commands](/.github/README.commands.md)
-- [Store](/.github/README.store.md)
 - [Utilities](/.github/README.utilities.md)
 
 ## Getting started
