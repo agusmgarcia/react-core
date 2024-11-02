@@ -1,3 +1,9 @@
-export { default as createSlice } from "./createSlice";
-export { default as createStore } from "./createStore";
-export { default as useSWR } from "./useSWR";
+export {
+  type CreateGlobalSliceTypes,
+  default as createGlobalSlice,
+} from "./createGlobalSlice";
+export {
+  type CreateServerSliceTypes,
+  default as createServerSlice,
+} from "./createServerSlice";
+export { type CreateStoreTypes, default as createStore } from "./createStore";
