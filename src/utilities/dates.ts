@@ -31,37 +31,6 @@ export function differenceInDays(endDate: string, startDate: string): number {
   return Math.ceil(diffTime / 86_400_000);
 }
 
-/**
- * @deprecated This method is going to be deleted in the next major version.
- * Use toDateString instead.
- */
-// TODO: delete this method in the next major version.
-export function formatDate(
-  date: Date | string,
-  format: "dd" | "ii" | "MM" | "yyyy" | "yyyy-MM-dd",
-): string {
-  date = typeof date === "string" ? new Date(date) : date;
-  switch (format) {
-    case "dd":
-      return `${`${date.getUTCDate()}`.padStart(2, "0")}`;
-
-    case "ii":
-      return `${`${date.getUTCDay()}`.padStart(2, "0")}`;
-
-    case "MM":
-      return `${`${date.getUTCMonth() + 1}`.padStart(2, "0")}`;
-
-    case "yyyy":
-      return `${date.getUTCFullYear()}`;
-
-    case "yyyy-MM-dd":
-      return `${formatDate(date, "yyyy")}-${formatDate(
-        date,
-        "MM",
-      )}-${formatDate(date, "dd")}`;
-  }
-}
-
 export function getCurrentDate(
   timeZone?: Intl.DateTimeFormatOptions["timeZone"],
   timeZoneName?: Intl.DateTimeFormatOptions["timeZoneName"],
