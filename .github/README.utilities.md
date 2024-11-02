@@ -193,33 +193,8 @@ type OnlyIdPerson = OnlyId<Person>; // => { id: string, name?: undefined }
 import { replaceString } from "@agusmgarcia/react-core";
 
 replaceString("This is the ${value} test", { value: "third" }); // => "This is the third test"
-```
-
-### With conditions
-
-```typescript
-import { replaceString } from "@agusmgarcia/react-core";
-
-replaceString("${nights} ${singular?night:nights}", {
-  nights: 1,
-  singular: true,
-}); // => "1 night"
-
-replaceString("${nights} ${singular?night:nights}", {
-  nights: 2,
-  singular: false,
-}); // => "2 nights"
-```
-
-### With conditions (old-way) <!-- // TODO: remove it in the nextj major release -->
-
-This is kept for compatibility with versions `v2.x.x`. It is going to be removed in the next major release.
-
-```typescript
-import { replaceString } from "@agusmgarcia/react-core";
-
-replaceString("${nights} ${nights:night/nights}", { nights: 1 }); // => "1 night"
-replaceString("${nights} ${nights:night/nights}", { nights: 2 }); // => "2 nights"
+replaceString("${nights} ${nights?night:nights}", { nights: 1 }); // => "1 night"
+replaceString("${nights} ${nights?night:nights}", { nights: 2 }); // => "2 nights"
 ```
 
 ## Sorts
