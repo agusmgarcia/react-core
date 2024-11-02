@@ -43,15 +43,6 @@ import { capitalize } from "@agusmgarcia/react-core";
 capitalize("foo"); // => "Foo"
 ```
 
-## Currencies
-
-```typescript
-import { currencies } from "@agusmgarcia/react-core";
-
-currencies.toString(20); // => "20.00"
-currencies.toNumber("20.00"); // => 20
-```
-
 ## Dates
 
 ```typescript
