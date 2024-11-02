@@ -247,20 +247,6 @@ function useHook() {
 }
 ```
 
-## Use focus tracker <!-- // TODO: remove it in the nextj major release -->
-
-This is kept for compatibility with versions `v2.x.x`. It is going to be removed in the next major release.
-
-```typescript
-import { useFocusTracker } from "@agusmgarcia/react-core";
-import { useRef } from "react";
-
-function useHook() {
-  const ref = useRef<HTMLElement>(null);
-  const focus = useFocusTracker(ref); // => true if the element or its children have been focused.
-}
-```
-
 ## Use media query
 
 ```typescript
