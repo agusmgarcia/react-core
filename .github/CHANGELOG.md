@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.10.0](https://github.com/agusmgarcia/react-core/tree/v2.10.0)
+
+> 2 November 2024
+
+- **replaceString**: add ability to introduce conditions
+- **isOnlyId**: add utils
+- **finds**: add singleOrDefault method
+- **replaceString**: handle scenarios for undefined message
+
 ## [v2.9.0](https://github.com/agusmgarcia/react-core/tree/v2.9.0)
 
 > 30 October 2024
