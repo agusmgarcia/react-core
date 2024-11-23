@@ -168,6 +168,21 @@ function Component() {
 }
 ```
 
+## Omit funcs
+
+```typescript
+import { type OmitFuncs } from "@agusmgarcia/react-core";
+
+type Person = {
+  name: string;
+  setName: Func<void, [name: string]>;
+  setSurname: Func<void, [surname: string]>;
+  surname: string;
+};
+
+type Result = OmitFuncs<Person>; // => { name: string; surname: string }
+```
+
 ## Only Id
 
 ```typescript
