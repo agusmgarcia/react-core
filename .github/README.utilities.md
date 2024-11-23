@@ -247,6 +247,19 @@ import { sorts } from "@agusmgarcia/react-core";
 [false, true].sort(sorts.byBooleanDesc); // => [false, true]
 ```
 
+## Storage cache
+
+```typescript
+import { StorageCache } from "@agusmgarcia/react-core";
+
+const cache = new StorageCache("myCache", "session");
+cache
+  .getOrCreate("key", () => {
+    // Run some exclusive function.
+  })
+  .then((result) => console.log(result));
+```
+
 ## Use element at bottom
 
 ```typescript
