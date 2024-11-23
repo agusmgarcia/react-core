@@ -1,4 +1,5 @@
 import Cache from "./Cache";
+import type Func from "./Func.types";
 import isSSR from "./isSSR";
 
 type Storage = "local" | "session";
@@ -15,10 +16,11 @@ export default class StorageCache extends Cache {
 
   override getOrCreate<TResult>(
     key: string,
-    factory: () => TResult | Promise<TResult>,
+    factory: Func<TResult | Promise<TResult>>,
   ): Promise<TResult> {
-    return super.getOrCreate(key, async () => {
-      const result = await factory();
+    // TODO: remove the '<TResult>' statement after v3.x.x
+    return super.getOrCreate<TResult>(key, async () => {
+      const result = (await factory()) as TResult; // TODO: remove the 'as' statement after v3.x.x
       const now = Date.now();
       saveItemIntoStore(this.storage, this.storageName, key, {
         createdAt: now,
