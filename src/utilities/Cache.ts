@@ -1,5 +1,7 @@
 import { Mutex } from "async-mutex";
 
+import type Func from "./Func.types";
+
 type Item = { createdAt: number; result: any };
 
 export default class Cache {
@@ -7,7 +9,7 @@ export default class Cache {
   private readonly items: Record<string, Item>;
   private readonly maxCacheTime: number;
 
-  constructor(maxCacheTime = 900_000, items: Record<string, Item>) {
+  constructor(maxCacheTime = 900_000, items: Record<string, Item> = {}) {
     this.mutexes = {};
     this.items = items;
     this.maxCacheTime = maxCacheTime;
@@ -15,7 +17,7 @@ export default class Cache {
 
   getOrCreate<TResult>(
     key: string,
-    factory: () => TResult | Promise<TResult>,
+    factory: Func<TResult | Promise<TResult>>,
   ): Promise<TResult> {
     if (this.mutexes[key] === undefined) this.mutexes[key] = new Mutex();
     return this.mutexes[key].runExclusive(async () => {
