@@ -1,15 +1,13 @@
 import Cache from "./Cache";
 import isSSR from "./isSSR";
 
+type Storage = "local" | "session";
+
 export default class StorageCache extends Cache {
   private readonly storageName: string;
-  private readonly storage: "local" | "session";
+  private readonly storage: Storage;
 
-  constructor(
-    storageName: StorageCache["storageName"],
-    storage: StorageCache["storage"] = "session",
-    maxCacheTime?: Cache["maxCacheTime"],
-  ) {
+  constructor(storageName: string, storage: Storage, maxCacheTime?: number) {
     super(maxCacheTime, loadItemsFromStore(storage, storageName));
     this.storage = storage;
     this.storageName = storageName;
