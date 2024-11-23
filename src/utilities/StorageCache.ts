@@ -18,9 +18,8 @@ export default class StorageCache extends Cache {
     key: string,
     factory: Func<TResult | Promise<TResult>>,
   ): Promise<TResult> {
-    // TODO: remove the '<TResult>' statement after v3.x.x
-    return super.getOrCreate<TResult>(key, async () => {
-      const result = (await factory()) as TResult; // TODO: remove the 'as' statement after v3.x.x
+    return super.getOrCreate(key, async () => {
+      const result = await factory();
       const now = Date.now();
       saveItemIntoStore(this.storage, this.storageName, key, {
         createdAt: now,
