@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.11.0](https://github.com/agusmgarcia/react-core/tree/v2.10.0)
+
+> 22 November 2024
+
+- **StorageCache**: add utility
+- **Cache**: add utility
+
 ## [v2.10.0](https://github.com/agusmgarcia/react-core/tree/v2.10.0)
 
 > 2 November 2024
