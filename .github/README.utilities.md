@@ -22,6 +22,19 @@ blockUntil(controller.signal).then(() => console.log("Continue"));
 setTimeout(() => controller.abort(), 3000);
 ```
 
+## Cache
+
+```typescript
+import { Cache } from "@agusmgarcia/react-core";
+
+const cache = new Cache();
+cache
+  .getOrCreate("key", () => {
+    // Run some exclusive function.
+  })
+  .then((result) => console.log(result));
+```
+
 ## Capitalize
 
 ```typescript
