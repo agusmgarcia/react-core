@@ -1,14 +1,13 @@
 import { Mutex } from "async-mutex";
 
+type Item = { createdAt: number; result: any };
+
 export default class Cache {
   private readonly mutexes: Record<string, Mutex>;
-  private readonly items: Record<string, { createdAt: number; result: any }>;
+  private readonly items: Record<string, Item>;
   private readonly maxCacheTime: number;
 
-  constructor(
-    maxCacheTime: Cache["maxCacheTime"] = 900_000,
-    items: Cache["items"] = {},
-  ) {
+  constructor(maxCacheTime = 900_000, items: Record<string, Item>) {
     this.mutexes = {};
     this.items = items;
     this.maxCacheTime = maxCacheTime;
