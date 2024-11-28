@@ -65,3 +65,18 @@ When running `npm run regenerate` all the pertinent files will be regenerated. H
 In case you want to prevent one of the files of being regenerated, use the `--ignore=` flag.
 
 > For example, `agusmgarcia-react-core-check --ignore=.eslintrc --ignore=.prettierignore`. It will ignore `.eslintrc` and `.prettierignore` files of being regenerated.
+
+## Simulated
+
+Sometimes you don't want to delete the `.tgz` file generated after packing the library. It is useful when doing some local testing before publishing it. To achive that, add the `--simulated` argument to the postpack script.
+
+```jsonc
+// package.json
+
+{
+  "scripts": {
+    // ...
+    "postpack": "agusmgarcia-react-core-postpack --simulated",
+  },
+}
+```

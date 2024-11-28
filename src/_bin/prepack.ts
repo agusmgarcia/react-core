@@ -6,6 +6,7 @@ export default async function prepack(): Promise<void> {
 
   await run(
     false,
+    () => execute("del bin dist *.tgz README.md CHANGELOG.md", true),
     () => execute("webpack --mode=production", true),
     () => execute("cpy README.md CHANGELOG.md ../.. --cwd=.github", true),
   );
