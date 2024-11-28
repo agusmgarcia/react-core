@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.12.0](https://github.com/agusmgarcia/react-core/tree/v2.12.0)
+
+> 28 November 2024
+
+- add simulated flag when packing the library
+- **StorageCache**: adjust types
+- **Cache**: adjust types
+
 ## [v2.11.1](https://github.com/agusmgarcia/react-core/tree/v2.11.1)
 
 > 22 November 2024
