@@ -15,5 +15,4 @@ export type Input<TData extends ValidData> = [
 
 export type Output<TData extends ValidData> = State<TData> & {
   reload: Func;
-  setData: Func<void, [data: TData | Func<TData, [prevData: TData]>]>;
 };

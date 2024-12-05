@@ -38,17 +38,6 @@ export default function useServerState<TData extends ValidData = any>(
     [],
   );
 
-  const setData = useCallback<Output<TData | undefined>["setData"]>((data) => {
-    controllerRef.current?.abort();
-    controllerRef.current = new AbortController();
-
-    setState((prevState) => ({
-      data: data instanceof Function ? data(prevState.data) : data,
-      error: undefined,
-      loading: false,
-    }));
-  }, []);
-
   useEffect(() => {
     controllerRef.current?.abort();
     controllerRef.current = new AbortController();
@@ -68,7 +57,7 @@ export default function useServerState<TData extends ValidData = any>(
     return () => controller.abort();
   }, [fetcher, reloadTrigger]);
 
-  return { ...state, reload, setData };
+  return { ...state, reload };
 }
 
 async function makeAsync<TResult>(
