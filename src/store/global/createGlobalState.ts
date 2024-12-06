@@ -12,7 +12,7 @@ export default function createGlobalState<TState extends object>(
 ): Output<TState> {
   return create<TState>()(
     devtools(
-      (setState, getState) => {
+      (set, get) => {
         let controller = new AbortController();
 
         const stateWithFunctionsWithContext = input[0]();
@@ -29,8 +29,8 @@ export default function createGlobalState<TState extends object>(
                 const signal = controller.signal;
 
                 return element(...args, {
-                  getState,
-                  setState,
+                  get,
+                  set,
                   signal,
                 } as unknown as Context<TState>);
               }) as any;

@@ -1,8 +1,8 @@
 import { type Func, type OmitFuncs } from "#src/utilities";
 
 export type Context<TState extends object> = {
-  getState: Func<OmitFuncs<TState>>;
-  setState: Func<
+  get: Func<OmitFuncs<TState>>;
+  set: Func<
     void,
     [
       state:
