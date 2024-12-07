@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
+import { useShallow } from "zustand/react/shallow";
 
 import {
   type Context,
@@ -10,7 +11,7 @@ import {
 export default function createGlobalState<TState extends object>(
   ...input: Input<TState>
 ): Output<TState> {
-  return create<TState>()(
+  const hook = create<TState>()(
     devtools(
       (set, get) => {
         let controller = new AbortController();
@@ -46,4 +47,10 @@ export default function createGlobalState<TState extends object>(
       },
     ),
   );
+
+  return ((selector, shallow) => {
+    if (selector === undefined) return hook();
+    if (!shallow) return hook(selector);
+    return hook(useShallow(selector));
+  }) as Output<TState>;
 }

@@ -29,4 +29,5 @@ export type Input<TState extends object> = [
 
 export type Output<TState> = <TResult>(
   selector?: Func<TResult, [state: TState]>,
+  shallow?: boolean,
 ) => TResult;
