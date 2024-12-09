@@ -18,6 +18,7 @@ export { type default as OnlyId } from "./OnlyId.types";
 export { default as replaceString } from "./replaceString";
 export * as sorts from "./sorts";
 export { default as StorageCache } from "./StorageCache";
+export { type default as TuplifyUnion } from "./TuplifyUnion.types";
 export { default as useElementAtBottom } from "./useElementAtBottom";
 export { default as useElementAtTop } from "./useElementAtTop";
 export { default as useMediaQuery } from "./useMediaQuery";

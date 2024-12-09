@@ -237,6 +237,16 @@ cache
   .then((result) => console.log(result));
 ```
 
+## Tuplify union
+
+```typescript
+import { type TuplifyUnion } from "@agusmgarcia/react-core";
+
+type Person = { id: string; name: string };
+
+type TuplifyPerson = TuplifyUnion<Person>; // => ["id", "name"]
+```
+
 ## Use element at bottom
 
 ```typescript
