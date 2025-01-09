@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.12.1](https://github.com/agusmgarcia/react-core/tree/v2.12.1)
+
+> 9 January 2025
+
+- bump vulnerable dependencies
+
 ## [v2.12.0](https://github.com/agusmgarcia/react-core/tree/v2.12.0)
 
 > 28 November 2024
