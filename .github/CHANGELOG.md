@@ -4,43 +4,46 @@ All notable changes to this project will be documented in this file.
 
 ## [v2.12.2](https://github.com/agusmgarcia/react-core/tree/v2.12.2)
 
-> 11 January 2025
+> January 11, 2025
 
 - **prettier.middleware**: start using EOL
-- prevent dependency error
+- prevent dependecy error
 
 ## [v2.12.1](https://github.com/agusmgarcia/react-core/tree/v2.12.1)
 
-> 9 January 2025
+> January 9, 2025
 
 - bump vulnerable dependencies
 
 ## [v2.12.0](https://github.com/agusmgarcia/react-core/tree/v2.12.0)
 
-> 28 November 2024
+> November 28, 2024
 
 - add simulated flag when packing the library
-- **StorageCache**: adjust types
-- **Cache**: adjust types
+- **StorageCache**: adjust typings
+- **Cache**: adjust typings
 
 ## [v2.11.1](https://github.com/agusmgarcia/react-core/tree/v2.11.1)
 
-> 22 November 2024
+> November 23, 2024
 
 - **StorageCache**: adjust types
 - **Cache**: adjust types
 
 ## [v2.11.0](https://github.com/agusmgarcia/react-core/tree/v2.11.0)
 
-> 22 November 2024
+> November 22, 2024
 
 - **StorageCache**: add utility
 - **Cache**: add utility
+- bump vulnerable dependencies
+- **package.json**: adjust scripts
 
 ## [v2.10.0](https://github.com/agusmgarcia/react-core/tree/v2.10.0)
 
-> 2 November 2024
+> November 2, 2024
 
+- **README.md**: prepare it for the next major version
 - **replaceString**: add ability to introduce conditions
 - **isOnlyId**: add utils
 - **finds**: add singleOrDefault method
@@ -48,23 +51,25 @@ All notable changes to this project will be documented in this file.
 
 ## [v2.9.0](https://github.com/agusmgarcia/react-core/tree/v2.9.0)
 
-> 30 October 2024
+> October 30, 2024
 
+- adjust README.md paths
+- update packages
 - **github.middleware**: remove scope
-- **eslint.middleware**: add `eslint-plugin-boundaries` for app
-- **eslint.middleware**: add `eslint-plugin-tailwindcss`
-- **tailwindcss.middleware**: adjust `tailwind.config.js` file
-- **nextjs.middleware**: adjust `nextjs.config.js` file
+- **eslint.middleware**: add eslint-plugin-boundaries for app
+- **eslint.middleware**: add eslint-plugin-tailwindcss
+- **tailwindcss.middleware**: adjust tailwind config file
+- **nextjs.middleware**: adjust nextjs config file
 
 ## [v2.8.1](https://github.com/agusmgarcia/react-core/tree/v2.8.1)
 
-> 16 October 2024
+> October 16, 2024
 
 - adjust engine compatibility to minimum
 
 ## [v2.8.0](https://github.com/agusmgarcia/react-core/tree/v2.8.0)
 
-> 14 October 2024
+> October 14, 2024
 
 - **finds**: add utility
 - **dates**: add validate feature
@@ -73,23 +78,33 @@ All notable changes to this project will be documented in this file.
 
 ## [v2.7.0](https://github.com/agusmgarcia/react-core/tree/v2.7.0)
 
-> 20 September 2024
+> September 20, 2024
 
-- **useMediaQuery**: add initial value
+- **useMediaQuery**: add initialValue
+- **useValueTracker**: track change events
+- **README.md**: update file
+- **useValueTracker**: deprecate it
+- **useFocusTracker**: deprecate it
+- **useElementAtTop**: rename initialValue
+- **useElementAtBottom**: rename initialValue
+- bump vulnerable dependencies
 
 ## [v2.6.1](https://github.com/agusmgarcia/react-core/tree/v2.6.1)
 
-> 29 August 2024
+> August 29, 2024
 
 - **useFocusTracker**: separate focusin vs focusout handlers
 - **useValueTracker**: use input instead of change event
 - **useElementAtTop**: consider element beign resized
 - **useElementAtBottom**: consider element beign resized
+- bump vulnerable dependencies
 
 ## [v2.6.0](https://github.com/agusmgarcia/react-core/tree/v2.6.0)
 
-> 24 August 2024
+> August 24, 2024
 
+- bump vulnerable dependencies
+- **README.utilities**: adjust documentation
 - **dates**: add ability to get date, month and year
 - **dates**: add toDateString
 - **useValueTracker**: add utility
@@ -98,10 +113,12 @@ All notable changes to this project will be documented in this file.
 - **getCurrentDate**: add timeZoneName parameter
 - **getCurrentDate**: consider timeZone
 - **useElementAtBottom**: adjust logic to detect scenario
+- **useElementAtTop**: adjust documentation
+- **useElementAtBottom**: adjust documentation
 
 ## [v2.5.0](https://github.com/agusmgarcia/react-core/tree/v2.5.0)
 
-> 14 August 2024
+> August 14, 2024
 
 - **capitalize**: add utility
 - **isChildOf**: add utility
@@ -110,169 +127,202 @@ All notable changes to this project will be documented in this file.
 
 ## [v2.4.2](https://github.com/agusmgarcia/react-core/tree/v2.4.2)
 
-> 20 July 2024
+> July 20, 2024
 
 - **github.middleware**: adjust deployment steps
 
 ## [v2.4.1](https://github.com/agusmgarcia/react-core/tree/v2.4.1)
 
-> 20 July 2024
+> July 20, 2024
 
 - **github.middleware**: adjust deployment steps
 
 ## [v2.4.0](https://github.com/agusmgarcia/react-core/tree/v2.4.0)
 
-> 19 July 2024
+> July 19, 2024
 
 - **eslint.middleware**: add consistent type import rule
 - adjust paths resolver for libraries
 
 ## [v2.3.0](https://github.com/agusmgarcia/react-core/tree/v2.3.0)
 
-> 17 July 2024
+> July 17, 2024
 
 - separate workflows in two
-- add `tsconfig-paths` resolver
-- add `test` command
-- **block**: add utility
+- add tsconfig-paths resolver
+- add test command
+- **blockUntil**: add utility
 - **useElementAtBottom**: add some margins
 - **useElementAtTop**: add some margins
 - **github.middleware**: re-organize steps
 - **github.middleware**: bump actions versions
-- **github.middleware**: rename `Lint` by `Check`
+- **github.middleware**: rename lint by check
+- use node v20
+- use Func type
+- **Func.types**: make typescript compatible
+- **README.commands.md**: include tailwindcss
+- **README.utilities.md**: fix documentation
 
 ## [v2.2.0](https://github.com/agusmgarcia/react-core/tree/v2.2.0)
 
-> 22 June 2024
+> June 22, 2024
 
 - **webpack.middleware**: add support for commands
-- **tailwindcss.middleware**: prevent overriding `tailwind.config.js` file
+- **tailwindcss.middleware**: prevent overriding tailwind.config.js file
 
 ## [v2.1.1](https://github.com/agusmgarcia/react-core/tree/v2.1.1)
 
-> 19 June 2024
+> June 19, 2024
 
-- **prettier.middleware**: adjust `.prettierrc` file
+- **prettier.middleware**: adjust .prettierrc file
+- **README.utilities.md**: adjust Func documentation
+- **.prettierrc**: ignore eslintrc file
 
 ## [v2.1.0](https://github.com/agusmgarcia/react-core/tree/v2.1.0)
 
-> 19 June 2024
+> June 19, 2024
 
-- **tailwindcss.middleware** add tailwind support
-- **useElementAtBottom** add utility
-- **useElementAtTop** add utility
-- **AsyncFunc.types** add utility
-- **Func.types** move result and args positions
-- **delay** add utility
-- **prettier.middleware**: adjust `.eslintrc` format
+- **tailwindcss.middleware**: add tailwind support
+- **useElementAtBottom**: add utility
+- **useElementAtTop**: add utility
+- **AsyncFunc.types**: add utility
+- **Func.types**: move result and args positions
+- **delay**: add utility
+- **prettier.middleware**: adjust eslintrc format
+- **currencies**: add return type
+- **useMediaQuery**: add return type
+- **replaceString**: add return type
+- **README.utilities.md**: adjust useMediaQuery doc
+- **README.utilities.md**: adjust OnlyId doc
 
 ## [v2.0.2](https://github.com/agusmgarcia/react-core/tree/v2.0.2)
 
-> 10 June 2024
+> June 10, 2024
 
-- **.env**: stop being regenerated
-- **.env.local**: stop being regenerated
-- **OnlyId**: mark the rest of the properties as partial
+- stop regenerating .env and .env.local
+- **OnlyId**: mark rest of props to partial
 
 ## [v2.0.1](https://github.com/agusmgarcia/react-core/tree/v2.0.1)
 
-> 10 June 2024
+> June 10, 2024
 
-- **.gitignore**: exclude _.next_ folder
+- **.gitignore**: exclude .next folder
 
 ## [v2.0.0](https://github.com/agusmgarcia/react-core/tree/v2.0.0)
 
-> 8 June 2024
+> June 8, 2024
 
-- **commands**: include `.gitignore`
-- **commands**: include `.npmignore`
-- **commands**: stop regenerating `README.md` and `CHANGELOG.md` files
+- **useSWR**: adjust input and outputs
+- store global variables in globalThis
+- include .npmignore generation
+- include sub README files
+- include .gitignore generation
+- stop regenerating README and CHANGELOG
+- start using its own commands
+- **README.md**: update file
+- add store
 - rename commands
-- add `regenerate` command
-- add `store` module
-- add `utilities` module
+- **regenerate**: add command
+- restructure commands module
+- add utilities
+- **withContext.core**: start creating .nvmrc file
+- **withContext.webpack**: modify getting absolute paths
+- prettify content
+- move commands inside a folder
 
 ## [v1.3.3](https://github.com/agusmgarcia/react-core/tree/v1.3.3)
 
-> 1 June 2024
+> June 1, 2024
 
 - **withContext.github**: use node version 20
 
 ## [v1.3.2](https://github.com/agusmgarcia/react-core/tree/v1.3.2)
 
-> 23 May 2024
+> May 23, 2024
 
 - bump peer dependencies
-- start using Node 20
 
 ## [v1.3.1](https://github.com/agusmgarcia/react-core/tree/v1.3.1)
 
-> 22 January 2024
+> February 22, 2024
 
 - **withContext.github**: remove empty space
+- **.nvmrc**: add file
 
 ## [v1.3.0](https://github.com/agusmgarcia/react-core/tree/v1.3.0)
 
-> 21 December 2023
+> December 22, 2023
 
+- check package matches tag
 - **withContext.github**: check whether package matches tag
 
 ## [v1.2.1](https://github.com/agusmgarcia/react-core/tree/v1.2.1)
 
-> 30 November 2023
+> November 30, 2023
 
 - **execute**: make compatible with windows
 
 ## [v1.2.0](https://github.com/agusmgarcia/react-core/tree/v1.2.0)
 
-> 27 November 2023
+> November 27, 2023
 
 - restrict to use node 16
 - **withContext.github**: add support to trigger workflows
 
 ## [v1.1.1](https://github.com/agusmgarcia/react-core/tree/v1.1.1)
 
-> 31 October 2023
+> October 31, 2023
 
-- change `force` by `skip`
+- change force by skip
 
 ## [v1.1.0](https://github.com/agusmgarcia/react-core/tree/v1.1.0)
 
-> 30 October 2023
+> October 30, 2023
 
-- add `--force` and `-f` flag.
+- delete bin folder after pack
+- add force flag
 
 ## [v1.0.3](https://github.com/agusmgarcia/react-core/tree/v1.0.3)
 
-> 27 October 2023
+> October 27, 2023
 
-- **withContext.typescript**: adjust ignore file
-- **withContext.prettier**: adjust ignore file
-- **withContext.eslint**: adjust ignore file
+- ignore more files
+- **withContext.typescript**: adjust ignore files
+- **withContext.prettier**: adjust ignore files
+- **withContext.eslint**: adjust ignore files
 
 ## [v1.0.2](https://github.com/agusmgarcia/react-core/tree/v1.0.2)
 
-> 27 October 2023
+> October 27, 2023
 
 - **withContext.prettier**: adjust ignore file
 - **withContext.eslint**: adjust ignore file
 
 ## [v1.0.1](https://github.com/agusmgarcia/react-core/tree/v1.0.1)
 
-> 27 October 2023
+> October 27, 2023
 
+- start ignoring more files
 - **withContext.prettier**: ignore more files
 - **withContext.eslint**: ignore more files
 - **build.core**: split commands
 
 ## [v1.0.0](https://github.com/agusmgarcia/react-core/tree/v1.0.0)
 
-> 27 October 2023
+> October 27, 2023
 
 - export commands
-- add `core` commands
-- add `webpack` commands
-- add `typescript` commands
-- add `prettier` commands
-- add `github` commands
-- add `eslint` commands
+- **core**: add commands
+- **github**: add commands
+- **webpack**: add commands
+- **typescript**: add commands
+- **eslint**: add commands
+- **prettier**: add commands
+- **writeFile**: add utils
+- **remove**: add utils
+- **isLibrary**: add utils
+- **readFile**: add utils
+- **execute**: add utils
+- **IgnorableError**: add class
+- **exists**: add utils
+- **createFolder**: add utils

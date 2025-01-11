@@ -1,6 +1,15 @@
+import { EOL } from "os";
+
 import { type AsyncFunc } from "#src/utilities";
 
-import { isLibrary, removeFile, upsertFile, upsertFolder } from "../utilities";
+import {
+  execute,
+  getProjectName,
+  isLibrary,
+  removeFile,
+  upsertFile,
+  upsertFolder,
+} from "../utilities";
 
 export default async function githubMiddleware(
   next: AsyncFunc,
@@ -16,7 +25,11 @@ export default async function githubMiddleware(
       regenerate && !ignore.includes(".gitignore"),
     ),
     upsertFile(".github/README.md", readme, false),
-    upsertFile(".github/CHANGELOG.md", changelog, false),
+    upsertFile(
+      ".github/CHANGELOG.md",
+      await createChangelogFile(),
+      regenerate && !ignore.includes(".github/CHANGELOG.md"),
+    ),
     upsertFolder(".github/workflows")
       .then(() => (!library ? "deploy-app.yml" : "publish-lib.yml"))
       .then((workflowName) => `.github/workflows/${workflowName}`)
@@ -48,12 +61,94 @@ node_modules
 
 const readme = "";
 
-const changelog = `# Changelog
+async function createChangelogFile(): Promise<string> {
+  const tagRegexp = /^v([0-9]+)\.([0-9]+)\.([0-9]+)$/;
+
+  function filterTags(tag: string): boolean {
+    return tagRegexp.test(tag);
+  }
+
+  function sortTags(tag1: string, tag2: string): number {
+    const tagInfo1 = tagRegexp.exec(tag1);
+    const tagInfo2 = tagRegexp.exec(tag2);
+
+    for (let i = 1; i < 4; i++) {
+      const result = +tagInfo1![i] - +tagInfo2![i];
+      if (result === 0) continue;
+      return -result;
+    }
+
+    return 0;
+  }
+
+  const commitRegexp = /^"(?:chore|feat|fix|refactor)(?:\((.*)\))?!?:\s(.*)"$/;
+
+  function filterCommits(commit: string): boolean {
+    return commitRegexp.test(commit);
+  }
+
+  function transformCommit(commit: string): string {
+    const commitInfo = commitRegexp.exec(commit);
+    const scope = commitInfo![1];
+    const message = commitInfo![2];
+    return `- ${scope !== undefined ? `**${scope}**: ` : ""}${message}`;
+  }
+
+  const projectName = await getProjectName().then((name) =>
+    name.replace("@", ""),
+  );
+
+  const initialCommit = await execute(
+    "git rev-list --max-parents=0 HEAD",
+    false,
+  ).then((commit) => commit?.replace(EOL, ""));
+
+  const tags = await execute("git tag --merged", false)
+    .then((tags) => tags?.split(EOL) ?? [])
+    .then((tags) => tags.filter(filterTags))
+    .then((tags) => tags.sort(sortTags));
+
+  const fragments = await Promise.all(
+    tags.map(async (tag, index) => {
+      const nextTag = index < tags.length - 1 ? tags[index + 1] : initialCommit;
+
+      const commits = await execute(
+        `git log --pretty=format:"%s" ${tag}...${nextTag}`,
+        false,
+      )
+        .then((commits) => commits?.split(EOL) ?? [])
+        .then((commits) => commits.slice(1))
+        .then((commits) => commits.filter(filterCommits))
+        .then((commits) => commits.map(transformCommit))
+        .then((commits) => commits.join(EOL));
+
+      const date = await execute(
+        `git show --no-patch --format=%ci ${tag}`,
+        false,
+      )
+        .then((date) => new Date(date))
+        .then((date) =>
+          date.toLocaleDateString("en-US", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          }),
+        );
+
+      return `## [${tag}](https://github.com/${projectName}/tree/${tag})
+
+> ${date}
+
+${commits}
+`;
+    }),
+  ).then((fragments) => fragments.join(EOL));
+
+  return `# Changelog
 
 All notable changes to this project will be documented in this file.
-
-## [v1.0.0](https://github.com/<OWNER>/<NAME>/tree/v1.0.0)
-`;
+${fragments === "" ? "" : `${EOL}${fragments}`}`;
+}
 
 const deploy_app = `name: Deploy application
 permissions: write-all
