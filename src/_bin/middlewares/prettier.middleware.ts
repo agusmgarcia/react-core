@@ -1,3 +1,5 @@
+import { EOL } from "os";
+
 import { type AsyncFunc } from "#src/utilities";
 
 import { execute, isLibrary, upsertFile } from "../utilities";
@@ -10,9 +12,10 @@ export default async function prettierMiddleware(
   const library = await isLibrary();
 
   try {
-    const configFilePath = await execute("prettier --find-config-path .", false)
-      .then((cfg) => cfg.replace("\n", ""))
-      .then((cfg) => cfg.replace("\r", ""));
+    const configFilePath = await execute(
+      "prettier --find-config-path .",
+      false,
+    ).then((cfg) => cfg.replace(EOL, ""));
 
     if (configFilePath !== ".prettierrc")
       console.warn(
@@ -20,7 +23,7 @@ export default async function prettierMiddleware(
       );
   } catch (error: any) {
     if (
-      error.message.replace("\n", "").replace("\r", "") !==
+      error.message.replace(EOL, "") !==
       '[error] Can not find configure file for ".".'
     )
       throw error;
