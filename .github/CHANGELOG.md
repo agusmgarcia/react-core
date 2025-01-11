@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.12.2](https://github.com/agusmgarcia/react-core/tree/v2.12.2)
+
+> 11 January 2025
+
+- **prettier.middleware**: start using EOL
+- prevent dependency error
+
 ## [v2.12.1](https://github.com/agusmgarcia/react-core/tree/v2.12.1)
 
 > 9 January 2025
