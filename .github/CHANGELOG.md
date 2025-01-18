@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v3.0.0](https://github.com/agusmgarcia/react-core/tree/v3.0.0)
+
+> January 18, 2025
+
+- **github.middleware**: regenerate CHANGELOG file
+- **getProjectName**: add utility
+- **store**: separate store
+- **StorageCache**: remove uneeded casts
+- **currencies**: remove it
+- **dates**: remove formatDate
+- **useValueTracker**: remove it
+- **useFocusTracker**: remove it
+- **useCheckedTracker**: remove it
+- **replaceString**: change shape of the model
+- **Func.types**: remove the old-way
+
 ## [v2.12.2](https://github.com/agusmgarcia/react-core/tree/v2.12.2)
 
 > January 11, 2025
