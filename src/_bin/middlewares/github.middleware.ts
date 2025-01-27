@@ -84,7 +84,11 @@ async function createChangelogFile(): Promise<string> {
   const commitRegexp = /^"(?:chore|feat|fix|refactor)(?:\((.*)\))?!?:\s(.*)"$/;
 
   function filterCommits(commit: string): boolean {
-    return commitRegexp.test(commit);
+    return (
+      commitRegexp.test(commit) &&
+      commit !== '"chore: bump package version"' &&
+      commit !== '"chore(CHANGELOG.md): update file"'
+    );
   }
 
   function transformCommit(commit: string): string {
@@ -117,7 +121,6 @@ async function createChangelogFile(): Promise<string> {
         false,
       )
         .then((commits) => commits?.split(EOL) ?? [])
-        .then((commits) => commits.slice(1))
         .then((commits) => commits.filter(filterCommits))
         .then((commits) => commits.map(transformCommit))
         .then((commits) => commits.join(EOL));
