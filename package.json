@@ -9,10 +9,10 @@
     "build": "ts-node src/_bin/build.ts",
     "check": "ts-node src/_bin/check.ts",
     "format": "ts-node src/_bin/format.ts",
-    "start": "ts-node src/_bin/start.ts",
-    "prepack": "ts-node src/_bin/prepack.ts",
     "postpack": "ts-node src/_bin/postpack.ts",
+    "prepack": "ts-node src/_bin/prepack.ts",
     "regenerate": "ts-node src/_bin/regenerate.ts",
+    "start": "ts-node src/_bin/start.ts",
     "test": "ts-node src/_bin/test.ts"
   },
   "bin": {
@@ -21,8 +21,8 @@
     "agusmgarcia-react-core-format": "bin/format.js",
     "agusmgarcia-react-core-postpack": "bin/postpack.js",
     "agusmgarcia-react-core-prepack": "bin/prepack.js",
-    "agusmgarcia-react-core-start": "bin/start.js",
     "agusmgarcia-react-core-regenerate": "bin/regenerate.js",
+    "agusmgarcia-react-core-start": "bin/start.js",
     "agusmgarcia-react-core-test": "bin/test.js"
   },
   "peerDependencies": {
