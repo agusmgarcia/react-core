@@ -4,7 +4,7 @@ import { type AsyncFunc } from "#src/utilities";
 
 import {
   execute,
-  getProjectName,
+  getPackageJSON,
   isLibrary,
   removeFile,
   upsertFile,
@@ -98,9 +98,12 @@ async function createChangelogFile(): Promise<string> {
     return `- ${scope !== undefined ? `**${scope}**: ` : ""}${message}`;
   }
 
-  const projectName = await getProjectName().then((name) =>
-    name.replace("@", ""),
-  );
+  const projectName = await getPackageJSON()
+    .then((json) => json.name)
+    .then((name) => name?.replace("@", ""));
+
+  if (projectName === undefined)
+    throw "Project name must be defined within the package.json file";
 
   const initialCommit = await execute(
     "git rev-list --max-parents=0 HEAD",
