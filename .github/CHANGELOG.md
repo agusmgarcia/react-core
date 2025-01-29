@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v3.0.1](https://github.com/agusmgarcia/react-core/tree/v3.0.1)
+
+> January 29, 2025
+
+- **eslint.middleware**: encapsulate functions outside the module
+- **getPackageJSON**: create a method to get the object
+- re-order commands
+- **eslint.middleware**: stop using eslint-plugin-boundaries
+- **github.middleware**: adjust CHANGELOG file regeneration
+
 ## [v3.0.0](https://github.com/agusmgarcia/react-core/tree/v3.0.0)
 
 > January 18, 2025
