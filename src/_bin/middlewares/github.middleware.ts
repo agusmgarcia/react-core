@@ -4,7 +4,9 @@ import { type AsyncFunc } from "#src/utilities";
 
 import {
   execute,
+  getCommits,
   getPackageJSON,
+  getTags,
   isLibrary,
   removeFile,
   upsertFile,
@@ -62,25 +64,6 @@ node_modules
 const readme = "";
 
 async function createChangelogFile(): Promise<string> {
-  const tagRegexp = /^v([0-9]+)\.([0-9]+)\.([0-9]+)$/;
-
-  function filterTags(tag: string): boolean {
-    return tagRegexp.test(tag);
-  }
-
-  function sortTags(tag1: string, tag2: string): number {
-    const tagInfo1 = tagRegexp.exec(tag1);
-    const tagInfo2 = tagRegexp.exec(tag2);
-
-    for (let i = 1; i < 4; i++) {
-      const result = +tagInfo1![i] - +tagInfo2![i];
-      if (result === 0) continue;
-      return -result;
-    }
-
-    return 0;
-  }
-
   const commitRegexp = /^"(?:chore|feat|fix|refactor)(?:\((.*)\))?!?:\s(.*)"$/;
 
   function filterCommits(commit: string): boolean {
@@ -110,20 +93,13 @@ async function createChangelogFile(): Promise<string> {
     false,
   ).then((commit) => commit?.replace(EOL, ""));
 
-  const tags = await execute("git tag --merged", false)
-    .then((tags) => tags?.split(EOL) ?? [])
-    .then((tags) => tags.filter(filterTags))
-    .then((tags) => tags.sort(sortTags));
+  const tags = await getTags().then((tags) => tags.reverse());
 
   const fragments = await Promise.all(
     tags.map(async (tag, index) => {
       const nextTag = index < tags.length - 1 ? tags[index + 1] : initialCommit;
 
-      const commits = await execute(
-        `git log --pretty=format:"%s" ${tag}...${nextTag}`,
-        false,
-      )
-        .then((commits) => commits?.split(EOL) ?? [])
+      const commits = await getCommits(tag, nextTag)
         .then((commits) => commits.filter(filterCommits))
         .then((commits) => commits.map(transformCommit))
         .then((commits) => commits.join(EOL));
