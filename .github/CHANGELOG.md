@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v3.0.2](https://github.com/agusmgarcia/react-core/tree/v3.0.2)
+
+> January 30, 2025
+
+- **store**: make run the first time
+- **README.md**: adjust store doc
+- **github.middleware**: create CHANGELOG.md file when no git context available
+
 ## [v3.0.1](https://github.com/agusmgarcia/react-core/tree/v3.0.1)
 
 > January 29, 2025
