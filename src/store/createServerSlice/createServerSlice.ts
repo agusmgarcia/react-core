@@ -10,7 +10,7 @@ import {
 export default function createServerSlice<
   TSlice extends SliceOf<any, any>,
   TOtherSlices = {},
-  TSelected = any,
+  TSelected = {},
 >(
   ...input: Input<TSlice, TOtherSlices, TSelected>
 ): Output<TSlice, TOtherSlices> {
@@ -53,7 +53,7 @@ export default function createServerSlice<
         return {
           data: undefined,
           error: undefined,
-          loading: false,
+          loading: true,
           reload,
         } as any;
       },

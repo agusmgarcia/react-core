@@ -19,22 +19,12 @@ export default function createGlobalSlice<
 
     const name = input[0];
 
-    let firstNotification = true;
+    const subscribe: Subscribe<TSlice, TOtherSlices> = (listener, selector) => {
+      const unsubscribe = store.subscribe((state, prevState) => {
+        const selection = selector !== undefined ? selector(state) : {};
+        const prevSelection = selector !== undefined ? selector(prevState) : {};
 
-    const subscribe: Subscribe<TSlice, TOtherSlices> = (listener, selector) =>
-      store.subscribe((state, prevState) => {
-        const selection = selector !== undefined ? selector(state) : state;
-        const prevSelection =
-          selector !== undefined ? selector(prevState) : prevState;
-
-        if (
-          !firstNotification &&
-          (selector === undefined ||
-            equals.shallow(selection, prevSelection, 2))
-        )
-          return;
-
-        firstNotification = false;
+        if (equals.shallow(selection, prevSelection, 2)) return;
 
         const ctx = buildContext<TSlice, TOtherSlices>(
           name,
@@ -43,8 +33,23 @@ export default function createGlobalSlice<
           set,
         );
 
-        listener(selection, ctx);
+        listener(selection as any, ctx);
       });
+
+      setTimeout(() => {
+        const ctx = buildContext<TSlice, TOtherSlices>(
+          name,
+          controller,
+          get,
+          set,
+        );
+
+        const selection = selector !== undefined ? selector(ctx.get()) : {};
+        listener(selection as any, ctx);
+      }, 0);
+
+      return unsubscribe;
+    };
 
     const factory = input[1](subscribe);
 
