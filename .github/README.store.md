@@ -78,7 +78,6 @@ import createFormResultSlice from "./FormResultSlice";
 const { useSelector, ...reactStore } = createStore(
   createFormSearchSlice,
   createFormResultSlice,
-  { devtools: true },
 );
 
 export const StoreProvider = reactStore.StoreProvider;
