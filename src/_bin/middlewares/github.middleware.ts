@@ -7,6 +7,7 @@ import {
   getCommits,
   getPackageJSON,
   getTags,
+  isInsideGitRepository,
   isLibrary,
   removeFile,
   upsertFile,
@@ -88,43 +89,48 @@ async function createChangelogFile(): Promise<string> {
   if (projectName === undefined)
     throw "Project name must be defined within the package.json file";
 
-  const initialCommit = await execute(
-    "git rev-list --max-parents=0 HEAD",
-    false,
-  ).then((commit) => commit?.replace(EOL, ""));
+  let fragments = "";
 
-  const tags = await getTags().then((tags) => tags.reverse());
+  if (await isInsideGitRepository()) {
+    const initialCommit = await execute(
+      "git rev-list --max-parents=0 HEAD",
+      false,
+    ).then((commit) => commit?.replace(EOL, ""));
 
-  const fragments = await Promise.all(
-    tags.map(async (tag, index) => {
-      const nextTag = index < tags.length - 1 ? tags[index + 1] : initialCommit;
+    const tags = await getTags().then((tags) => tags.reverse());
 
-      const commits = await getCommits(tag, nextTag)
-        .then((commits) => commits.filter(filterCommits))
-        .then((commits) => commits.map(transformCommit))
-        .then((commits) => commits.join(EOL));
+    fragments = await Promise.all(
+      tags.map(async (tag, index) => {
+        const nextTag =
+          index < tags.length - 1 ? tags[index + 1] : initialCommit;
 
-      const date = await execute(
-        `git show --no-patch --format=%ci ${tag}`,
-        false,
-      )
-        .then((date) => new Date(date))
-        .then((date) =>
-          date.toLocaleDateString("en-US", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          }),
-        );
+        const commits = await getCommits(tag, nextTag)
+          .then((commits) => commits.filter(filterCommits))
+          .then((commits) => commits.map(transformCommit))
+          .then((commits) => commits.join(EOL));
 
-      return `## [${tag}](https://github.com/${projectName}/tree/${tag})
+        const date = await execute(
+          `git show --no-patch --format=%ci ${tag}`,
+          false,
+        )
+          .then((date) => new Date(date))
+          .then((date) =>
+            date.toLocaleDateString("en-US", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            }),
+          );
+
+        return `## [${tag}](https://github.com/${projectName}/tree/${tag})
 
 > ${date}
 
 ${commits}
 `;
-    }),
-  ).then((fragments) => fragments.join(EOL));
+      }),
+    ).then((fragments) => fragments.join(EOL));
+  }
 
   return `# Changelog
 
