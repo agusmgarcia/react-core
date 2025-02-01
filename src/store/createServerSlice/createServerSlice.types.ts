@@ -8,18 +8,25 @@ export type SliceOf<
 > = CreateGlobalSliceTypes.SliceOf<
   TName,
   {
+    _pagination: { limit: number; page: number };
+    _selected: unknown;
     data: TData | undefined;
     error: unknown;
     loading: boolean;
-    reload: Func;
+    loadMore: AsyncFunc<void, [args?: { limit?: number }]>;
+    reload: AsyncFunc;
   }
 >;
 
-export type Input<TSlice extends SliceOf<any, any>, TOtherSlices, TSelected> = [
+export type Input<
+  TSlice extends SliceOf<any, any>,
+  TOtherSlices,
+  TSelected extends object,
+> = [
   name: keyof TSlice,
   fetcher: AsyncFunc<
     TSlice[keyof TSlice]["data"],
-    [args: TSelected, signal: AbortSignal]
+    [args: TSelected & { limit: number; page: number }, signal: AbortSignal]
   >,
   selector?: Func<TSelected, [state: OmitFuncs<TOtherSlices>]>,
 ];
