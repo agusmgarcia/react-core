@@ -124,7 +124,7 @@ export function toDateString(
   });
 }
 
-function toString(date: Date): string {
+export function toString(date: Date): string {
   return `${date.getUTCFullYear()}-${(date.getUTCMonth() + 1).toString().padStart(2, "0")}-${date.getUTCDate().toString().padStart(2, "0")}`;
 }
 
