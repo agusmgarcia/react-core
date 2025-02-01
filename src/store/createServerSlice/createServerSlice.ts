@@ -51,10 +51,27 @@ export default function createServerSlice<
     }
 
     async function reload(
+      args: { limit: number | undefined; page: number | undefined } | undefined,
       context: CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>,
     ): Promise<void> {
+      const selected =
+        selector !== undefined
+          ? selector(context.get() as OmitFuncs<TOtherSlices>)
+          : {};
+
       await reloadHelper(
-        () => ({ limit: 100, page: 1 }),
+        (prevState) => ({
+          limit:
+            args?.limit !== undefined
+              ? args.limit
+              : prevState._pagination.limit,
+          page:
+            args?.page !== undefined
+              ? args.page
+              : equals.shallow(prevState._selected, selected)
+                ? prevState._pagination.page
+                : 1,
+        }),
         (data) => data,
         context,
       );
@@ -112,7 +129,7 @@ export default function createServerSlice<
     const result = createGlobalSlice<TSlice, TOtherSlices>(
       name,
       (subscribe) => {
-        subscribe((_, ctx) => reload(ctx), selector);
+        subscribe((_, ctx) => reload(undefined, ctx), selector);
 
         return {
           _pagination: { limit: 100, page: 1 },

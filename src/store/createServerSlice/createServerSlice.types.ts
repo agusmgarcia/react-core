@@ -14,7 +14,7 @@ export type SliceOf<
     error: unknown;
     loading: boolean;
     loadMore: AsyncFunc<void, [args?: { limit?: number }]>;
-    reload: AsyncFunc;
+    reload: AsyncFunc<void, [args?: { limit?: number; page?: number }]>;
   }
 >;
 
