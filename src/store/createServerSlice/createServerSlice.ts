@@ -1,3 +1,5 @@
+import { type OmitFuncs } from "#src/utilities";
+
 import createGlobalSlice, {
   type CreateGlobalSliceTypes,
 } from "../createGlobalSlice";
@@ -27,7 +29,7 @@ export default function createServerSlice<
       try {
         const data = await fetcher(
           selector !== undefined
-            ? selector(context.get())
+            ? selector(context.get() as OmitFuncs<TOtherSlices>)
             : (context.get() as TSelected),
           context.signal,
         );

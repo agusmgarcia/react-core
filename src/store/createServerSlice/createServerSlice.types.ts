@@ -1,4 +1,4 @@
-import { type AsyncFunc, type Func } from "#src/utilities";
+import { type AsyncFunc, type Func, type OmitFuncs } from "#src/utilities";
 
 import { type CreateGlobalSliceTypes } from "../createGlobalSlice";
 
@@ -21,7 +21,7 @@ export type Input<TSlice extends SliceOf<any, any>, TOtherSlices, TSelected> = [
     TSlice[keyof TSlice]["data"],
     [args: TSelected, signal: AbortSignal]
   >,
-  selector?: Func<TSelected, [state: TOtherSlices]>,
+  selector?: Func<TSelected, [state: OmitFuncs<TOtherSlices>]>,
 ];
 
 export type Output<

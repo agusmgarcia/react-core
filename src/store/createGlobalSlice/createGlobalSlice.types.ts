@@ -1,17 +1,20 @@
 import { type StateCreator } from "zustand";
 
-import { type Func } from "#src/utilities";
+import { type Func, type OmitFuncs } from "#src/utilities";
 
 export type SliceOf<TName extends string, TState> = Record<TName, TState>;
 
 export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
-  get: Func<TSlice & TOtherSlices>;
+  get: Func<OmitFuncs<TSlice & TOtherSlices>>;
   set: Func<
     void,
     [
       state:
-        | TSlice[keyof TSlice]
-        | Func<TSlice[keyof TSlice], [prevState: TSlice[keyof TSlice]]>,
+        | OmitFuncs<TSlice[keyof TSlice]>
+        | Func<
+            OmitFuncs<TSlice[keyof TSlice]>,
+            [prevState: OmitFuncs<TSlice[keyof TSlice]>]
+          >,
     ]
   >;
   signal: AbortSignal;
@@ -41,7 +44,7 @@ export type Subscribe<TSlice extends SliceOf<any, any>, TOtherSlices> = <
     void,
     [state: TSelected, context: Context<TSlice, TOtherSlices>]
   >,
-  selector?: Func<TSelected, [state: TOtherSlices]>,
+  selector?: Func<TSelected, [state: OmitFuncs<TOtherSlices>]>,
 ) => Func;
 
 export type Input<TSlice extends SliceOf<any, any>, TOtherSlices> = [
