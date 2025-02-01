@@ -179,7 +179,17 @@ function Component() {
 }
 ```
 
-## Only Id
+## Omit Funcs
+
+```typescript
+import { type Func, type OmitFuncs } from "@agusmgarcia/react-core";
+
+type Person = { id: string; name: string; setName: Func<void, [name: string]> };
+
+type OmitFuncsPerson = OmitFuncs<Person>; // => { id: string, name: undefined }
+```
+
+## Only id
 
 ```typescript
 import { type OnlyId } from "@agusmgarcia/react-core";

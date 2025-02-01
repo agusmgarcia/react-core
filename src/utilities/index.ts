@@ -14,6 +14,7 @@ export { default as isOnlyId } from "./isOnlyId";
 export { default as isParentOf } from "./isParentOf";
 export { default as isSSR } from "./isSSR";
 export { default as mergeRefs } from "./mergeRefs";
+export { type default as OmitFuncs } from "./OmitFuncs.types";
 export { type default as OnlyId } from "./OnlyId.types";
 export { default as replaceString } from "./replaceString";
 export * as sorts from "./sorts";
