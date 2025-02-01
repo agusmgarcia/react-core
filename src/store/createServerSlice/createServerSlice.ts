@@ -5,6 +5,7 @@ import createGlobalSlice, {
 } from "../createGlobalSlice";
 import {
   type Input,
+  type Options,
   type Output,
   type SliceOf,
 } from "./createServerSlice.types";
@@ -19,7 +20,10 @@ export default function createServerSlice<
   return () => {
     const name = input[0];
     const fetcher = input[1];
-    const selector = input[2];
+    const options = populateOptions(
+      typeof input[2] === "object" ? input[2] : undefined,
+    );
+    const selector = typeof input[2] === "function" ? input[2] : input[3];
 
     async function loadMore(
       args: { limit: number | undefined } | undefined,
@@ -38,10 +42,10 @@ export default function createServerSlice<
               : prevState._pagination.limit,
           page: equals.shallow(prevState._selected, selected)
             ? prevState._pagination.page + 1
-            : 1,
+            : options.pagination.page,
         }),
         (data, prevState) =>
-          prevState._pagination.page === 1
+          prevState._pagination.page !== options.pagination.page
             ? Array.isArray(prevState.data) && Array.isArray(data)
               ? ([...prevState.data, ...data] as typeof data)
               : data
@@ -70,7 +74,7 @@ export default function createServerSlice<
               ? args.page
               : equals.shallow(prevState._selected, selected)
                 ? prevState._pagination.page
-                : 1,
+                : options.pagination.page,
         }),
         (data) => data,
         context,
@@ -132,7 +136,10 @@ export default function createServerSlice<
         subscribe((_, ctx) => reload(undefined, ctx), selector);
 
         return {
-          _pagination: { limit: 100, page: 1 },
+          _pagination: {
+            limit: options.pagination.limit,
+            page: options.pagination.page,
+          },
           _selected: undefined,
           data: undefined,
           error: undefined,
@@ -144,5 +151,14 @@ export default function createServerSlice<
     );
 
     return result();
+  };
+}
+
+function populateOptions(options: Partial<Options> | undefined): Options {
+  return {
+    pagination: {
+      limit: options?.pagination?.limit ?? 100,
+      page: options?.pagination?.page ?? 1,
+    },
   };
 }
