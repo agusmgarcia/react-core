@@ -2,9 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v3.1.0](https://github.com/agusmgarcia/react-core/tree/v3.1.0)
+
+> February 3, 2025
+
+- **store**: add ability to set up the initial pagination
+- **store**: add pagination to the reload method
+- **store**: add load more functionality
+- **store**: prevent accessing functions inside store
+- **OmitFuncs**: add utility
+- **filters**: add utility
+- **dates**: export toString method
+
 ## [v3.0.2](https://github.com/agusmgarcia/react-core/tree/v3.0.2)
 
-> January 30, 2025
+> January 31, 2025
 
 - **store**: make run the first time
 - **README.md**: adjust store doc

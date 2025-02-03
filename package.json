@@ -1,6 +1,6 @@
 {
   "name": "@agusmgarcia/react-core",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Agus Garcia",
@@ -9,7 +9,7 @@
     "build": "ts-node src/_bin/build.ts",
     "check": "ts-node src/_bin/check.ts",
     "format": "ts-node src/_bin/format.ts",
-    "postpack": "ts-node src/_bin/postpack.ts --simulated",
+    "postpack": "ts-node src/_bin/postpack.ts",
     "prepack": "ts-node src/_bin/prepack.ts",
     "regenerate": "ts-node src/_bin/regenerate.ts",
     "start": "ts-node src/_bin/start.ts",
