@@ -124,7 +124,12 @@ export function toDateString(
   });
 }
 
-export function toString(date: Date): string {
+export function toString(date: number): string;
+
+export function toString(date: Date): string;
+
+export function toString(date: Date | number): string {
+  date = typeof date === "number" ? new Date(date) : date;
   return `${date.getUTCFullYear()}-${(date.getUTCMonth() + 1).toString().padStart(2, "0")}-${date.getUTCDate().toString().padStart(2, "0")}`;
 }
 
