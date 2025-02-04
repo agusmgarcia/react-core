@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v3.2.1](https://github.com/agusmgarcia/react-core/tree/v3.2.1)
+
+> February 4, 2025
+
+- **OmitFuncs**: ignore arrays and functions
+
 ## [v3.2.0](https://github.com/agusmgarcia/react-core/tree/v3.2.0)
 
 > February 4, 2025
