@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v3.2.0](https://github.com/agusmgarcia/react-core/tree/v3.2.0)
+
+> February 4, 2025
+
+- **filters**: add paginate function
+- **Cache**: add ability to set custom expiration per key
+- **dates**: allow receiving number in the toString method
+- **createServerSlice**: adjust input typings
+
 ## [v3.1.0](https://github.com/agusmgarcia/react-core/tree/v3.1.0)
 
 > February 3, 2025
