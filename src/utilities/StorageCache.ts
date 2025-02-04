@@ -17,16 +17,29 @@ export default class StorageCache extends Cache {
   override getOrCreate<TResult>(
     key: string,
     factory: Func<TResult | Promise<TResult>>,
+    expiresAt?: number | Func<number, [result: TResult]>,
   ): Promise<TResult> {
-    return super.getOrCreate(key, async () => {
-      const result = await factory();
-      const now = Date.now();
-      saveItemIntoStore(this.storage, this.storageName, key, {
-        createdAt: now,
-        result,
-      });
-      return result;
-    });
+    const newExpiresAt = (result: TResult) =>
+      expiresAt === undefined
+        ? Date.now() + this.maxCacheTime
+        : typeof expiresAt === "number"
+          ? expiresAt
+          : expiresAt(result);
+
+    return super.getOrCreate(
+      key,
+      async () => {
+        const result = await factory();
+
+        saveItemIntoStore(this.storage, this.storageName, key, {
+          expiresAt: newExpiresAt(result),
+          result,
+        });
+
+        return result;
+      },
+      newExpiresAt,
+    );
   }
 }
 
