@@ -26,24 +26,25 @@ export type Input<
   TSlice extends SliceOf<any, any>,
   TOtherSlices,
   TSelected extends object,
-> =
-  | [
-      name: keyof TSlice,
-      fetcher: AsyncFunc<
-        TSlice[keyof TSlice]["data"],
-        [args: TSelected & Pagination, signal: AbortSignal]
-      >,
-      selector?: Func<TSelected, [state: OmitFuncs<TOtherSlices>]>,
-    ]
-  | [
-      name: keyof TSlice,
-      fetcher: AsyncFunc<
-        TSlice[keyof TSlice]["data"],
-        [args: TSelected & Pagination, signal: AbortSignal]
-      >,
-      options?: Partial<Options>,
-      selector?: Func<TSelected, [state: OmitFuncs<TOtherSlices>]>,
-    ];
+> = [
+  [
+    name: keyof TSlice,
+    fetcher: AsyncFunc<
+      TSlice[keyof TSlice]["data"],
+      [args: TSelected & Pagination, signal: AbortSignal]
+    >,
+    selector?: Func<TSelected, [state: OmitFuncs<TOtherSlices>]>,
+  ],
+  [
+    name: keyof TSlice,
+    fetcher: AsyncFunc<
+      TSlice[keyof TSlice]["data"],
+      [args: TSelected & Pagination, signal: AbortSignal]
+    >,
+    options: Options,
+    selector?: Func<TSelected, [state: OmitFuncs<TOtherSlices>]>,
+  ],
+];
 
 export type Output<
   TSlice extends SliceOf<any, any>,

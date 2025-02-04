@@ -15,7 +15,23 @@ export default function createServerSlice<
   TOtherSlices = {},
   TSelected extends object = {},
 >(
-  ...input: Input<TSlice, TOtherSlices, TSelected>
+  ...input: Input<TSlice, TOtherSlices, TSelected>[0]
+): Output<TSlice, TOtherSlices>;
+
+export default function createServerSlice<
+  TSlice extends SliceOf<any, any>,
+  TOtherSlices = {},
+  TSelected extends object = {},
+>(
+  ...input: Input<TSlice, TOtherSlices, TSelected>[1]
+): Output<TSlice, TOtherSlices>;
+
+export default function createServerSlice<
+  TSlice extends SliceOf<any, any>,
+  TOtherSlices = {},
+  TSelected extends object = {},
+>(
+  ...input: Input<TSlice, TOtherSlices, TSelected>[number]
 ): Output<TSlice, TOtherSlices> {
   return () => {
     const name = input[0];
