@@ -104,6 +104,7 @@ import { filters } from "@agusmgarcia/react-core";
 const array = [17, 6, 95, 6];
 
 array.filter(filters.distinct); // => [17, 6, 95]
+array.filter(filters.paginate(1, 2)); // => [17, 6]
 ```
 
 ## Finds
