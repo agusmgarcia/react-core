@@ -2,51 +2,39 @@ import { type AsyncFunc, type Func, type OmitFuncs } from "#src/utilities";
 
 import { type CreateGlobalSliceTypes } from "../createGlobalSlice";
 
-type Pagination = { limit: number; page: number };
-
 export type SliceOf<
   TName extends string,
   TData,
+  TSelected extends object = {},
 > = CreateGlobalSliceTypes.SliceOf<
   TName,
   {
-    _pagination: Pagination;
-    _selected: unknown;
     data: TData | undefined;
     error: unknown;
     loading: boolean;
-    loadMore: AsyncFunc<void, [args?: { limit?: number }]>;
-    reload: AsyncFunc<void, [args?: { limit?: number; page?: number }]>;
+    reload: AsyncFunc<void, [args?: Partial<TSelected>]>;
   }
 >;
 
-export type Options = { pagination: Pagination };
+export type ExtractNameOf<TSlice extends SliceOf<any, any, any>> =
+  CreateGlobalSliceTypes.ExtractNameOf<TSlice>;
 
-export type Input<
-  TSlice extends SliceOf<any, any>,
-  TOtherSlices,
-  TSelected extends object,
-> = [
-  [
-    name: keyof TSlice,
-    fetcher: AsyncFunc<
-      TSlice[keyof TSlice]["data"],
-      [args: TSelected & Pagination, signal: AbortSignal]
-    >,
-    selector?: Func<TSelected, [state: OmitFuncs<TOtherSlices>]>,
-  ],
-  [
-    name: keyof TSlice,
-    fetcher: AsyncFunc<
-      TSlice[keyof TSlice]["data"],
-      [args: TSelected & Pagination, signal: AbortSignal]
-    >,
-    options: Options,
-    selector?: Func<TSelected, [state: OmitFuncs<TOtherSlices>]>,
-  ],
+export type ExtractDataOf<TSlice extends SliceOf<any, any, any>> =
+  CreateGlobalSliceTypes.ExtractStateOf<TSlice>["data"];
+
+export type ExtractSelectedOf<TSlice extends SliceOf<any, any, any>> =
+  TSlice extends SliceOf<any, any, infer TSelected> ? TSelected : never;
+
+export type Input<TSlice extends SliceOf<any, any, any>, TOtherSlices> = [
+  name: ExtractNameOf<TSlice>,
+  fetcher: AsyncFunc<
+    ExtractDataOf<TSlice>,
+    [args: ExtractSelectedOf<TSlice>, signal: AbortSignal]
+  >,
+  selector?: Func<ExtractSelectedOf<TSlice>, [state: OmitFuncs<TOtherSlices>]>,
 ];
 
 export type Output<
-  TSlice extends SliceOf<any, any>,
+  TSlice extends SliceOf<any, any, any>,
   TOtherSlices,
 > = CreateGlobalSliceTypes.Output<TSlice, TOtherSlices>;

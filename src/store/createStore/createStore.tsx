@@ -27,7 +27,7 @@ export default function createStore<
                   ...result,
                   ...factory()(...a),
                 }),
-                {} as any,
+                {},
               ),
             { enabled: true },
           ),

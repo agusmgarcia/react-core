@@ -52,18 +52,15 @@ import { type FormSearchSlice } from "./FormSearch.ts";
 
 export type FormResultSlice = CreateServerSliceTypes.SliceOf<
   "formResult",
-  {
-    name: string;
-    surname: string;
-    age: number;
-  }[]
+  { age: number; name: string; surname: string }[],
+  { asc: boolean; name: string }
 >;
 
 export default createServerSlice<FormResultSlice, FormSearchSlice>(
   "formResult",
   ({ asc, name }, signal) =>
     fetch(`/api/search?asc=${asc}&name=${name}`, { signal }),
-  (state) => ({ asc: state.asc, name: state.name }),
+  (state) => ({ asc: state.formSearch.asc, name: state.formSearch.name }),
 );
 ```
 

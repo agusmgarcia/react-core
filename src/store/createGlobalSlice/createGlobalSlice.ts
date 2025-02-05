@@ -4,6 +4,7 @@ import { equals, type OmitFuncs } from "#src/utilities";
 
 import {
   type Context,
+  type ExtractNameOf,
   type Input,
   type Output,
   type SliceOf,
@@ -24,12 +25,12 @@ export default function createGlobalSlice<
         const selection =
           selector !== undefined
             ? selector(state as OmitFuncs<TOtherSlices>)
-            : {};
+            : ({} as ReturnType<NonNullable<typeof selector>>);
 
         const prevSelection =
           selector !== undefined
             ? selector(prevState as OmitFuncs<TOtherSlices>)
-            : {};
+            : ({} as ReturnType<NonNullable<typeof selector>>);
 
         if (equals.shallow(selection, prevSelection, 2)) return;
 
@@ -40,7 +41,7 @@ export default function createGlobalSlice<
           set,
         );
 
-        listener(selection as any, ctx);
+        listener(selection, ctx);
       });
 
       setTimeout(() => {
@@ -54,9 +55,9 @@ export default function createGlobalSlice<
         const selection =
           selector !== undefined
             ? selector(ctx.get() as OmitFuncs<TOtherSlices>)
-            : {};
+            : ({} as ReturnType<NonNullable<typeof selector>>);
 
-        listener(selection as any, ctx);
+        listener(selection, ctx);
       }, 0);
 
       return unsubscribe;
@@ -69,13 +70,11 @@ export default function createGlobalSlice<
 
     return Object.keys(factory).reduce(
       (result, key) => {
-        const element = factory[key as keyof TSlice[keyof TSlice]];
-        result[name][key as keyof TSlice[keyof TSlice]] = element;
+        const element = factory[key];
+        result[name][key] = element;
 
         if (element instanceof Function) {
-          result[name][key as keyof TSlice[keyof TSlice]] = (
-            ...args: any[]
-          ) => {
+          result[name][key] = (...args: any[]) => {
             const ctx = buildContext<TSlice, TOtherSlices>(
               name,
               controller,
@@ -106,7 +105,7 @@ export default function createGlobalSlice<
 }
 
 function buildContext<TSlice extends SliceOf<any, any>, TOtherSlices>(
-  name: keyof TSlice,
+  name: ExtractNameOf<TSlice>,
   controller: AbortController,
   get: Parameters<StateCreator<TSlice & TOtherSlices, [], [], TSlice>>[1],
   set: Parameters<StateCreator<TSlice & TOtherSlices, [], [], TSlice>>[0],

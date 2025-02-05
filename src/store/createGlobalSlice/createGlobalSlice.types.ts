@@ -4,38 +4,42 @@ import { type Func, type OmitFuncs } from "#src/utilities";
 
 export type SliceOf<TName extends string, TState> = Record<TName, TState>;
 
+export type ExtractNameOf<TSlice extends SliceOf<any, any>> =
+  TSlice extends SliceOf<infer TName, any> ? TName : never;
+
+export type ExtractStateOf<TSlice extends SliceOf<any, any>> =
+  TSlice extends SliceOf<any, infer TState> ? TState : never;
+
 export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
   get: Func<OmitFuncs<TSlice & TOtherSlices>>;
   set: Func<
     void,
     [
       state:
-        | OmitFuncs<TSlice[keyof TSlice]>
+        | OmitFuncs<ExtractStateOf<TSlice>>
         | Func<
-            OmitFuncs<TSlice[keyof TSlice]>,
-            [prevState: OmitFuncs<TSlice[keyof TSlice]>]
+            OmitFuncs<ExtractStateOf<TSlice>>,
+            [prevState: OmitFuncs<ExtractStateOf<TSlice>>]
           >,
     ]
   >;
   signal: AbortSignal;
 };
 
-type WithContext<
-  TSlice extends SliceOf<any, any>,
-  TOtherSlices,
-> = TSlice[keyof TSlice] extends object
-  ? {
-      [TProperty in keyof TSlice[keyof TSlice]]: TSlice[keyof TSlice][TProperty] extends Func<
-        infer TResult,
-        infer TArgs
-      >
-        ? Func<
-            TResult,
-            [...args: TArgs, context: Context<TSlice, TOtherSlices>]
-          >
-        : TSlice[keyof TSlice][TProperty];
-    }
-  : TSlice[keyof TSlice];
+type WithContext<TSlice extends SliceOf<any, any>, TOtherSlices> =
+  ExtractStateOf<TSlice> extends object
+    ? {
+        [TProperty in keyof ExtractStateOf<TSlice>]: ExtractStateOf<TSlice>[TProperty] extends Func<
+          infer TResult,
+          infer TArgs
+        >
+          ? Func<
+              TResult,
+              [...args: TArgs, context: Context<TSlice, TOtherSlices>]
+            >
+          : ExtractStateOf<TSlice>[TProperty];
+      }
+    : ExtractStateOf<TSlice>;
 
 export type Subscribe<TSlice extends SliceOf<any, any>, TOtherSlices> = <
   TSelected,
@@ -48,7 +52,7 @@ export type Subscribe<TSlice extends SliceOf<any, any>, TOtherSlices> = <
 ) => Func;
 
 export type Input<TSlice extends SliceOf<any, any>, TOtherSlices> = [
-  name: keyof TSlice,
+  name: ExtractNameOf<TSlice>,
   factory: Func<
     WithContext<TSlice, TOtherSlices>,
     [subscribe: Subscribe<TSlice, TOtherSlices>]
