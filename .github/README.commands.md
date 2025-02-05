@@ -49,7 +49,10 @@ When running `npm run regenerate` all the pertinent files will be regenerated. H
 
 - .eslintignore
 - .eslintrc
+- .env _(just creation phase)_
+- .env.local _(just creation phase)_
 - .github/CHANGELOG.md
+- .github/README.md _(just creation phase)_
 - .github/workflows/deploy-app.yml
 - .github/workflows/publish-lib.yml
 - .gitignore
@@ -60,12 +63,13 @@ When running `npm run regenerate` all the pertinent files will be regenerated. H
 - jest.config.ts
 - next.config.js
 - postcss.config.js
+- tailwind.config.js _(just creation phase)_
 - tsconfig.json
 - webpack.config.js
 
 In case you want to prevent one of the files of being regenerated, use the `--ignore=` flag.
 
-> For example, `agusmgarcia-react-core-check --ignore=.eslintrc --ignore=.prettierignore`. It will ignore `.eslintrc` and `.prettierignore` files of being regenerated.
+> For example, `agusmgarcia-react-core-regenerate --ignore=.eslintrc --ignore=.prettierignore`. It will ignore `.eslintrc` and `.prettierignore` files of being regenerated.
 
 ## Simulated
 

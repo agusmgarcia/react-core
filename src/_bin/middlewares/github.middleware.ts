@@ -27,7 +27,10 @@ export default async function githubMiddleware(
       !library ? gitignore_app : gitignore_lib,
       regenerate && !ignore.includes(".gitignore"),
     ),
-    upsertFile(".github/README.md", readme, false),
+    upsertFile(".github/README.md", readme, {
+      create: regenerate && !ignore.includes(".github/README.md"),
+      update: false,
+    }),
     upsertFile(
       ".github/CHANGELOG.md",
       await createChangelogFile(),

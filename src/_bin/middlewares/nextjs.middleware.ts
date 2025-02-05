@@ -24,8 +24,18 @@ export default async function nextJSMiddleware(
           regenerate && !ignore.includes("next.config.js"),
         )
       : Promise.resolve(),
-    !library ? upsertFile(".env", env, false) : Promise.resolve(),
-    !library ? upsertFile(".env.local", envLocal, false) : Promise.resolve(),
+    !library
+      ? upsertFile(".env", env, {
+          create: regenerate && !ignore.includes(".env"),
+          update: false,
+        })
+      : Promise.resolve(),
+    !library
+      ? upsertFile(".env.local", envLocal, {
+          create: regenerate && !ignore.includes(".env.local"),
+          update: false,
+        })
+      : Promise.resolve(),
   ]);
 
   try {
