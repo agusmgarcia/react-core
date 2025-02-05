@@ -1,8 +1,6 @@
-import { EOL } from "os";
-
 import { type AsyncFunc } from "#src/utilities";
 
-import { execute, isLibrary, upsertFile } from "../utilities";
+import { isLibrary, upsertFile } from "../utilities";
 
 export default async function prettierMiddleware(
   next: AsyncFunc,
@@ -10,24 +8,6 @@ export default async function prettierMiddleware(
   ignore: string[],
 ): Promise<void> {
   const library = await isLibrary();
-
-  try {
-    const configFilePath = await execute(
-      "prettier --find-config-path .",
-      false,
-    ).then((cfg) => cfg.replace(EOL, ""));
-
-    if (configFilePath !== ".prettierrc")
-      console.warn(
-        `[warn] Prettier configure file "${configFilePath}" will be ignored in favor of ".prettierrc"`,
-      );
-  } catch (error: any) {
-    if (
-      error.message.replace(EOL, "") !==
-      '[error] Can not find configure file for ".".'
-    )
-      throw error;
-  }
 
   await Promise.all([
     upsertFile(
