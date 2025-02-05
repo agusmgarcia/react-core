@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v3.2.2](https://github.com/agusmgarcia/react-core/tree/v3.2.2)
+
+> February 5, 2025
+
+- **store**: adjust typings
+- **prettier.middleware**: stop finding prettier config
+- segregate between create and update phase while regenerating
+- **github.middleware**: segregate concurrency by tag
+
 ## [v3.2.1](https://github.com/agusmgarcia/react-core/tree/v3.2.1)
 
 > February 4, 2025
