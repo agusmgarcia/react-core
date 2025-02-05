@@ -152,7 +152,7 @@ jobs:
     name: Deploy application
     runs-on: ubuntu-latest
     concurrency:
-      group: \${{ github.workflow }}-deploy-app
+      group: \${{ github.workflow }}-\${{ github.ref_name }}
       cancel-in-progress: true
 
     steps:
@@ -237,7 +237,7 @@ jobs:
     name: Publish library
     runs-on: ubuntu-latest
     concurrency:
-      group: \${{ github.workflow }}-publish-lib
+      group: \${{ github.workflow }}-\${{ github.ref_name }}
       cancel-in-progress: true
 
     steps:
