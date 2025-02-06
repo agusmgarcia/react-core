@@ -21,7 +21,12 @@ export default function execute(
   disassociated: boolean,
 ): Promise<void | string> {
   return new Promise((resolve, reject) => {
-    const [cmd, ...args] = command.split(" ");
+    const [cmd, ...args] = command
+      .replace(/\s"(.+?)"\s?/g, ' @"$1"@ ')
+      .split("@")
+      .flatMap((r) => (r.startsWith('"') ? r : r.split(" ")))
+      .filter((r) => r !== "");
+
     const child = spawn(cmd, args, {
       shell: process.platform === "win32" ? true : undefined,
       stdio: disassociated === true ? "inherit" : "pipe",
