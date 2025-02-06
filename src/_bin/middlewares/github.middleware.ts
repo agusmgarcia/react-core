@@ -4,14 +4,11 @@ import { type AsyncFunc } from "#src/utilities";
 
 import {
   execute,
-  getCommits,
+  files,
+  folders,
   getPackageJSON,
-  getTags,
-  isInsideGitRepository,
+  git,
   isLibrary,
-  removeFile,
-  upsertFile,
-  upsertFolder,
 } from "../utilities";
 
 export default async function githubMiddleware(
@@ -19,28 +16,32 @@ export default async function githubMiddleware(
   regenerate: boolean,
   ignore: string[],
 ): Promise<void> {
-  const [library] = await Promise.all([isLibrary(), upsertFolder(".github")]);
+  const [library] = await Promise.all([
+    isLibrary(),
+    folders.upsertFolder(".github"),
+  ]);
 
   await Promise.all([
-    upsertFile(
+    files.upsertFile(
       ".gitignore",
       !library ? gitignore_app : gitignore_lib,
       regenerate && !ignore.includes(".gitignore"),
     ),
-    upsertFile(".github/README.md", readme, {
+    files.upsertFile(".github/README.md", readme, {
       create: regenerate && !ignore.includes(".github/README.md"),
       update: false,
     }),
-    upsertFile(
+    files.upsertFile(
       ".github/CHANGELOG.md",
       await createChangelogFile(),
       regenerate && !ignore.includes(".github/CHANGELOG.md"),
     ),
-    upsertFolder(".github/workflows")
+    folders
+      .upsertFolder(".github/workflows")
       .then(() => (!library ? "deploy-app.yml" : "publish-lib.yml"))
       .then((workflowName) => `.github/workflows/${workflowName}`)
       .then((fileName) =>
-        upsertFile(
+        files.upsertFile(
           fileName,
           !library ? deploy_app : publish_lib,
           regenerate && !ignore.includes(fileName),
@@ -48,7 +49,9 @@ export default async function githubMiddleware(
       ),
     Promise.resolve(
       ".github/workflows/continuous-integration-and-deployment.yml",
-    ).then((f) => (!ignore.includes(f) ? removeFile(f) : Promise.resolve())),
+    ).then((f) =>
+      !ignore.includes(f) ? files.removeFile(f) : Promise.resolve(),
+    ),
   ]);
 
   await next();
@@ -68,21 +71,16 @@ node_modules
 const readme = "";
 
 async function createChangelogFile(): Promise<string> {
-  const commitRegexp = /^"(?:chore|feat|fix|refactor)(?:\((.*)\))?!?:\s(.*)"$/;
-
   function filterCommits(commit: string): boolean {
     return (
-      commitRegexp.test(commit) &&
       commit !== '"chore: bump package version"' &&
       commit !== '"chore(CHANGELOG.md): update file"'
     );
   }
 
   function transformCommit(commit: string): string {
-    const commitInfo = commitRegexp.exec(commit);
-    const scope = commitInfo![1];
-    const message = commitInfo![2];
-    return `- ${scope !== undefined ? `**${scope}**: ` : ""}${message}`;
+    const commitInfo = git.getCommitInfo(commit);
+    return `- ${commitInfo.scope !== undefined ? `**${commitInfo.scope}**: ` : ""}${commitInfo.message}`;
   }
 
   const projectName = await getPackageJSON()
@@ -94,20 +92,21 @@ async function createChangelogFile(): Promise<string> {
 
   let fragments = "";
 
-  if (await isInsideGitRepository()) {
+  if (await git.isInsideRepository()) {
     const initialCommit = await execute(
       "git rev-list --max-parents=0 HEAD",
       false,
     ).then((commit) => commit?.replace(EOL, ""));
 
-    const tags = await getTags().then((tags) => tags.reverse());
+    const tags = await git.getTags().then((tags) => tags.reverse());
 
     fragments = await Promise.all(
       tags.map(async (tag, index) => {
         const nextTag =
           index < tags.length - 1 ? tags[index + 1] : initialCommit;
 
-        const commits = await getCommits(tag, nextTag)
+        const commits = await git
+          .getCommits(tag, nextTag)
           .then((commits) => commits.filter(filterCommits))
           .then((commits) => commits.map(transformCommit))
           .then((commits) => commits.join(EOL));

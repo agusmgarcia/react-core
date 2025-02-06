@@ -1,6 +1,6 @@
 import { type AsyncFunc } from "#src/utilities";
 
-import { isLibrary, upsertFile } from "../utilities";
+import { files, isLibrary } from "../utilities";
 
 export default async function eslintMiddleware(
   next: AsyncFunc,
@@ -10,12 +10,12 @@ export default async function eslintMiddleware(
   const library = await isLibrary();
 
   await Promise.all([
-    upsertFile(
+    files.upsertFile(
       ".eslintrc",
       !library ? eslintrc_app : eslintrc_lib,
       regenerate && !ignore.includes(".eslintrc"),
     ),
-    upsertFile(
+    files.upsertFile(
       ".eslintignore",
       !library ? eslintIgnore_app : eslintIgnore_lib,
       regenerate && !ignore.includes(".eslintignore"),

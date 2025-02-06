@@ -1,8 +1,20 @@
 import fs from "fs";
 
-import exists from "./exists";
+export function exists(path: string): Promise<boolean> {
+  return new Promise<boolean>((resolve) =>
+    fs.access(path, fs.constants.F_OK, (error) => resolve(error === null)),
+  );
+}
 
-export default async function upsertFile(
+export function removeFile(path: string): Promise<void> {
+  return new Promise((resolve, reject) =>
+    fs.rm(path, { force: true, recursive: true }, (error) =>
+      error === null ? resolve() : reject(error),
+    ),
+  );
+}
+
+export async function upsertFile(
   path: string,
   data: string,
   options: { create: boolean; update: boolean } | boolean,

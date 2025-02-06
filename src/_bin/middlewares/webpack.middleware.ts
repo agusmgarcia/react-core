@@ -1,6 +1,6 @@
 import { type AsyncFunc } from "#src/utilities";
 
-import { isLibrary, upsertFile } from "../utilities";
+import { files, isLibrary } from "../utilities";
 
 export default async function webpackMiddleware(
   next: AsyncFunc,
@@ -9,7 +9,7 @@ export default async function webpackMiddleware(
 ): Promise<void> {
   const library = await isLibrary();
   if (library)
-    await upsertFile(
+    await files.upsertFile(
       "webpack.config.js",
       webpackConfig,
       regenerate && !ignore.includes("webpack.config.js"),

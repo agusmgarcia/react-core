@@ -1,6 +1,6 @@
 import { type AsyncFunc } from "#src/utilities";
 
-import { isLibrary, upsertFile } from "../utilities";
+import { files, isLibrary } from "../utilities";
 
 export default async function prettierMiddleware(
   next: AsyncFunc,
@@ -10,12 +10,12 @@ export default async function prettierMiddleware(
   const library = await isLibrary();
 
   await Promise.all([
-    upsertFile(
+    files.upsertFile(
       ".prettierrc",
       prettierrc,
       regenerate && !ignore.includes(".prettierrc"),
     ),
-    upsertFile(
+    files.upsertFile(
       ".prettierignore",
       !library ? prettierignore_app : prettierIgnore_lib,
       regenerate && !ignore.includes(".prettierignore"),

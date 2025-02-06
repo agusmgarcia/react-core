@@ -1,6 +1,6 @@
 import { type AsyncFunc } from "#src/utilities";
 
-import { isLibrary, upsertFile } from "../utilities";
+import { files, isLibrary } from "../utilities";
 
 export default async function jestMiddleware(
   next: AsyncFunc,
@@ -9,7 +9,7 @@ export default async function jestMiddleware(
 ): Promise<void> {
   const library = await isLibrary();
 
-  await upsertFile(
+  await files.upsertFile(
     "jest.config.js",
     !library ? jestConfig_app : jestConfig_lib,
     regenerate && !ignore.includes("jest.config.js"),

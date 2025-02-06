@@ -1,12 +1,6 @@
 import { type AsyncFunc } from "#src/utilities";
 
-import {
-  isLibrary,
-  removeFile,
-  removeFolder,
-  upsertFile,
-  upsertFolder,
-} from "../utilities";
+import { files, folders, isLibrary } from "../utilities";
 
 export default async function nextJSMiddleware(
   next: AsyncFunc,
@@ -16,22 +10,22 @@ export default async function nextJSMiddleware(
   const library = await isLibrary();
 
   await Promise.all([
-    upsertFolder("pages"),
+    folders.upsertFolder("pages"),
     !library
-      ? upsertFile(
+      ? files.upsertFile(
           "next.config.js",
           nextConfig,
           regenerate && !ignore.includes("next.config.js"),
         )
       : Promise.resolve(),
     !library
-      ? upsertFile(".env", env, {
+      ? files.upsertFile(".env", env, {
           create: regenerate && !ignore.includes(".env"),
           update: false,
         })
       : Promise.resolve(),
     !library
-      ? upsertFile(".env.local", envLocal, {
+      ? files.upsertFile(".env.local", envLocal, {
           create: regenerate && !ignore.includes(".env.local"),
           update: false,
         })
@@ -42,9 +36,9 @@ export default async function nextJSMiddleware(
     await next();
   } finally {
     await Promise.all([
-      library ? removeFile("next-env.d.ts") : Promise.resolve(),
-      library ? removeFolder(".next") : Promise.resolve(),
-      library ? removeFolder("pages") : Promise.resolve(),
+      library ? files.removeFile("next-env.d.ts") : Promise.resolve(),
+      library ? folders.removeFolder(".next") : Promise.resolve(),
+      library ? folders.removeFolder("pages") : Promise.resolve(),
     ]);
   }
 }

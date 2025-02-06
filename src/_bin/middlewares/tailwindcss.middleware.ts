@@ -1,6 +1,6 @@
 import { type AsyncFunc } from "#src/utilities";
 
-import { isLibrary, upsertFile } from "../utilities";
+import { files, isLibrary } from "../utilities";
 
 export default async function tailwindcssMiddleware(
   next: AsyncFunc,
@@ -10,12 +10,12 @@ export default async function tailwindcssMiddleware(
   const library = await isLibrary();
   if (!library) {
     await Promise.all([
-      upsertFile(
+      files.upsertFile(
         "postcss.config.js",
         postCSSConfig,
         regenerate && !ignore.includes("postcss.config.js"),
       ),
-      upsertFile("tailwind.config.js", tailwindConfig, {
+      files.upsertFile("tailwind.config.js", tailwindConfig, {
         create: regenerate && !ignore.includes("tailwind.config.js"),
         update: false,
       }),
