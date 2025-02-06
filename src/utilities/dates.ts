@@ -60,14 +60,10 @@ export function getDayOfTheWeek(date: string): number {
 }
 
 export function getFirstDateOfMonth(date: string): string {
-  const tmp = new Date(
-    date.replace(
-      dateRegexp,
-      (_: string, year: string, month: string) => `${year}-${month}-01`,
-    ),
+  return date.replace(
+    dateRegexp,
+    (_: string, year: string, month: string) => `${year}-${month}-01`,
   );
-
-  return toString(tmp);
 }
 
 export function getLastDateOfMonth(date: string): string {
