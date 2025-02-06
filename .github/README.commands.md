@@ -33,6 +33,7 @@ Then, place add the following commands within the scripts section of the _packag
   "scripts": {
     "build": "agusmgarcia-react-core-build",
     "check": "agusmgarcia-react-core-check",
+    "deploy": "agusmgarcia-react-core-deploy",
     "format": "agusmgarcia-react-core-format",
     "postpack": "agusmgarcia-react-core-postpack",
     "prepack": "agusmgarcia-react-core-prepack",

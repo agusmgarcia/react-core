@@ -8,6 +8,7 @@
   "scripts": {
     "build": "ts-node src/_bin/build.ts",
     "check": "ts-node src/_bin/check.ts",
+    "deploy": "ts-node src/_bin/deploy.ts",
     "format": "ts-node src/_bin/format.ts",
     "postpack": "ts-node src/_bin/postpack.ts",
     "prepack": "ts-node src/_bin/prepack.ts",
@@ -18,6 +19,7 @@
   "bin": {
     "agusmgarcia-react-core-build": "bin/build.js",
     "agusmgarcia-react-core-check": "bin/check.js",
+    "agusmgarcia-react-core-deploy": "bin/deploy.js",
     "agusmgarcia-react-core-format": "bin/format.js",
     "agusmgarcia-react-core-postpack": "bin/postpack.js",
     "agusmgarcia-react-core-prepack": "bin/prepack.js",
