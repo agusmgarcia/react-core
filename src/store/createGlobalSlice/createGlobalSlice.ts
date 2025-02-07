@@ -1,6 +1,6 @@
 import { type StateCreator } from "zustand";
 
-import { equals, type OmitFuncs } from "#src/utilities";
+import { equals, isSSR, type OmitFuncs } from "#src/utilities";
 
 import {
   type Context,
@@ -47,21 +47,23 @@ export default function createGlobalSlice<
         listener(selection, ctx);
       });
 
-      setTimeout(() => {
-        const ctx = buildContext<TSlice, TOtherSlices>(
-          name,
-          controller,
-          get,
-          set,
-        );
+      if (!isSSR()) {
+        setTimeout(() => {
+          const ctx = buildContext<TSlice, TOtherSlices>(
+            name,
+            controller,
+            get,
+            set,
+          );
 
-        const selection =
-          selector !== undefined
-            ? selector(ctx.get() as OmitFuncs<TOtherSlices>)
-            : ({} as ReturnType<NonNullable<typeof selector>>);
+          const selection =
+            selector !== undefined
+              ? selector(ctx.get() as OmitFuncs<TOtherSlices>)
+              : ({} as ReturnType<NonNullable<typeof selector>>);
 
-        listener(selection, ctx);
-      }, 0);
+          listener(selection, ctx);
+        }, 0);
+      }
 
       return unsubscribe;
     };
