@@ -4,6 +4,7 @@ import createGlobalSlice, {
   type CreateGlobalSliceTypes,
 } from "../createGlobalSlice";
 import {
+  type ExtractNameOf,
   type ExtractSelectedOf,
   type Input,
   type Output,
@@ -14,7 +15,7 @@ export default function createServerSlice<
   TSlice extends SliceOf<any, any, any>,
   TOtherSlices = {},
 >(...input: Input<TSlice, TOtherSlices>): Output<TSlice, TOtherSlices> {
-  return () => {
+  return (initialData) => {
     const name = input[0];
     const fetcher = input[1];
     const selector = input[2];
@@ -36,7 +37,6 @@ export default function createServerSlice<
         if (context.signal.aborted) return;
         context.set((prevState) => ({
           ...prevState,
-          _selected: selected,
           data,
           error: undefined,
           loading: false,
@@ -57,10 +57,19 @@ export default function createServerSlice<
           error: undefined,
           loading: true,
           reload,
-        } as any;
+        } as CreateGlobalSliceTypes.WithContext<TSlice, TOtherSlices>;
       },
     );
 
-    return result();
+    return result({
+      [name]: {
+        data: initialData?.[name],
+        error: undefined,
+        loading: true,
+      },
+    } as Record<
+      ExtractNameOf<TSlice>,
+      OmitFuncs<CreateGlobalSliceTypes.ExtractStateOf<TSlice>>
+    >);
   };
 }

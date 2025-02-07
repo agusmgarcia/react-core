@@ -5,14 +5,15 @@ import { devtools } from "zustand/middleware";
 import { type CreateGlobalSliceTypes } from "../createGlobalSlice";
 import { type Input, type Output, type StateOf } from "./createStore.types";
 
-type Store<TSliceFactories extends CreateGlobalSliceTypes.Output<any, any>[]> =
-  UseBoundStore<StoreApi<StateOf<TSliceFactories>>>;
+type Store<
+  TSliceFactories extends CreateGlobalSliceTypes.Output<any, any, any>[],
+> = UseBoundStore<StoreApi<StateOf<TSliceFactories>>>;
 
 const StoreContext = createContext<Store<any[]> | undefined>(undefined);
 StoreContext.displayName = "StoreContext";
 
 export default function createStore<
-  TSliceFactories extends CreateGlobalSliceTypes.Output<any, any>[],
+  TSliceFactories extends CreateGlobalSliceTypes.Output<any, any, any>[],
 >(...input: Input<TSliceFactories>): Output<TSliceFactories> {
   return {
     StoreProvider: (props) => {
@@ -25,7 +26,7 @@ export default function createStore<
               input.reduce(
                 (result, factory) => ({
                   ...result,
-                  ...factory()(...a),
+                  ...factory(props.initialState)(...a),
                 }),
                 {},
               ),

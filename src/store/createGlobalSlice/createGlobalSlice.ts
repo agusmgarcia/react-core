@@ -5,6 +5,7 @@ import { equals, type OmitFuncs } from "#src/utilities";
 import {
   type Context,
   type ExtractNameOf,
+  type ExtractStateOf,
   type Input,
   type Output,
   type SliceOf,
@@ -14,8 +15,10 @@ import {
 export default function createGlobalSlice<
   TSlice extends SliceOf<any, any>,
   TOtherSlices = {},
->(...input: Input<TSlice, TOtherSlices>): Output<TSlice, TOtherSlices> {
-  return () => (set, get, store) => {
+>(
+  ...input: Input<TSlice, TOtherSlices>
+): Output<TSlice, TOtherSlices, ExtractStateOf<TSlice>> {
+  return (initialState) => (set, get, store) => {
     let controller = new AbortController();
 
     const name = input[0];
@@ -66,9 +69,14 @@ export default function createGlobalSlice<
     const factory = input[1](subscribe);
 
     if (typeof factory !== "object" || factory === null)
-      return { [name]: factory } as TSlice;
+      return {
+        [name]:
+          initialState !== undefined && name in initialState
+            ? initialState[name]
+            : factory,
+      } as TSlice;
 
-    return Object.keys(factory).reduce(
+    const result = Object.keys(factory).reduce(
       (result, key) => {
         const element = factory[key];
         result[name][key] = element;
@@ -101,6 +109,8 @@ export default function createGlobalSlice<
       },
       { [name]: {} } as TSlice,
     );
+
+    return { [name]: { ...result[name], ...initialState?.[name] } } as TSlice;
   };
 }
 

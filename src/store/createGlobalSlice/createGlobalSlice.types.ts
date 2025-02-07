@@ -26,7 +26,7 @@ export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
   signal: AbortSignal;
 };
 
-type WithContext<TSlice extends SliceOf<any, any>, TOtherSlices> =
+export type WithContext<TSlice extends SliceOf<any, any>, TOtherSlices> =
   ExtractStateOf<TSlice> extends object
     ? {
         [TProperty in keyof ExtractStateOf<TSlice>]: ExtractStateOf<TSlice>[TProperty] extends Func<
@@ -59,6 +59,15 @@ export type Input<TSlice extends SliceOf<any, any>, TOtherSlices> = [
   >,
 ];
 
-export type Output<TSlice extends SliceOf<any, any>, TOtherSlices> = Func<
-  StateCreator<TSlice & TOtherSlices, [], [], TSlice>
+export type Output<
+  TSlice extends SliceOf<any, any>,
+  TOtherSlices,
+  TInitialState,
+> = Func<
+  StateCreator<TSlice & TOtherSlices, [], [], TSlice>,
+  [
+    initialState:
+      | Partial<Record<ExtractNameOf<TSlice>, OmitFuncs<TInitialState>>>
+      | undefined,
+  ]
 >;

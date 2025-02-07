@@ -37,4 +37,4 @@ export type Input<TSlice extends SliceOf<any, any, any>, TOtherSlices> = [
 export type Output<
   TSlice extends SliceOf<any, any, any>,
   TOtherSlices,
-> = CreateGlobalSliceTypes.Output<TSlice, TOtherSlices>;
+> = CreateGlobalSliceTypes.Output<TSlice, TOtherSlices, ExtractDataOf<TSlice>>;
