@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v3.4.0](https://github.com/agusmgarcia/react-core/tree/v3.4.0)
+
+> February 7, 2025
+
+- **store**: prevent subscribing in SSR context
+- **store**: add initial state
+
 ## [v3.3.1](https://github.com/agusmgarcia/react-core/tree/v3.3.1)
 
 > February 6, 2025
