@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v3.3.1](https://github.com/agusmgarcia/react-core/tree/v3.3.1)
+
+> February 6, 2025
+
+- **deploy**: adjust naming convention
+
 ## [v3.3.0](https://github.com/agusmgarcia/react-core/tree/v3.3.0)
 
 > February 6, 2025
