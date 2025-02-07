@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v3.3.0](https://github.com/agusmgarcia/react-core/tree/v3.3.0)
+
+> February 6, 2025
+
+- **deploy**: add deploy cli
+- reorganize imports
+- **dates**: adjust calculation to get first date of the month
+- **execute**: adjust the way of getting parameters
+
 ## [v3.2.2](https://github.com/agusmgarcia/react-core/tree/v3.2.2)
 
 > February 5, 2025
