@@ -11,6 +11,7 @@ export default async function deploy(): Promise<void> {
     .then(findTypeOfNewVersion);
 
   let newTag = "";
+  const origin = "origin"; // TODO: get origin name.
 
   await run(
     false,
@@ -28,11 +29,11 @@ export default async function deploy(): Promise<void> {
       execute(`git commit -a --amend -m "chore: bump package version"`, true),
     () => execute(`git tag --delete ${newTag}`, true),
     () => execute(`git tag ${newTag}`, true),
-    () => execute(`git push origin ${newTag}`, true), // TODO: get origin name.
+    () => execute(`git push ${origin} ${newTag}`, true),
     () =>
-      execute("git branch --show-current", false).then(
-        (branch) => execute(`git push origin ${branch}`, true), // TODO: get origin name.
-      ),
+      execute("git branch --show-current", false)
+        .then((branch) => branch.replace(EOL, ""))
+        .then((branch) => execute(`git push ${origin} ${branch}`, true)),
   );
 }
 

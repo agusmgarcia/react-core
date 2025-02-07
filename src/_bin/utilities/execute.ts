@@ -25,7 +25,8 @@ export default function execute(
       .replace(/\s"(.+?)"\s?/g, ' @"$1"@ ')
       .split("@")
       .flatMap((r) => (r.startsWith('"') ? r : r.split(" ")))
-      .filter((r) => r !== "");
+      .filter((r) => r !== "")
+      .map((r) => r.replace(/^"(.*)"$/g, "$1"));
 
     const child = spawn(cmd, args, {
       shell: process.platform === "win32" ? true : undefined,
