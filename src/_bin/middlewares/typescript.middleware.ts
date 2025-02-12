@@ -20,6 +20,7 @@ const tsconfig_app = `{
   "compilerOptions": {
     "allowJs": true,
     "baseUrl": "./",
+    "declaration": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
@@ -40,7 +41,7 @@ const tsconfig_app = `{
     "target": "es5",
     "tsBuildInfoFile": "node_modules/.typescriptcache"
   },
-  "exclude": [".env.local", ".next", "node_modules", "out"],
+  "exclude": [".next", "node_modules"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }
 `;
@@ -55,7 +56,7 @@ const tsconfig_lib = `{
     "incremental": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "lib": ["DOM"],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmit": false,
@@ -71,7 +72,7 @@ const tsconfig_lib = `{
     "target": "es5",
     "tsBuildInfoFile": "node_modules/.typescriptcache"
   },
-  "exclude": ["bin", "dist", "node_modules", "*.tgz"],
+  "exclude": ["node_modules"],
   "include": ["**/*.ts", "**/*.tsx"]
 }
 `;

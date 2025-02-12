@@ -8,7 +8,7 @@
     "incremental": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "lib": ["DOM"],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmit": false,
@@ -24,6 +24,6 @@
     "target": "es5",
     "tsBuildInfoFile": "node_modules/.typescriptcache"
   },
-  "exclude": ["bin", "dist", "node_modules", "*.tgz"],
+  "exclude": ["node_modules"],
   "include": ["**/*.ts", "**/*.tsx"]
 }
