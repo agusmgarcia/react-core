@@ -214,6 +214,9 @@ jobs:
 
       - name: Configure pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
+          token: \${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v3
