@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v3.5.0](https://github.com/agusmgarcia/react-core/tree/v3.5.0)
+
+> February 12, 2025
+
+- **github.middleware**: escape markdown
+- **nextjs.middleware**: prevent regenerating next.config.js
+- **typescript.middleware**: adjust tsconfig
+- add tailwind in the library
+- **github.middleware**: enable pages automatically
+
 ## [v3.4.0](https://github.com/agusmgarcia/react-core/tree/v3.4.0)
 
 > February 7, 2025
