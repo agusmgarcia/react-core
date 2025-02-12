@@ -62,7 +62,7 @@ When running `npm run regenerate` all the pertinent files will be regenerated. H
 - .prettierignore
 - .prettierrc
 - jest.config.ts
-- next.config.js
+- next.config.js _(just creation phase)_
 - postcss.config.js
 - tailwind.config.js _(just creation phase)_
 - tsconfig.json
