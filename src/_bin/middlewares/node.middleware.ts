@@ -28,5 +28,7 @@ const npmignore = `**/.*
 src
 jest.config.js
 package-lock.json
+postcss.config.js
+tailwind.config.js
 tsconfig.json
 webpack.config.js`;

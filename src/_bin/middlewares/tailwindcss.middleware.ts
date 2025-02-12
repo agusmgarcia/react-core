@@ -8,19 +8,22 @@ export default async function tailwindcssMiddleware(
   ignore: string[],
 ): Promise<void> {
   const library = await isLibrary();
-  if (!library) {
-    await Promise.all([
-      files.upsertFile(
-        "postcss.config.js",
-        postCSSConfig,
-        regenerate && !ignore.includes("postcss.config.js"),
-      ),
-      files.upsertFile("tailwind.config.js", tailwindConfig, {
+
+  await Promise.all([
+    files.upsertFile(
+      "postcss.config.js",
+      postCSSConfig,
+      regenerate && !ignore.includes("postcss.config.js"),
+    ),
+    files.upsertFile(
+      "tailwind.config.js",
+      !library ? tailwindConfig_app : tailwindConfig_lib,
+      {
         create: regenerate && !ignore.includes("tailwind.config.js"),
         update: false,
-      }),
-    ]);
-  }
+      },
+    ),
+  ]);
 
   await next();
 }
@@ -33,12 +36,20 @@ const postCSSConfig = `module.exports = {
 };
 `;
 
-const tailwindConfig = `/** @type import('tailwindcss').Config */
+const tailwindConfig_app = `/** @type import('tailwindcss').Config */
 module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  plugins: [],
+  theme: { extend: {} },
+};
+`;
+
+const tailwindConfig_lib = `/** @type import('tailwindcss').Config */
+module.exports = {
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   plugins: [],
   theme: { extend: {} },
 };

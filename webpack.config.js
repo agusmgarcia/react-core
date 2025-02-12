@@ -15,6 +15,11 @@ module.exports = [
       rules: [
         {
           exclude: /node_modules/,
+          test: /\.css$/,
+          use: ["style-loader", "css-loader", "postcss-loader"],
+        },
+        {
+          exclude: /node_modules/,
           test: /\.tsx?$/,
           use: [
             {
