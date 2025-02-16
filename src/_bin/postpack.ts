@@ -4,9 +4,7 @@ import { execute, isLibrary } from "./utilities";
 export default async function postpack(): Promise<void> {
   if (!(await isLibrary())) return;
 
-  const simulated = !!process.argv.find(
-    (p) => p === "--simulated" || p === "--simulated=true",
-  );
+  const simulated = !!process.argv.find((p) => p === "--simulated");
 
   await run(false, () =>
     execute(
