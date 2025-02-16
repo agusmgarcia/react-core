@@ -5,13 +5,12 @@ import { execute, git } from "./utilities";
 
 export default async function deploy(): Promise<void> {
   const typeOfNewVersion = await git
-    .getTags()
+    .getTags({ merged: true })
     .then((tags) => tags.at(tags.length - 1))
     .then(git.getCommits)
     .then(findTypeOfNewVersion);
 
   let newTag = "";
-  const origin = "origin"; // TODO: get origin name.
 
   await run(
     false,
@@ -22,18 +21,14 @@ export default async function deploy(): Promise<void> {
       ).then((tag) => {
         newTag = tag.replace(EOL, "");
       }),
-    () => execute(`git commit -a -m "wip"`, true),
-    () => execute(`git tag ${newTag}`, true),
+    () => git.createCommit("chore: bump package version"),
+    () => git.createTag(newTag),
     () => execute("npm run regenerate", true),
-    () =>
-      execute(`git commit -a --amend -m "chore: bump package version"`, true),
-    () => execute(`git tag --delete ${newTag}`, true),
-    () => execute(`git tag ${newTag}`, true),
-    () => execute(`git push ${origin} ${newTag}`, true),
-    () =>
-      execute("git branch --show-current", false)
-        .then((branch) => branch.replace(EOL, ""))
-        .then((branch) => execute(`git push ${origin} ${branch}`, true)),
+    () => git.createCommit("chore: bump package version", { amend: true }),
+    () => git.deleteTag(newTag),
+    () => git.createTag(newTag),
+    () => git.pushTag(newTag),
+    () => git.getCurrentBranch().then(git.pushBranch),
   );
 }
 

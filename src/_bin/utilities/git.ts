@@ -2,6 +2,22 @@ import { EOL } from "os";
 
 import execute from "./execute";
 
+// <=============================== BRANCHES ===============================> //
+
+export function getCurrentBranch(): Promise<string> {
+  return execute("git branch --show-current", false).then((branch) =>
+    branch.replace(EOL, ""),
+  );
+}
+
+export function pushBranch(branch: string): Promise<void> {
+  return getRemote().then((remote) =>
+    execute(`git push -u ${remote} ${branch} --no-verify`, true),
+  );
+}
+
+// <=============================== COMMITS ===============================> //
+
 const COMMIT_REGEXP = /^"(chore|feat|fix|refactor)(?:\((.*)\))?(!)?:\s(.*)"$/;
 
 export function getCommits(
@@ -38,10 +54,37 @@ export function getCommitInfo(commit: string): {
   };
 }
 
+export function createCommit(
+  message: string,
+  options?: Partial<{ amend: boolean }>,
+): Promise<void> {
+  message = `"${message}"`;
+
+  if (!COMMIT_REGEXP.test(message))
+    throw `Commit ${message} doesn't match the pattern`;
+
+  return execute("git add .", true).then(() =>
+    execute(
+      `git commit${!!options?.amend ? " --amend" : ""} -m ${message} -n`,
+      true,
+    ),
+  );
+}
+
+// <=============================== REMOTES ===============================> //
+
+export function getRemote(): Promise<string> {
+  return Promise.resolve("origin"); // TODO: get origin name.
+}
+
+// <================================= TAGS =================================> //
+
 const TAG_REGEXP = /^v([0-9]+)\.([0-9]+)\.([0-9]+)$/;
 
-export function getTags(): Promise<string[]> {
-  return execute("git tag --merged", false)
+export function getTags(
+  options?: Partial<{ merged: boolean }>,
+): Promise<string[]> {
+  return execute(`git tag ${!!options?.merged ? " --merged" : ""}`, false)
     .then((tags) => tags?.split(EOL) ?? [])
     .then((tags) => tags.filter(filterTags))
     .then((tags) => tags.sort(sortTags));
@@ -72,6 +115,23 @@ export function getTagInfo(tag: string): {
   const tagInfo = TAG_REGEXP.exec(tag);
   return { major: +tagInfo![1], minor: +tagInfo![2], patch: +tagInfo![3] };
 }
+
+export function createTag(tag: string): Promise<void> {
+  if (!TAG_REGEXP.test(tag)) throw `Tag ${tag} doesn't match the pattern`;
+  return execute(`git tag ${tag}`, true);
+}
+
+export function deleteTag(tag: string): Promise<void> {
+  return execute(`git tag --delete ${tag}`, true);
+}
+
+export function pushTag(tag: string): Promise<void> {
+  return getRemote().then((remote) =>
+    execute(`git push ${remote} ${tag} --no-verify`, true),
+  );
+}
+
+// <================================ UTILS ================================> //
 
 export function isInsideRepository(): Promise<boolean> {
   return execute("git rev-parse --is-inside-work-tree", false)

@@ -99,7 +99,9 @@ async function createChangelogFile(): Promise<string> {
       false,
     ).then((commit) => commit?.replace(EOL, ""));
 
-    const tags = await git.getTags().then((tags) => tags.reverse());
+    const tags = await git
+      .getTags({ merged: true })
+      .then((tags) => tags.reverse());
 
     fragments = await Promise.all(
       tags.map(async (tag, index) => {
