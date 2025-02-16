@@ -12,10 +12,11 @@ export default async function nextJSMiddleware(
   await Promise.all([
     folders.upsertFolder("pages"),
     !library
-      ? files.upsertFile("next.config.js", nextConfig, {
-          create: regenerate && !ignore.includes("next.config.js"),
-          update: false,
-        })
+      ? files.upsertFile(
+          "next.config.js",
+          nextConfig,
+          regenerate && !ignore.includes("next.config.js"),
+        )
       : Promise.resolve(),
     !library
       ? files.upsertFile(".env", env, {
