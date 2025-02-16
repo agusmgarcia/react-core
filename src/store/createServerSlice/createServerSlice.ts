@@ -1,9 +1,10 @@
-import { type OmitFuncs } from "#src/utilities";
+import { type Func, type OmitFuncs } from "#src/utilities";
 
 import createGlobalSlice, {
   type CreateGlobalSliceTypes,
 } from "../createGlobalSlice";
 import {
+  type ExtractDataOf,
   type ExtractNameOf,
   type ExtractSelectedOf,
   type Input,
@@ -20,9 +21,13 @@ export default function createServerSlice<
     const fetcher = input[1];
     const selector = input[2];
 
-    async function reload(
+    async function reloadHelper(
       args: Partial<ExtractSelectedOf<TSlice>> | undefined,
       context: CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>,
+      mergeData: Func<
+        ExtractDataOf<TSlice>,
+        [newData: ExtractDataOf<TSlice>, prevData: ExtractDataOf<TSlice>]
+      >,
     ): Promise<void> {
       context.set((prevState) => ({ ...prevState, loading: true }));
 
@@ -37,7 +42,7 @@ export default function createServerSlice<
         if (context.signal.aborted) return;
         context.set((prevState) => ({
           ...prevState,
-          data,
+          data: mergeData(data, prevState.data),
           error: undefined,
           loading: false,
         }));
@@ -45,6 +50,24 @@ export default function createServerSlice<
         if (context.signal.aborted) return;
         context.set((prevState) => ({ ...prevState, error, loading: false }));
       }
+    }
+
+    async function reload(
+      args: Partial<ExtractSelectedOf<TSlice>> | undefined,
+      context: CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>,
+    ): Promise<void> {
+      return reloadHelper(args, context, (newData) => newData);
+    }
+
+    async function loadMore(
+      args: Partial<ExtractSelectedOf<TSlice>> | undefined,
+      context: CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>,
+    ): Promise<void> {
+      return reloadHelper(args, context, (newData, prevData) =>
+        Array.isArray(prevData) && Array.isArray(newData)
+          ? [...prevData, ...newData]
+          : newData,
+      );
     }
 
     const result = createGlobalSlice<TSlice, TOtherSlices>(
@@ -56,6 +79,7 @@ export default function createServerSlice<
           data: undefined,
           error: undefined,
           loading: true,
+          loadMore,
           reload,
         } as CreateGlobalSliceTypes.WithContext<TSlice, TOtherSlices>;
       },

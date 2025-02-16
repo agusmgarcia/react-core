@@ -12,6 +12,7 @@ export type SliceOf<
     data: TData | undefined;
     error: unknown;
     loading: boolean;
+    loadMore: AsyncFunc<void, [args?: Partial<TSelected>]>;
     reload: AsyncFunc<void, [args?: Partial<TSelected>]>;
   }
 >;
