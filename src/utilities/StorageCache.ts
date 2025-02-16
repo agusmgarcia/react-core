@@ -29,14 +29,23 @@ export default class StorageCache extends Cache {
     return super.getOrCreate(
       key,
       async () => {
-        const result = await factory();
+        try {
+          const result = await factory();
 
-        saveItemIntoStore(this.storage, this.storageName, key, {
-          expiresAt: newExpiresAt(result),
-          result,
-        });
+          saveItemIntoStore(this.storage, this.storageName, key, {
+            expiresAt: newExpiresAt(result),
+            result,
+          });
 
-        return result;
+          return result;
+        } catch (error) {
+          saveItemIntoStore(this.storage, this.storageName, key, {
+            error,
+            expiresAt: Date.now() + 1000,
+          });
+
+          throw error;
+        }
       },
       newExpiresAt,
     );

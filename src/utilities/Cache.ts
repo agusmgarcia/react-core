@@ -2,7 +2,7 @@ import { Mutex } from "async-mutex";
 
 import type Func from "./Func.types";
 
-type Item = { expiresAt: number; result: any };
+type Item = { expiresAt: number } & ({ result: any } | { error: any });
 
 export default class Cache {
   protected readonly maxCacheTime: number;
@@ -28,19 +28,25 @@ export default class Cache {
         this.items[key] === undefined ||
         Date.now() >= this.items[key].expiresAt
       ) {
-        const result = await factory();
+        try {
+          const result = await factory();
 
-        expiresAt =
-          expiresAt === undefined
-            ? Date.now() + this.maxCacheTime
-            : typeof expiresAt === "number"
-              ? expiresAt
-              : expiresAt(result);
+          expiresAt =
+            expiresAt === undefined
+              ? Date.now() + this.maxCacheTime
+              : typeof expiresAt === "number"
+                ? expiresAt
+                : expiresAt(result);
 
-        this.items[key] = { expiresAt, result };
+          this.items[key] = { expiresAt, result };
+        } catch (error) {
+          expiresAt = Date.now() + 1_000;
+          this.items[key] = { error, expiresAt };
+        }
       }
 
-      return this.items[key].result;
+      if ("result" in this.items[key]) return this.items[key].result;
+      else throw this.items[key].error;
     });
   }
 }
