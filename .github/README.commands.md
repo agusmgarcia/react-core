@@ -44,6 +44,12 @@ Then, place add the following commands within the scripts section of the _packag
 }
 ```
 
+## Change port
+
+By default `npm start` creates a server from <http://localhost:3000>. In case you want to change the port used, append the `--port=` parameter.
+
+> For example `npm start --port=3001`.
+
 ## Skip regenerating files
 
 When running `npm run regenerate` all the pertinent files will be regenerated. Here the list of the files:
