@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v3.6.0](https://github.com/agusmgarcia/react-core/tree/v3.6.0)
+
+> February 16, 2025
+
+- move instructions into the git module
+- **start**: add port argument
+- **Cache**: handle errors properly
+- **createServer**: add loadMore function
+- **postpack**: adjust arguments structure
+- **nextjs.middleware**: start regenerating next.config.js
+
 ## [v3.5.0](https://github.com/agusmgarcia/react-core/tree/v3.5.0)
 
 > February 12, 2025
