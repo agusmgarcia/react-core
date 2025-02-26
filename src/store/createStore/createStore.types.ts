@@ -1,4 +1,8 @@
-import { type Func, type OmitFuncs } from "#src/utilities";
+import {
+  type Func,
+  type OmitFuncs,
+  type UnionToIntersection,
+} from "#src/utilities";
 
 import { type CreateGlobalSliceTypes } from "../createGlobalSlice";
 
@@ -14,12 +18,6 @@ type ExtractState<
   TSliceFactory extends CreateGlobalSliceTypes.Output<infer TSlice, any, any>
     ? TSlice
     : never;
-
-type UnionToIntersection<Union> = (
-  Union extends unknown ? (distributedUnion: Union) => void : never
-) extends (mergedIntersection: infer Intersection) => void
-  ? Intersection & Union
-  : never;
 
 export type StateOf<
   TSliceFactories extends CreateGlobalSliceTypes.Output<any, any, any>[],

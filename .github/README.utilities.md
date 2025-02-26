@@ -236,6 +236,17 @@ cache
   .then((result) => console.log(result));
 ```
 
+## Union to intersection
+
+```typescript
+import { type UnionToIntersection } from "@agusmgarcia/react-core";
+
+type Person = { person: { id: string } };
+type Pet = { pet: { id: string } };
+
+type PersonAndPet = UnionToIntersection<Person | Pet>; // => { person: { id: string }; pet: { id: string } }
+```
+
 ## Use element at bottom
 
 ```typescript
