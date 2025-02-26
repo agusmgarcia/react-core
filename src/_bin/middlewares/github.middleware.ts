@@ -1,4 +1,3 @@
-import markdownEscape from "markdown-escape";
 import { EOL } from "os";
 
 import { type AsyncFunc } from "#src/utilities";
@@ -81,7 +80,7 @@ async function createChangelogFile(): Promise<string> {
 
   function transformCommit(commit: string): string {
     const commitInfo = git.getCommitInfo(commit);
-    return `- ${commitInfo.scope !== undefined ? `**${markdownEscape(commitInfo.scope)}**: ` : ""}${markdownEscape(commitInfo.message)}`;
+    return `- ${commitInfo.scope !== undefined ? `**${commitInfo.scope}**: ` : ""}${commitInfo.message}`;
   }
 
   const projectName = await getPackageJSON()
