@@ -236,6 +236,14 @@ cache
   .then((result) => console.log(result));
 ```
 
+## Tuple
+
+```typescript
+import { type Tuple } from "@agusmgarcia/react-core";
+
+type TupleOfThreeStrings = Tuple<string, 3>; // => [string, string, string]
+```
+
 ## Tuple to union
 
 ```typescript
