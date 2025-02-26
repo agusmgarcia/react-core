@@ -1,6 +1,7 @@
 import {
   type Func,
   type OmitFuncs,
+  type TupleToUnion,
   type UnionToIntersection,
 } from "#src/utilities";
 
@@ -9,8 +10,6 @@ import { type CreateGlobalSliceTypes } from "../createGlobalSlice";
 export type Input<
   TSliceFactories extends CreateGlobalSliceTypes.Output<any, any, any>[],
 > = TSliceFactories;
-
-type TupleToUnion<TArray> = TArray extends unknown[] ? TArray[number] : never;
 
 type ExtractState<
   TSliceFactory extends CreateGlobalSliceTypes.Output<any, any, any>,

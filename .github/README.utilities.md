@@ -236,6 +236,14 @@ cache
   .then((result) => console.log(result));
 ```
 
+## Tuple to union
+
+```typescript
+import { type TupleToUnion } from "@agusmgarcia/react-core";
+
+type AorB = TupleToUnion<["a", "b"]>; // => "a" | "b"
+```
+
 ## Union to intersection
 
 ```typescript
