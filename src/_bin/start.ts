@@ -6,13 +6,14 @@ export default async function start(): Promise<void> {
 
   const portRegexp = /--port=(\d+)/;
 
-  const port =
-    process.argv
-      .filter((p) => portRegexp.test(p))
-      .map((p) => +p.replace(portRegexp, "$1"))
-      .find((_, i) => i === 0) ?? 3000;
+  const port = process.argv
+    .filter((p) => portRegexp.test(p))
+    .map((p) => +p.replace(portRegexp, "$1"))
+    .find((_, i) => i === 0);
 
-  await run(false, () => execute(`next dev --port ${port}`, true));
+  await run(false, () =>
+    execute(`next dev${port !== undefined ? ` --port ${port}` : ""}`, true),
+  );
 }
 
 start();
