@@ -255,6 +255,14 @@ type Pet = { pet: { id: string } };
 type PersonAndPet = UnionToIntersection<Person | Pet>; // => { person: { id: string }; pet: { id: string } }
 ```
 
+## Union to tuple
+
+```typescript
+import { type UnionToTuple } from "@agusmgarcia/react-core";
+
+type ArrayOfAOrB = UnionToTuple<"a" | "b">; // => ["a", "b"]
+```
+
 ## Use element at bottom
 
 ```typescript
