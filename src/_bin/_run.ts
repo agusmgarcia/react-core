@@ -1,3 +1,5 @@
+import { Mutex } from "async-mutex";
+
 import { type AsyncFunc } from "#src/utilities";
 
 import * as middlewares from "./middlewares";
@@ -6,19 +8,28 @@ export default async function run(
   regenerate: boolean,
   ...commands: AsyncFunc[]
 ): Promise<void> {
-  const ignore = process.argv
-    .filter((flag) => flag.startsWith("--ignore="))
-    .map((skips) => skips.replace("--ignore=", "").replace(/\s/g, ""))
-    .flatMap((skips) => skips.split(","));
+  const mutex: Mutex = ((globalThis as any).__AGUSMGARCIA__RUN__MUTEX__ ??=
+    new Mutex());
 
-  const middleware = concat(regenerate, ignore, ...Object.values(middlewares));
+  await mutex.runExclusive(async () => {
+    const ignore = process.argv
+      .filter((flag) => flag.startsWith("--ignore="))
+      .map((skips) => skips.replace("--ignore=", "").replace(/\s/g, ""))
+      .flatMap((skips) => skips.split(","));
 
-  await middleware(async () => {
-    try {
-      for (const cmd of commands) await cmd();
-    } catch (error: any) {
-      if (error.ignorable !== true) console.error(error);
-    }
+    const middleware = concat(
+      regenerate,
+      ignore,
+      ...Object.values(middlewares),
+    );
+
+    await middleware(async () => {
+      try {
+        for (const cmd of commands) await cmd();
+      } catch (error: any) {
+        if (error.ignorable !== true) console.error(error);
+      }
+    });
   });
 }
 
