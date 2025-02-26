@@ -1,5 +1,6 @@
 import { EOL } from "os";
 
+import regenerate from "./_regenerate";
 import run from "./_run";
 import { execute, git } from "./utilities";
 
@@ -23,9 +24,12 @@ export default async function deploy(): Promise<void> {
       }),
     () => git.createCommit("chore: bump package version"),
     () => git.createTag(newTag),
-    () => execute("npm run regenerate", true),
-    () => git.createCommit("chore: bump package version", { amend: true }),
+  );
+  await regenerate();
+  await run(
+    false,
     () => git.deleteTag(newTag),
+    () => git.createCommit("chore: bump package version", { amend: true }),
     () => git.createTag(newTag),
     () => git.pushTag(newTag),
     () => git.getCurrentBranch().then(git.pushBranch),
