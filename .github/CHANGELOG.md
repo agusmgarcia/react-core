@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v3.7.0](https://github.com/agusmgarcia/react-core/tree/v3.7.0)
+
+> February 26, 2025
+
+- call scripts directly
+- run scripts in sequence
+- **getChildrenOfType**: add utility
+- **Tuple**: add type
+- **UnionToTuple**: add type
+- **TupleToUnion**: add type
+- **UnionToIntersection**: add type
+- **github.middleware**: stop scaping markdown in CHANGELOG file
+- **github.middleware**: display a message when no commits have been included in changelog
+- **start**: use available port if not specified
+
 ## [v3.6.0](https://github.com/agusmgarcia/react-core/tree/v3.6.0)
 
 > February 16, 2025
