@@ -129,6 +129,22 @@ type Func2 = Func<number>; // => () => number
 type Func3 = Func<number, [arg0: string]>; // => (arg0: string) => number
 ```
 
+## Get children of type
+
+```typescript
+import { getChildrenOfType } from "@agusmgarcia/react-core";
+
+import { Input } from "#src/components";
+
+type HookProps = {
+  children?: React.ReactNode;
+};
+
+function useHook(props: HookProps) {
+  const inputChildren = getChildrenOfType(Input, props.children); // => React.ReactElement<InputProps, Input>[]
+}
+```
+
 ## Is child of
 
 ```typescript
