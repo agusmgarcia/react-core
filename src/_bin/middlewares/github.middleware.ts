@@ -131,7 +131,7 @@ async function createChangelogFile(): Promise<string> {
 
 > ${date}
 
-${commits}
+${commits !== "" ? commits : "- No compatible changes to show"}
 `;
       }),
     ).then((fragments) => fragments.join(EOL));
