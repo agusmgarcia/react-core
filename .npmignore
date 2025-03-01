@@ -1,4 +1,5 @@
 **/.*
+dist/**/*.test.d.ts
 src
 jest.config.js
 package-lock.json

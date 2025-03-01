@@ -25,6 +25,7 @@ export default async function nodeMiddleware(
 const nvmrc = "20";
 
 const npmignore = `**/.*
+dist/**/*.test.d.ts
 src
 jest.config.js
 package-lock.json
