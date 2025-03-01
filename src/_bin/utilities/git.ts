@@ -26,12 +26,12 @@ export function getCommits(
   format = "%s",
 ): Promise<string[]> {
   return execute(
-    initialCommit !== undefined
+    !!initialCommit
       ? `git log --pretty=format:"${format}" ${initialCommit}...${lastCommit}`
       : `git log --pretty=format:"${format}" ${lastCommit}`,
     false,
   )
-    .then((commits) => commits?.split(EOL) ?? [])
+    .then((commits) => commits?.split(EOL) || [])
     .then((commits) => commits.filter(filterCommits));
 }
 
@@ -85,7 +85,7 @@ export function getTags(
   options?: Partial<{ merged: boolean }>,
 ): Promise<string[]> {
   return execute(`git tag ${!!options?.merged ? " --merged" : ""}`, false)
-    .then((tags) => tags?.split(EOL) ?? [])
+    .then((tags) => tags?.split(EOL) || [])
     .then((tags) => tags.filter(filterTags))
     .then((tags) => tags.sort(sortTags));
 }
@@ -100,7 +100,7 @@ function sortTags(tag1: string, tag2: string): number {
 
   for (let i = 1; i < 4; i++) {
     const result = +tagInfo2![i] - +tagInfo1![i];
-    if (result === 0) continue;
+    if (!result) continue;
     return -result;
   }
 

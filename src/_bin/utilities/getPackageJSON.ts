@@ -5,7 +5,7 @@ type PackageJSON = { name?: string; private?: boolean; version?: string };
 export default function getPackageJSON(): Promise<PackageJSON> {
   return new Promise<PackageJSON>((resolve, reject) =>
     fs.readFile("package.json", { encoding: "utf-8" }, (error, data) =>
-      error === null ? resolve(JSON.parse(data)) : reject(error),
+      !error ? resolve(JSON.parse(data)) : reject(error),
     ),
   );
 }

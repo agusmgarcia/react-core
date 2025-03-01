@@ -8,7 +8,7 @@ export default async function run(
   regenerate: boolean,
   ...commands: AsyncFunc[]
 ): Promise<void> {
-  const mutex: Mutex = ((globalThis as any).__AGUSMGARCIA__RUN__MUTEX__ ??=
+  const mutex: Mutex = ((globalThis as any).__AGUSMGARCIA__RUN__MUTEX__ ||=
     new Mutex());
 
   await mutex.runExclusive(async () => {

@@ -131,7 +131,7 @@ export function toString(date: Date | number): string {
 
 export function validate(date: string): boolean {
   const matches = dateRegexp.exec(date);
-  if (matches === null) return false;
+  if (!matches) return false;
 
   const year = +matches[1];
   const month = +matches[2];

@@ -9,10 +9,10 @@ export default async function start(): Promise<void> {
   const port = process.argv
     .filter((p) => portRegexp.test(p))
     .map((p) => +p.replace(portRegexp, "$1"))
-    .find((_, i) => i === 0);
+    .find((_, i) => !i);
 
   await run(false, () =>
-    execute(`next dev${port !== undefined ? ` --port ${port}` : ""}`, true),
+    execute(`next dev${!!port ? ` --port ${port}` : ""}`, true),
   );
 }
 

@@ -9,7 +9,7 @@ export default function useElementAtBottom<TElement extends HTMLElement>(
 
   useEffect(() => {
     const element = elementRef.current;
-    if (element === null) return;
+    if (!element) return;
 
     const set = (e: TElement): void =>
       setAtBottom(
@@ -19,7 +19,7 @@ export default function useElementAtBottom<TElement extends HTMLElement>(
 
     function handle(event: Event) {
       const target = event.target;
-      if (target === null) return;
+      if (!target) return;
       if (!("scrollTop" in target)) return;
       if (typeof target.scrollTop !== "number") return;
       if (!("scrollHeight" in target)) return;
@@ -37,7 +37,7 @@ export default function useElementAtBottom<TElement extends HTMLElement>(
 
   useEffect(() => {
     const element = elementRef.current;
-    if (element === null) return;
+    if (!element) return;
 
     const observer = new ResizeObserver(() => setResize((prev) => !prev));
     observer.observe(element);

@@ -80,14 +80,14 @@ async function createChangelogFile(): Promise<string> {
 
   function transformCommit(commit: string): string {
     const commitInfo = git.getCommitInfo(commit);
-    return `- ${commitInfo.scope !== undefined ? `**${commitInfo.scope}**: ` : ""}${commitInfo.message}`;
+    return `- ${!!commitInfo.scope ? `**${commitInfo.scope}**: ` : ""}${commitInfo.message}`;
   }
 
   const projectName = await getPackageJSON()
     .then((json) => json.name)
     .then((name) => name?.replace("@", ""));
 
-  if (projectName === undefined)
+  if (!projectName)
     throw "Project name must be defined within the package.json file";
 
   let fragments = "";
@@ -130,7 +130,7 @@ async function createChangelogFile(): Promise<string> {
 
 > ${date}
 
-${commits !== "" ? commits : "- No compatible changes to show"}
+${!!commits ? commits : "- No compatible changes to show"}
 `;
       }),
     ).then((fragments) => fragments.join(EOL));
@@ -139,7 +139,7 @@ ${commits !== "" ? commits : "- No compatible changes to show"}
   return `# Changelog
 
 All notable changes to this project will be documented in this file.
-${fragments === "" ? "" : `${EOL}${fragments}`}`;
+${!fragments ? "" : `${EOL}${fragments}`}`;
 }
 
 const deploy_app = `name: Deploy application

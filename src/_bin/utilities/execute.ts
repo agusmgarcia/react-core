@@ -25,7 +25,7 @@ export default function execute(
       .replace(/\s"(.+?)"\s?/g, ' @"$1"@ ')
       .split("@")
       .flatMap((r) => (r.startsWith('"') ? r : r.split(" ")))
-      .filter((r) => r !== "")
+      .filter((r) => !!r)
       .map((r) => r.replace(/^"(.*)"$/g, "$1"));
 
     const child = spawn(cmd, args, {
@@ -41,7 +41,7 @@ export default function execute(
 
     listeners.push(
       (function () {
-        if (child.stdout === null) return emptyFunction;
+        if (!child.stdout) return emptyFunction;
         const handle = (data: Buffer) => (stdout += data.toString());
         const listener = child.stdout.on("data", handle);
         return () => listener.removeListener("data", handle);
@@ -50,7 +50,7 @@ export default function execute(
 
     listeners.push(
       (function () {
-        if (child.stderr === null) return emptyFunction;
+        if (!child.stderr) return emptyFunction;
         const handle = (data: Buffer) => (stderr += data.toString());
         const listener = child.stderr.on("data", handle);
         return () => listener.removeListener("data", handle);
@@ -69,12 +69,12 @@ export default function execute(
       (function () {
         function handle(code: number) {
           listeners.forEach((unlisten) => unlisten());
-          if (code === 0) resolve(stdout !== "" ? stdout : undefined);
+          if (!code) resolve(!!stdout ? stdout : undefined);
           else
             reject(
-              stderr !== ""
+              !!stderr
                 ? new Error(stderr)
-                : error !== undefined
+                : !!error
                   ? error
                   : { ignorable: true },
             );

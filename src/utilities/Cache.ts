@@ -21,22 +21,18 @@ export default class Cache {
     factory: Func<TResult | Promise<TResult>>,
     expiresAt?: number | Func<number, [result: TResult]>,
   ): Promise<TResult> {
-    if (this.mutexes[key] === undefined) this.mutexes[key] = new Mutex();
+    if (!this.mutexes[key]) this.mutexes[key] = new Mutex();
 
     return this.mutexes[key].runExclusive(async () => {
-      if (
-        this.items[key] === undefined ||
-        Date.now() >= this.items[key].expiresAt
-      ) {
+      if (!this.items[key] || Date.now() >= this.items[key].expiresAt) {
         try {
           const result = await factory();
 
-          expiresAt =
-            expiresAt === undefined
-              ? Date.now() + this.maxCacheTime
-              : typeof expiresAt === "number"
-                ? expiresAt
-                : expiresAt(result);
+          expiresAt = !expiresAt
+            ? Date.now() + this.maxCacheTime
+            : typeof expiresAt === "number"
+              ? expiresAt
+              : expiresAt(result);
 
           this.items[key] = { expiresAt, result };
         } catch (error) {

@@ -20,7 +20,7 @@ export default class StorageCache extends Cache {
     expiresAt?: number | Func<number, [result: TResult]>,
   ): Promise<TResult> {
     const newExpiresAt = (result: TResult) =>
-      expiresAt === undefined
+      !expiresAt
         ? Date.now() + this.maxCacheTime
         : typeof expiresAt === "number"
           ? expiresAt
@@ -59,7 +59,7 @@ function loadItemsFromStore(
   if (isSSR()) return {};
 
   const item = window[`${storage}Storage`].getItem(storageName);
-  if (item === null) return {};
+  if (!item) return {};
 
   return JSON.parse(item);
 }

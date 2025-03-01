@@ -4,7 +4,7 @@ export default function delay(ms: number, signal?: AbortSignal): Promise<void> {
 
     function signalHandler() {
       clearTimeout(timeoutHandler);
-      if (signal === undefined) return;
+      if (!signal) return;
 
       signal.removeEventListener("abort", signalHandler);
       try {
@@ -14,7 +14,7 @@ export default function delay(ms: number, signal?: AbortSignal): Promise<void> {
       }
     }
 
-    if (signal !== undefined) {
+    if (!!signal) {
       try {
         signal.throwIfAborted();
       } catch (error) {
@@ -25,8 +25,7 @@ export default function delay(ms: number, signal?: AbortSignal): Promise<void> {
     }
 
     timeoutHandler = setTimeout(() => {
-      if (signal !== undefined)
-        signal.removeEventListener("abort", signalHandler);
+      if (!!signal) signal.removeEventListener("abort", signalHandler);
       resolve();
     }, ms);
   });

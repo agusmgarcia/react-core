@@ -5,7 +5,7 @@ export default function mergeRefs<TElement>(
 
   const refCallback: React.RefCallback<TElement> = (instance) => {
     for (const ref of inputRefs) {
-      if (typeof ref === "string" || ref === null) continue;
+      if (typeof ref === "string" || !ref) continue;
       if (typeof ref === "function") ref(instance);
       else (ref as any).current = instance;
     }

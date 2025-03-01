@@ -43,13 +43,13 @@ export default function getChildrenOfType<
 >(type: TType, children: React.ReactNode): any {
   if (!Array.isArray(children)) {
     if (type === "null") {
-      if (children === null) return [];
+      if (!children) return [];
       return [children];
     }
 
     if (typeof type === "function") {
       if (typeof children !== "object") return [];
-      if (children === null) return [];
+      if (!children) return [];
       if (!("type" in children)) return [];
       if (children.type !== type) return [];
       return [children];

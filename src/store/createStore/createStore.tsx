@@ -19,7 +19,7 @@ export default function createStore<
     StoreProvider: (props) => {
       const storeRef = useRef<Store<TSliceFactories>>();
 
-      if (storeRef.current === undefined)
+      if (!storeRef.current)
         storeRef.current = create<StateOf<TSliceFactories>>()(
           devtools(
             (...a) =>
@@ -42,7 +42,7 @@ export default function createStore<
     },
     useSelector: (selector) => {
       const store = useContext(StoreContext);
-      if (store === undefined) throw "";
+      if (!store) throw "";
 
       return store(selector as any);
     },

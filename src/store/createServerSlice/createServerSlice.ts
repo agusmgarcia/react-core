@@ -32,10 +32,9 @@ export default function createServerSlice<
       context.set((prevState) => ({ ...prevState, loading: true }));
 
       try {
-        const selected =
-          selector !== undefined
-            ? selector(context.get() as OmitFuncs<TOtherSlices>)
-            : ({} as ExtractSelectedOf<TSlice>);
+        const selected = !!selector
+          ? selector(context.get() as OmitFuncs<TOtherSlices>)
+          : ({} as ExtractSelectedOf<TSlice>);
 
         const data = await fetcher({ ...selected, ...args }, context.signal);
 

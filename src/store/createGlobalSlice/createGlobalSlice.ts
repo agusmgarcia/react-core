@@ -25,15 +25,13 @@ export default function createGlobalSlice<
 
     const subscribe: Subscribe<TSlice, TOtherSlices> = (listener, selector) => {
       const unsubscribe = store.subscribe((state, prevState) => {
-        const selection =
-          selector !== undefined
-            ? selector(state as OmitFuncs<TOtherSlices>)
-            : ({} as ReturnType<NonNullable<typeof selector>>);
+        const selection = !!selector
+          ? selector(state as OmitFuncs<TOtherSlices>)
+          : ({} as ReturnType<NonNullable<typeof selector>>);
 
-        const prevSelection =
-          selector !== undefined
-            ? selector(prevState as OmitFuncs<TOtherSlices>)
-            : ({} as ReturnType<NonNullable<typeof selector>>);
+        const prevSelection = !!selector
+          ? selector(prevState as OmitFuncs<TOtherSlices>)
+          : ({} as ReturnType<NonNullable<typeof selector>>);
 
         if (equals.shallow(selection, prevSelection, 2)) return;
 
@@ -56,10 +54,9 @@ export default function createGlobalSlice<
             set,
           );
 
-          const selection =
-            selector !== undefined
-              ? selector(ctx.get() as OmitFuncs<TOtherSlices>)
-              : ({} as ReturnType<NonNullable<typeof selector>>);
+          const selection = !!selector
+            ? selector(ctx.get() as OmitFuncs<TOtherSlices>)
+            : ({} as ReturnType<NonNullable<typeof selector>>);
 
           listener(selection, ctx);
         }, 0);
@@ -70,12 +67,10 @@ export default function createGlobalSlice<
 
     const factory = input[1](subscribe);
 
-    if (typeof factory !== "object" || factory === null)
+    if (typeof factory !== "object" || !factory)
       return {
         [name]:
-          initialState !== undefined && name in initialState
-            ? initialState[name]
-            : factory,
+          !!initialState && name in initialState ? initialState[name] : factory,
       } as TSlice;
 
     const result = Object.keys(factory).reduce(

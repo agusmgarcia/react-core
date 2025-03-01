@@ -2,12 +2,12 @@ export default function isParentOf(
   child: Node | null,
   parent: Node | null,
 ): boolean {
-  if (parent === null) return false;
+  if (!parent) return false;
 
   let aux = child;
   let index = 0;
 
-  while (aux !== null) {
+  while (!!aux) {
     if (aux === parent) return index > 0;
     ++index;
     aux = aux.parentElement;

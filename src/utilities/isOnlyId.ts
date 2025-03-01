@@ -9,7 +9,7 @@ export default function isOnlyId<
   id: TIdentifierName,
 ): maybeOnlyId is OnlyId<TData, TIdentifierName, TIdentifierValue> {
   if (typeof maybeOnlyId !== "object") return false;
-  if (maybeOnlyId === null) return false;
+  if (!maybeOnlyId) return false;
 
   const keys = Object.keys(maybeOnlyId);
   if (keys.length !== 1) return false;

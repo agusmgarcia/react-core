@@ -11,24 +11,23 @@ export function deep(a: unknown, b: unknown): boolean {
 }
 
 function equal(a: unknown, b: unknown, level: number | undefined): boolean {
-  if (level !== undefined && level < 0) return false;
+  if (!!level && level < 0) return false;
   if (a === b) return true;
-  if (level === 0) return false;
+  if (!level) return false;
 
   if (Array.isArray(a)) {
     if (!Array.isArray(b)) return false;
     if (a.length !== b.length) return false;
 
     for (let i = 0; i < a.length; i++)
-      if (!equal(a[i], b[i], level !== undefined ? level - 1 : undefined))
-        return false;
+      if (!equal(a[i], b[i], !!level ? level - 1 : undefined)) return false;
 
     return true;
   }
 
-  if (typeof a === "object" && a !== null) {
+  if (typeof a === "object" && !!a) {
     if (Array.isArray(b)) return false;
-    if (typeof b !== "object" || b === null) return false;
+    if (typeof b !== "object" || !b) return false;
 
     const keysOfA = Object.keys(a);
     const keysOfB = Object.keys(b);
@@ -43,7 +42,7 @@ function equal(a: unknown, b: unknown, level: number | undefined): boolean {
         !equal(
           a[keysOfA[i] as keyof typeof a],
           b[keysOfA[i] as keyof typeof b],
-          level !== undefined ? level - 1 : undefined,
+          !!level ? level - 1 : undefined,
         )
       )
         return false;

@@ -3,7 +3,7 @@ export function first<TElement>(
   index: number,
   _array: TElement[],
 ): boolean {
-  return index === 0;
+  return !index;
 }
 
 export function single<TElement>(
@@ -14,7 +14,7 @@ export function single<TElement>(
   if (array.length > 1)
     throw new Error("There are more than one element in the array");
 
-  return index === 0;
+  return !index;
 }
 
 export function singleOrDefault<TElement>(
@@ -23,5 +23,5 @@ export function singleOrDefault<TElement>(
   array: TElement[],
 ): boolean {
   if (array.length > 1) return false;
-  return index === 0;
+  return !index;
 }

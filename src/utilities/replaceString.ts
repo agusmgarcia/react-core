@@ -17,12 +17,12 @@ export default function replaceString(
   message: string | undefined,
   replacements?: Replacements,
 ): string | undefined {
-  if (message === undefined) return undefined;
+  if (!message) return undefined;
 
   return message.replace(searchValue, (original, key) => {
     if (multipleValues.test(key)) {
       const matches = multipleValues.exec(key);
-      if (matches === null) return original;
+      if (!matches) return original;
 
       const replacer = replacements?.[matches[1]];
       if (typeof replacer !== "number") return original;
