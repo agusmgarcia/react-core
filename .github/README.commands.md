@@ -92,3 +92,18 @@ Sometimes you don't want to delete the `.tgz` file generated after packing the l
   },
 }
 ```
+
+## Watch test files
+
+If you want to watch files for changes and rerun tests related to changed files use the `--watch` argument to the test script.
+
+```jsonc
+// package.json
+
+{
+  "scripts": {
+    // ...
+    "test": "agusmgarcia-react-core-test --watch",
+  },
+}
+```
