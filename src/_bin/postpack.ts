@@ -1,10 +1,10 @@
 import run from "./_run";
-import { execute, isLibrary } from "./utils";
+import { args, execute, isLibrary } from "./utils";
 
 export default async function postpack(): Promise<void> {
   if (!(await isLibrary())) return;
 
-  const simulated = !!process.argv.find((p) => p === "--simulated");
+  const simulated = args.has("simulated");
 
   await run(false, () =>
     execute(

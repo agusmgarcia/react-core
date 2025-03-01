@@ -3,6 +3,7 @@ import { Mutex } from "async-mutex";
 import { type AsyncFunc } from "#src/utils";
 
 import * as middlewares from "./middlewares";
+import { args } from "./utils";
 
 export default async function run(
   regenerate: boolean,
@@ -12,10 +13,7 @@ export default async function run(
     new Mutex());
 
   await mutex.runExclusive(async () => {
-    const ignore = process.argv
-      .filter((flag) => flag.startsWith("--ignore="))
-      .map((skips) => skips.replace("--ignore=", "").replace(/\s/g, ""))
-      .flatMap((skips) => skips.split(","));
+    const ignore = args.get("ignore");
 
     const middleware = concat(
       regenerate,
