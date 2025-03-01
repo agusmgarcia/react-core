@@ -13,7 +13,7 @@ export function deep(a: unknown, b: unknown): boolean {
 function equal(a: unknown, b: unknown, level: number | undefined): boolean {
   if (!!level && level < 0) return false;
   if (a === b) return true;
-  if (!level) return false;
+  if (typeof level === "number" && !level) return false;
 
   if (Array.isArray(a)) {
     if (!Array.isArray(b)) return false;

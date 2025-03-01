@@ -51,19 +51,19 @@ import { dates } from "@agusmgarcia/react-core";
 dates.addDays("1995-06-17", 1); // => "1995-06-18"
 dates.addMonths("1995-06-17", 1); // => "1995-07-17"
 dates.addYears("1995-06-17", 1); // => "1996-06-17"
-dates.clamp("1995-06-17", "1995-06-18", "1995-06-12"); // => "1995-06-17"
-dates.differenceInDays("1995-06-17", "1995-05-30"); // => 17
+dates.clamp("1995-06-17", "1995-06-12", "1995-06-18"); // => "1995-06-17"
+dates.differenceInDays("1995-06-17", "1995-05-30"); // => 18
 dates.getCurrentDate(); // => the current date considering the timeZone
 dates.getDate("1995-06-17"); // => 17
-dates.getDateOfTheWeek("1995-06-17"); // => 1
+dates.getDayOfTheWeek("1995-06-17"); // => 6
 dates.getFirstDateOfMonth("1995-06-17"); // => "1995-06-01"
 dates.getLastDateOfMonth("1995-06-17"); // => "1995-06-30"
 dates.getMonth("1995-06-17"); // => 6
 dates.getYear("1995-06-17"); // => 1995
 dates.max("1995-06-17", "1995-06-18", "1995-06-12"); // => "1995-06-18"
 dates.min("1995-06-17", "1995-06-18", "1995-06-12"); // => "1995-06-12"
-dates.toDateString("1995-06-17", "en-US", { day: "2-digit" }); // => "02"
-dates.toString(new Date()); // => "1995-06-17"
+dates.toDateString("1995-06-17", "en-US", { day: "2-digit" }); // => "17"
+dates.toString(new Date(1995, 5, 17)); // => "1995-06-17"
 dates.validate("1995-06-17"); // => true
 ```
 
@@ -90,7 +90,7 @@ import { equals } from "@agusmgarcia/react-core";
 
 equals.strict(1, 1); // => true
 equals.shallow({ name: "john" }, { name: "john" }); // => true
-equals.strict(
+equals.deep(
   { name: "john", address: { street: "doe" } },
   { name: "john", address: { street: "doe" } },
 ); // => true

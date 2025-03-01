@@ -40,24 +40,40 @@ export default function getChildrenOfType<
     | "number"
     | "string"
     | "undefined",
->(type: TType, children: React.ReactNode): any {
-  if (!Array.isArray(children)) {
-    if (type === "null") {
-      if (!children) return [];
-      return [children];
-    }
+>(type: TType, children: React.ReactNode): any[] {
+  const result = new Array();
+  getChildrenOfTypeRecursive(type, children, result);
+  return result;
+}
 
-    if (typeof type === "function") {
-      if (typeof children !== "object") return [];
-      if (!children) return [];
-      if (!("type" in children)) return [];
-      if (children.type !== type) return [];
-      return [children];
-    }
-
-    if (typeof children !== type) return [];
-    return [children];
+function getChildrenOfTypeRecursive<
+  TType extends
+    | Func<JSX.Element, [props: any]>
+    | "boolean"
+    | "null"
+    | "number"
+    | "string"
+    | "undefined",
+>(type: TType, children: React.ReactNode, result: any[]): void {
+  if (typeof children !== "object") {
+    if (typeof children === type) result.push(children);
+    return;
   }
 
-  return children.flatMap((child) => getChildrenOfType(type as any, child));
+  if (!children) {
+    if (type === "null") result.push(children);
+    return;
+  }
+
+  if (Array.isArray(children)) {
+    children.forEach((c) => getChildrenOfTypeRecursive(type, c, result));
+    return;
+  }
+
+  if (!("type" in children)) return;
+
+  if (typeof type === "function" && children.type === type)
+    result.push(children);
+
+  getChildrenOfTypeRecursive(type, children.props.children, result);
 }
