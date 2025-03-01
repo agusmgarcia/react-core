@@ -203,6 +203,7 @@ const eslintrc_lib = `{
     "import/no-duplicates": "error",
     "react/jsx-boolean-value": ["error", "always"],
     "react/jsx-sort-props": ["error", { "reservedFirst": true }],
+    "react/react-in-jsx-scope": "error",
     "simple-import-sort/exports": "off",
     "simple-import-sort/imports": "error",
     "sort/destructuring-properties": "error",
