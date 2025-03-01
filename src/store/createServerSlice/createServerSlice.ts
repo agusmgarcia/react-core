@@ -1,4 +1,4 @@
-import { type Func, type OmitFuncs } from "#src/utilities";
+import { type Func, type OmitFuncs } from "#src/utils";
 
 import createGlobalSlice, {
   type CreateGlobalSliceTypes,

@@ -1,6 +1,6 @@
 import { Mutex } from "async-mutex";
 
-import { type AsyncFunc } from "#src/utilities";
+import { type AsyncFunc } from "#src/utils";
 
 import * as middlewares from "./middlewares";
 

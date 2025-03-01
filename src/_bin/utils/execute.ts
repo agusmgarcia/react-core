@@ -1,6 +1,6 @@
 import { spawn } from "child_process";
 
-import { type Func } from "#src/utilities";
+import { type Func } from "#src/utils";
 
 export default function execute(
   // eslint-disable-next-line unused-imports/no-unused-vars

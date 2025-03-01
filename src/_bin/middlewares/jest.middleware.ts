@@ -1,6 +1,6 @@
-import { type AsyncFunc } from "#src/utilities";
+import { type AsyncFunc } from "#src/utils";
 
-import { files, isLibrary } from "../utilities";
+import { files, isLibrary } from "../utils";
 
 export default async function jestMiddleware(
   next: AsyncFunc,

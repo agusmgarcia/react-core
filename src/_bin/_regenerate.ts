@@ -1,6 +1,6 @@
 import format from "./_format";
 import run from "./_run";
-import { execute } from "./utilities";
+import { execute } from "./utils";
 
 export default async function regenerate(): Promise<void> {
   await execute("echo Regenerating files...", true);

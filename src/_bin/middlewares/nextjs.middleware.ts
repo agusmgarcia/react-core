@@ -1,6 +1,6 @@
-import { type AsyncFunc } from "#src/utilities";
+import { type AsyncFunc } from "#src/utils";
 
-import { files, folders, isLibrary } from "../utilities";
+import { files, folders, isLibrary } from "../utils";
 
 export default async function nextJSMiddleware(
   next: AsyncFunc,

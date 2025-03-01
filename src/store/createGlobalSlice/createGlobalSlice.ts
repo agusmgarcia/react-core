@@ -1,6 +1,6 @@
 import { type StateCreator } from "zustand";
 
-import { equals, isSSR, type OmitFuncs } from "#src/utilities";
+import { equals, isSSR, type OmitFuncs } from "#src/utils";
 
 import {
   type Context,

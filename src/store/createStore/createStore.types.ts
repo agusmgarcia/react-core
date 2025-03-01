@@ -3,7 +3,7 @@ import {
   type OmitFuncs,
   type TupleToUnion,
   type UnionToIntersection,
-} from "#src/utilities";
+} from "#src/utils";
 
 import { type CreateGlobalSliceTypes } from "../createGlobalSlice";
 

@@ -1,5 +1,5 @@
 import run from "./_run";
-import { execute, isLibrary } from "./utilities";
+import { execute, isLibrary } from "./utils";
 
 export default async function build(): Promise<void> {
   if (await isLibrary()) return;

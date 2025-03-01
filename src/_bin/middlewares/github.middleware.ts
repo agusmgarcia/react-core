@@ -1,6 +1,6 @@
 import { EOL } from "os";
 
-import { type AsyncFunc } from "#src/utilities";
+import { type AsyncFunc } from "#src/utils";
 
 import {
   execute,
@@ -9,7 +9,7 @@ import {
   getPackageJSON,
   git,
   isLibrary,
-} from "../utilities";
+} from "../utils";
 
 export default async function githubMiddleware(
   next: AsyncFunc,

@@ -1,5 +1,5 @@
 import run from "./_run";
-import { execute } from "./utilities";
+import { execute } from "./utils";
 
 export default async function check(): Promise<void> {
   await run(

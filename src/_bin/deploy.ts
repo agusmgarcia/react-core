@@ -2,7 +2,7 @@ import { EOL } from "os";
 
 import regenerate from "./_regenerate";
 import run from "./_run";
-import { execute, git } from "./utilities";
+import { execute, git } from "./utils";
 
 export default async function deploy(): Promise<void> {
   const typeOfNewVersion = await git

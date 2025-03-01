@@ -1,6 +1,6 @@
 import { type StateCreator } from "zustand";
 
-import { type Func, type OmitFuncs } from "#src/utilities";
+import { type Func, type OmitFuncs } from "#src/utils";
 
 export type SliceOf<TName extends string, TState> = Record<TName, TState>;
 

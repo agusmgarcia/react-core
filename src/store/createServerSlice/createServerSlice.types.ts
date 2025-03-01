@@ -1,4 +1,4 @@
-import { type AsyncFunc, type Func, type OmitFuncs } from "#src/utilities";
+import { type AsyncFunc, type Func, type OmitFuncs } from "#src/utils";
 
 import { type CreateGlobalSliceTypes } from "../createGlobalSlice";
 
