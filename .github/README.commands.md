@@ -44,6 +44,21 @@ Then, place add the following commands within the scripts section of the _packag
 }
 ```
 
+In case of library, to link the package with a repository, you need to specify the URL in the _package.json_.
+
+```jsonc
+// package.json
+
+{
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/<REPOSITORY_OWNER>/<REPOSITORY_NAME>.git",
+  },
+}
+```
+
+> For example, this package would be `git+https://github.com/agusmgarcia/react-core.git`.
+
 ## Change port
 
 By default `npm start` creates a server from <http://localhost:3000>. In case you want to change the port used, append the `--port=` parameter.

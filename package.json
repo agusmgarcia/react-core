@@ -71,5 +71,9 @@
   },
   "engines": {
     "node": "^18.18.0 || ^19.0.0 || ^20.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agusmgarcia/react-core.git"
   }
 }

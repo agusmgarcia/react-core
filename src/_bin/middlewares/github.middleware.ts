@@ -183,7 +183,6 @@ jobs:
         with:
           cache: npm
           node-version: 20
-          registry-url: https://npm.pkg.github.com
 
       - name: Install dependencies
         run: npm ci --ignore-scripts
@@ -277,7 +276,6 @@ jobs:
         with:
           cache: npm
           node-version: 20
-          registry-url: https://npm.pkg.github.com
 
       - name: Install dependencies
         run: npm ci --ignore-scripts
