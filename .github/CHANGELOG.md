@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v3.8.0](https://github.com/agusmgarcia/react-core/tree/v3.8.0)
+
+> March 2, 2025
+
+- **github.middleware**: stop forcing GitHub NPM registry
+- **webpack.middleware**: handle scenario for no-peers
+- **README.md**: add more details to the getting started section
+- **node.middleware**: omit tests definitions when packaging
+- **test**: add watch flag
+- **eslint.middleware**: make react in jsx scope
+- add a method to get process args
+- **test**: remove .swc folder on error too
+- add test cases
+- rename utilities to utils
+- replace null, undefined and string empty
+
 ## [v3.7.0](https://github.com/agusmgarcia/react-core/tree/v3.7.0)
 
 > February 26, 2025
