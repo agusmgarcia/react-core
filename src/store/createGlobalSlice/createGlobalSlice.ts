@@ -1,6 +1,6 @@
 import { type StateCreator } from "zustand";
 
-import { equals, isSSR, type OmitFuncs } from "#src/utils";
+import { equals, isSSR, merges, type OmitFuncs } from "#src/utils";
 
 import {
   type Context,
@@ -130,17 +130,7 @@ function buildContext<TSlice extends SliceOf<any, any>, TOtherSlices>(
       signal.throwIfAborted();
       return set((prev) => {
         const newState = state instanceof Function ? state(prev[name]) : state;
-
-        return {
-          ...prev,
-          [name]:
-            typeof newState === "object"
-              ? {
-                  ...prev[name],
-                  ...newState,
-                }
-              : newState,
-        };
+        return merges.shallow(prev, { [name]: newState }, 2);
       });
     },
     signal,
