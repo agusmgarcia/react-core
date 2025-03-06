@@ -205,14 +205,6 @@ jobs:
           BASE_PATH: /\${{ github.event.repository.name }}
           NEXT_PUBLIC_APP_VERSION: \${{ steps.get-version-from-tag.outputs.replaced }}
 
-      - name: Create release
-        if: \${{ github.event_name != 'workflow_dispatch' }}
-        uses: ncipollo/release-action@v1
-        with:
-          name: Version \${{ steps.get-version-from-tag.outputs.replaced }}
-          tag: \${{ github.ref_name }}
-          token: \${{ secrets.GITHUB_TOKEN }}
-
       - name: Configure pages
         uses: actions/configure-pages@v5
         with:
@@ -225,8 +217,24 @@ jobs:
           path: out
           retention-days: 1
 
+      - name: Create release
+        id: create-release
+        if: \${{ github.event_name != 'workflow_dispatch' }}
+        uses: ncipollo/release-action@v1
+        with:
+          name: Version \${{ steps.get-version-from-tag.outputs.replaced }}
+          tag: \${{ github.ref_name }}
+          token: \${{ secrets.GITHUB_TOKEN }}
+
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
+
+      - name: Delete release and tag on error
+        if: \${{ (failure() || cancelled()) && steps.create-release.conclusion == 'success' }}
+        run: gh release delete \${{ github.ref_name }} --cleanup-tag
+        shell: bash
+        env:
+          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
 `;
 
 const publish_lib = `name: Publish library
@@ -291,6 +299,7 @@ jobs:
         shell: bash
 
       - name: Create release
+        id: create-release
         uses: ncipollo/release-action@v1
         with:
           name: Version \${{ steps.get-version-from-tag.outputs.replaced }}
@@ -302,4 +311,11 @@ jobs:
         shell: bash
         env:
           NODE_AUTH_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete release and tag on error
+        if: \${{ (failure() || cancelled()) && steps.create-release.conclusion == 'success' }}
+        run: gh release delete \${{ github.ref_name }} --cleanup-tag
+        shell: bash
+        env:
+          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
 `;

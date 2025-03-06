@@ -60,6 +60,7 @@ jobs:
         shell: bash
 
       - name: Create release
+        id: create-release
         uses: ncipollo/release-action@v1
         with:
           name: Version ${{ steps.get-version-from-tag.outputs.replaced }}
@@ -71,3 +72,10 @@ jobs:
         shell: bash
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete release and tag on error
+        if: ${{ (failure() || cancelled()) && steps.create-release.conclusion == 'success' }}
+        run: gh release delete ${{ github.ref_name }} --cleanup-tag
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
