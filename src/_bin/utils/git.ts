@@ -10,6 +10,10 @@ export function getCurrentBranch(): Promise<string> {
   );
 }
 
+export function isCurrentBranchSynced(): Promise<boolean> {
+  return execute("git diff @{upstream}", false).then((diffs) => !diffs);
+}
+
 export function pushBranch(branch: string): Promise<void> {
   return getRemote().then((remote) =>
     execute(`git push -u ${remote} ${branch} --no-verify`, true),
@@ -46,11 +50,13 @@ export function getCommitInfo(commit: string): {
   type: "chore" | "feat" | "fix" | "refactor";
 } {
   const commitInfo = COMMIT_REGEXP.exec(commit);
+  if (!commitInfo) throw `Commit ${commit} doesn't match the pattern`;
+
   return {
-    isBreakingChange: commitInfo![3] === "!",
-    message: commitInfo![4],
-    scope: commitInfo![2],
-    type: commitInfo![1] as ReturnType<typeof getCommitInfo>["type"],
+    isBreakingChange: commitInfo[3] === "!",
+    message: commitInfo[4],
+    scope: commitInfo[2],
+    type: commitInfo[1] as ReturnType<typeof getCommitInfo>["type"],
   };
 }
 
@@ -61,7 +67,7 @@ export function createCommit(
   message = `"${message}"`;
 
   if (!COMMIT_REGEXP.test(message))
-    throw `Commit ${message} doesn't match the pattern`;
+    throw `Message ${message} doesn't match the pattern`;
 
   return execute("git add .", true).then(() =>
     execute(
@@ -98,8 +104,11 @@ function sortTags(tag1: string, tag2: string): number {
   const tagInfo1 = TAG_REGEXP.exec(tag1);
   const tagInfo2 = TAG_REGEXP.exec(tag2);
 
+  if (!tagInfo1) throw `Tag ${tag1} doesn't match the pattern`;
+  if (!tagInfo2) throw `Tag ${tag2} doesn't match the pattern`;
+
   for (let i = 1; i < 4; i++) {
-    const result = +tagInfo2![i] - +tagInfo1![i];
+    const result = +tagInfo2[i] - +tagInfo1[i];
     if (!result) continue;
     return -result;
   }
@@ -113,7 +122,8 @@ export function getTagInfo(tag: string): {
   patch: number;
 } {
   const tagInfo = TAG_REGEXP.exec(tag);
-  return { major: +tagInfo![1], minor: +tagInfo![2], patch: +tagInfo![3] };
+  if (!tagInfo) throw `Tag ${tag} doesn't match the pattern`;
+  return { major: +tagInfo[1], minor: +tagInfo[2], patch: +tagInfo[3] };
 }
 
 export function createTag(tag: string): Promise<void> {
