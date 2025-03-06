@@ -196,6 +196,18 @@ function Component() {
 }
 ```
 
+## Merges
+
+```tsx
+import { merges } from "@agusmgarcia/react-core";
+
+merges.shallow({ name: "John" }, { surname: "Doe" }); // => { name: "John", surname: "Doe" }
+merges.deep(
+  [{ name: "John" }, { name: "Foo" }],
+  [{ surname: "Doe" }, { surname: "Bar" }],
+); // => [{ name: "John", surname: "Doe" }, { name: "Foo", surname: "Bar" }];
+```
+
 ## Omit Funcs
 
 ```typescript
