@@ -5,27 +5,25 @@ import run from "./_run";
 import { execute, git } from "./utils";
 
 export default async function deploy(): Promise<void> {
+  if (!(await git.isCurrentBranchSynced())) {
+    console.error("Your branch must be in synced with remote");
+    return;
+  }
+
   const typeOfNewVersion = await git
     .getTags({ merged: true })
     .then((tags) => tags.at(tags.length - 1))
     .then(git.getCommits)
     .then(findTypeOfNewVersion);
 
-  let newTag = "";
+  const newTag = await execute(`npm version ${typeOfNewVersion}`, false)
+    .then((tag) => tag.replace(EOL, ""))
+    .then(validateTag);
 
-  await run(
-    false,
-    () =>
-      execute(
-        `npm version --no-commit-hooks --no-git-tag-version ${typeOfNewVersion}`,
-        false,
-      ).then((tag) => {
-        newTag = tag.replace(EOL, "");
-      }),
-    () => git.createCommit("chore: bump package version"),
-    () => git.createTag(newTag),
-  );
+  if (!newTag) return;
+
   await regenerate();
+
   await run(
     false,
     () => git.deleteTag(newTag),
@@ -53,6 +51,18 @@ function findTypeOfNewVersion(commits: string[]): "major" | "minor" | "patch" {
   }
 
   return bump;
+}
+
+function validateTag(tag: string): string | undefined {
+  try {
+    git.getTagInfo(tag);
+    return tag;
+  } catch {
+    console.error(
+      `There was an error creating the tag ${tag}. It probably already exists`,
+    );
+    return undefined;
+  }
 }
 
 deploy();
