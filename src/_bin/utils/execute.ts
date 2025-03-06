@@ -22,8 +22,8 @@ export default function execute(
 ): Promise<void | string> {
   return new Promise((resolve, reject) => {
     const [cmd, ...args] = command
-      .replace(/\s"(.+?)"\s?/g, ' @"$1"@ ')
-      .split("@")
+      .replace(/\s"(.+?)"\s?/g, ' @@"$1"@@ ')
+      .split("@@")
       .flatMap((r) => (r.startsWith('"') ? r : r.split(" ")))
       .filter((r) => !!r)
       .map((r) => r.replace(/^"(.*)"$/g, "$1"));
