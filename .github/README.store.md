@@ -7,7 +7,7 @@ An opinionated react state manager based on hooks. It provides tools to create g
 This is the information that is going to be consumed globally across the app. It is handled by `createGlobalSlice` function from the library.
 
 ```ts
-// ./store/FormSearchSlice.ts
+// ./src/store/FormSearchSlice.ts
 
 import {
   createGlobalSlice,
@@ -40,7 +40,7 @@ export default createGlobalSlice<FormSearchSlice>("formSearch", () => ({
 The state that is populated from an API or an external resource. It also handles automatic revalidation.
 
 ```ts
-// ./store/FormResultSlice.ts
+// ./src/store/FormResultSlice.ts
 
 import {
   createServerSlice,
@@ -67,6 +67,8 @@ export default createServerSlice<FormResultSlice, FormSearchSlice>(
 ## Store
 
 ```typescript
+// ./src/store/index.ts
+
 import { createStore } from "@agusmgarcia/react-core";
 
 import createFormSearchSlice from "./FormSearchSlice";
@@ -102,7 +104,7 @@ export function useFormResult() {
 ### Wrap the main component with the created store provider
 
 ```tsx
-// ./index.tsx
+// ./src/index.tsx
 
 import React from "react";
 import ReactDOM from "react-dom";

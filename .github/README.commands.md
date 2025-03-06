@@ -15,7 +15,7 @@ Set of opinionated commands to run, check, format and build react applications a
 In your _package.json_ file, make sure you have set `private: true` in case it is a web application.
 
 ```jsonc
-// package.json
+// ./package.json
 
 {
   "private": true,
@@ -27,7 +27,7 @@ In your _package.json_ file, make sure you have set `private: true` in case it i
 Then, place add the following commands within the scripts section of the _package.json_.
 
 ```jsonc
-// package.json
+// ./package.json
 
 {
   "scripts": {
@@ -47,7 +47,7 @@ Then, place add the following commands within the scripts section of the _packag
 In case of library, to link the package with a repository, you need to specify the URL in the _package.json_.
 
 ```jsonc
-// package.json
+// ./package.json
 
 {
   "repository": {
@@ -61,9 +61,18 @@ In case of library, to link the package with a repository, you need to specify t
 
 ## Change port
 
-By default `npm start` creates a server from <http://localhost:3000>. In case you want to change the port used, append the `--port=` parameter.
+By default `npm start` creates a server from <http://localhost:3000>. It also selects an available port in case 3000 is beign used by another process. In case you want to set the port explicitly, append the `--port=` parameter.
 
-> For example `npm start --port=3001`.
+```jsonc
+// ./package.json
+
+{
+  "scripts": {
+    // ...
+    "start": "agusmgarcia-react-core-start --port=3001",
+  },
+}
+```
 
 ## Skip regenerating files
 
@@ -91,14 +100,25 @@ When running `npm run regenerate` all the pertinent files will be regenerated. H
 
 In case you want to prevent one of the files of being regenerated, use the `--ignore=` flag.
 
-> For example, `agusmgarcia-react-core-regenerate --ignore=.eslintrc --ignore=.prettierignore`. It will ignore `.eslintrc` and `.prettierignore` files of being regenerated.
+```jsonc
+// ./package.json
+
+{
+  "scripts": {
+    // ...
+    "regenerate": "agusmgarcia-react-core-regenerate --ignore=.eslintrc --ignore=.prettierignore",
+  },
+}
+```
+
+> In this example, it will ignore `.eslintrc` and `.prettierignore` files of being regenerated.
 
 ## Simulated
 
 Sometimes you don't want to delete the `.tgz` file generated after packing the library. It is useful when doing some local testing before publishing it. To achive that, add the `--simulated` argument to the postpack script.
 
 ```jsonc
-// package.json
+// ./package.json
 
 {
   "scripts": {
@@ -113,7 +133,7 @@ Sometimes you don't want to delete the `.tgz` file generated after packing the l
 If you want to watch files for changes and rerun tests related to changed files use the `--watch` argument to the test script.
 
 ```jsonc
-// package.json
+// ./package.json
 
 {
   "scripts": {

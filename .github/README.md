@@ -11,6 +11,8 @@ Set of opinionated commands, utilities and state manager for react applications 
 Create a _.npmrc_ file at the root of your project. This file should look like this:
 
 ```.npmrc
+# ./.npmrc
+
 @agusmgarcia:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
 ```
