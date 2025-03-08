@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v3.9.0](https://github.com/agusmgarcia/react-core/tree/v3.9.0)
+
+> Invalid Date
+
+- **store**: start using merge utility
+- **merges**: add utility
+- **github.middleware**: delete release on error
+- **github.middleware**: stop enable pages automatically
+- **deploy**: check whether branch is synced and tag doesn't exist
+- **git**: add isCurrentBranchSynced method
+- **execute**: make the wildcard complex to be detected
+- **tailwind.middleware**: adjust tailwind.config file
+- **README**: update files
+
 ## [v3.8.0](https://github.com/agusmgarcia/react-core/tree/v3.8.0)
 
 > March 2, 2025
