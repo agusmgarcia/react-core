@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v3.9.1](https://github.com/agusmgarcia/react-core/tree/v3.9.1)
+
+> March 9, 2025
+
+- **github.middleware**: regenerate it using UTC time
+- **git**: adjust the way of getting creationg date
+
 ## [v3.9.0](https://github.com/agusmgarcia/react-core/tree/v3.9.0)
 
 > March 8, 2025
