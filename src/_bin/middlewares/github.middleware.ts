@@ -2,14 +2,7 @@ import { EOL } from "os";
 
 import { type AsyncFunc } from "#src/utils";
 
-import {
-  execute,
-  files,
-  folders,
-  getPackageJSON,
-  git,
-  isLibrary,
-} from "../utils";
+import { files, folders, getPackageJSON, git, isLibrary } from "../utils";
 
 export default async function githubMiddleware(
   next: AsyncFunc,
@@ -93,10 +86,7 @@ async function createChangelogFile(): Promise<string> {
   let fragments = "";
 
   if (await git.isInsideRepository()) {
-    const initialCommit = await execute(
-      "git rev-list --max-parents=0 HEAD",
-      false,
-    ).then((commit) => commit?.replace(EOL, ""));
+    const initialCommit = await git.getInitialCommit();
 
     const tags = await git
       .getTags({ merged: true })
@@ -113,18 +103,13 @@ async function createChangelogFile(): Promise<string> {
           .then((commits) => commits.map(transformCommit))
           .then((commits) => commits.join(EOL));
 
-        const date = await execute(
-          `git show --no-patch --format=%ci ${tag}`,
-          false,
-        )
-          .then((date) => new Date(date))
-          .then((date) =>
-            date.toLocaleDateString("en-US", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            }),
-          );
+        const date = await git.getCreationDate(tag).then((date) =>
+          date.toLocaleDateString("en-US", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          }),
+        );
 
         return `## [${tag}](https://github.com/${projectName}/tree/${tag})
 

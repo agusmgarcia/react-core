@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [v3.9.0](https://github.com/agusmgarcia/react-core/tree/v3.9.0)
 
-> Invalid Date
+> March 7, 2025
 
 - **store**: start using merge utility
 - **merges**: add utility

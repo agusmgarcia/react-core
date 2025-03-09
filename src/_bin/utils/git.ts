@@ -77,6 +77,12 @@ export function createCommit(
   );
 }
 
+export function getInitialCommit(): Promise<string | undefined> {
+  return execute("git rev-list --max-parents=0 HEAD", false).then(
+    (commit) => commit?.replace(EOL, "") || undefined,
+  );
+}
+
 // <=============================== REMOTES ===============================> //
 
 export function getRemote(): Promise<string> {
@@ -147,4 +153,10 @@ export function isInsideRepository(): Promise<boolean> {
   return execute("git rev-parse --is-inside-work-tree", false)
     .then((result) => result === `true${EOL}`)
     .catch(() => false);
+}
+
+export function getCreationDate(tagOrCommit: string): Promise<Date> {
+  return execute(`git show --no-patch --format=%ci ${tagOrCommit}`, false)
+    .then((date) => date.split(EOL).at(-2) || "")
+    .then((date) => new Date(date));
 }
