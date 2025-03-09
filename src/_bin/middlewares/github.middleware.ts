@@ -107,6 +107,7 @@ async function createChangelogFile(): Promise<string> {
           date.toLocaleDateString("en-US", {
             day: "numeric",
             month: "long",
+            timeZone: "UTC",
             year: "numeric",
           }),
         );

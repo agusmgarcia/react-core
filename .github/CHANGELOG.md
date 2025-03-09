@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [v3.9.0](https://github.com/agusmgarcia/react-core/tree/v3.9.0)
 
-> March 7, 2025
+> March 8, 2025
 
 - **store**: start using merge utility
 - **merges**: add utility
@@ -77,13 +77,13 @@ All notable changes to this project will be documented in this file.
 
 ## [v3.3.1](https://github.com/agusmgarcia/react-core/tree/v3.3.1)
 
-> February 6, 2025
+> February 7, 2025
 
 - **deploy**: adjust naming convention
 
 ## [v3.3.0](https://github.com/agusmgarcia/react-core/tree/v3.3.0)
 
-> February 6, 2025
+> February 7, 2025
 
 - **deploy**: add deploy cli
 - reorganize imports
@@ -190,7 +190,7 @@ All notable changes to this project will be documented in this file.
 
 ## [v2.11.0](https://github.com/agusmgarcia/react-core/tree/v2.11.0)
 
-> November 22, 2024
+> November 23, 2024
 
 - **StorageCache**: add utility
 - **Cache**: add utility
@@ -209,7 +209,7 @@ All notable changes to this project will be documented in this file.
 
 ## [v2.9.0](https://github.com/agusmgarcia/react-core/tree/v2.9.0)
 
-> October 30, 2024
+> October 31, 2024
 
 - adjust README.md paths
 - update packages
@@ -236,7 +236,7 @@ All notable changes to this project will be documented in this file.
 
 ## [v2.7.0](https://github.com/agusmgarcia/react-core/tree/v2.7.0)
 
-> September 20, 2024
+> September 21, 2024
 
 - **useMediaQuery**: add initialValue
 - **useValueTracker**: track change events
@@ -304,7 +304,7 @@ All notable changes to this project will be documented in this file.
 
 ## [v2.3.0](https://github.com/agusmgarcia/react-core/tree/v2.3.0)
 
-> July 17, 2024
+> July 18, 2024
 
 - separate workflows in two
 - add tsconfig-paths resolver
@@ -402,7 +402,7 @@ All notable changes to this project will be documented in this file.
 
 ## [v1.3.1](https://github.com/agusmgarcia/react-core/tree/v1.3.1)
 
-> February 22, 2024
+> February 23, 2024
 
 - **withContext.github**: remove empty space
 - **.nvmrc**: add file
