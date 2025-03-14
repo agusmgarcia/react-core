@@ -4,7 +4,7 @@ permissions: write-all
 on:
   push:
     tags:
-      - v*
+      - v[0-9]+.[0-9]+.[0-9]+
 
 jobs:
   publish-lib:
@@ -19,9 +19,9 @@ jobs:
         id: get-version-from-tag
         uses: frabert/replace-string-action@v2
         with:
-          pattern: v(.*)
+          pattern: ^v(\d+)\.(\d+)\.(\d+)$
+          replace-with: $1.$2.$3
           string: ${{ github.ref_name }}
-          replace-with: $1
 
       - name: Checkout
         uses: actions/checkout@v4

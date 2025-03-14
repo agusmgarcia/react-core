@@ -112,6 +112,8 @@ async function createChangelogFile(): Promise<string> {
           }),
         );
 
+        tag = tag.replace("-temp", "");
+
         return `## [${tag}](https://github.com/${projectName}/tree/${tag})
 
 > ${date}
@@ -128,7 +130,7 @@ All notable changes to this project will be documented in this file.
 ${!fragments ? "" : `${EOL}${fragments}`}`;
 }
 
-const deploy_app = `name: Deploy application
+const deploy_app = `name: Deploy app
 permissions: write-all
 
 on:
@@ -157,8 +159,8 @@ jobs:
         id: get-version-from-tag
         uses: frabert/replace-string-action@v2
         with:
-          pattern: v(.*)
-          replace-with: $1
+          pattern: ^v(\\d+)\\.(\\d+)\\.(\\d+)$
+          replace-with: $1.$2.$3
           string: \${{ github.ref_name }}
 
       - name: Checkout
@@ -229,7 +231,7 @@ permissions: write-all
 on:
   push:
     tags:
-      - v*
+      - v[0-9]+.[0-9]+.[0-9]+
 
 jobs:
   publish-lib:
@@ -244,9 +246,9 @@ jobs:
         id: get-version-from-tag
         uses: frabert/replace-string-action@v2
         with:
-          pattern: v(.*)
+          pattern: ^v(\\d+)\\.(\\d+)\\.(\\d+)$
+          replace-with: $1.$2.$3
           string: \${{ github.ref_name }}
-          replace-with: $1
 
       - name: Checkout
         uses: actions/checkout@v4

@@ -4,37 +4,59 @@ import execute from "./execute";
 
 // <=============================== BRANCHES ===============================> //
 
-export function getCurrentBranch(): Promise<string> {
-  return execute("git branch --show-current", false).then((branch) =>
-    branch.replace(EOL, ""),
+export async function deleteBranch(branch: string): Promise<void> {
+  await execute(`git branch -D ${branch}`, true);
+
+  const remote = await getRemote();
+  if (!remote) return;
+
+  await execute(`git push --delete ${remote} ${branch}`, true);
+}
+
+export async function getCurrentBranch(): Promise<string | undefined> {
+  return await execute("git branch --show-current", false).then((branch) =>
+    branch?.replace(EOL, ""),
   );
 }
 
-export function isCurrentBranchSynced(): Promise<boolean> {
-  return execute("git diff @{upstream}", false).then((diffs) => !diffs);
+export async function getDefaultBranch(): Promise<string | undefined> {
+  return await getRemote().then((remote) =>
+    !!remote
+      ? execute(`git remote show ${remote}`, false).then((branch) =>
+          branch
+            .split(EOL)
+            .find((line) => line.startsWith("  HEAD branch: "))
+            ?.replace("  HEAD branch: ", ""),
+        )
+      : undefined,
+  );
 }
 
-export function pushBranch(branch: string): Promise<void> {
-  return getRemote().then((remote) =>
-    execute(`git push -u ${remote} ${branch} --no-verify`, true),
-  );
+export async function isCurrentBranchSynced(): Promise<boolean> {
+  return await execute("git fetch -p -P", true)
+    .then(() => execute("git diff @{upstream}", false))
+    .then((diffs) => !diffs)
+    .catch(() => true);
 }
 
 // <=============================== COMMITS ===============================> //
 
 const COMMIT_REGEXP = /^"(chore|feat|fix|refactor)(?:\((.*)\))?(!)?:\s(.*)"$/;
 
-export function getCommits(
+export async function getCommits(
   initialCommit?: string,
   lastCommit = "HEAD",
   format = "%s",
 ): Promise<string[]> {
-  return execute(
-    !!initialCommit
-      ? `git log --pretty=format:"${format}" ${initialCommit}...${lastCommit}`
-      : `git log --pretty=format:"${format}" ${lastCommit}`,
-    false,
-  )
+  return await execute("git fetch -p -P", true)
+    .then(() =>
+      execute(
+        !!initialCommit
+          ? `git log --pretty=format:"${format}" ${initialCommit}...${lastCommit}`
+          : `git log --pretty=format:"${format}" ${lastCommit}`,
+        false,
+      ),
+    )
     .then((commits) => commits?.split(EOL) || [])
     .then((commits) => commits.filter(filterCommits));
 }
@@ -60,7 +82,7 @@ export function getCommitInfo(commit: string): {
   };
 }
 
-export function createCommit(
+export async function createCommit(
   message: string,
   options?: Partial<{ amend: boolean }>,
 ): Promise<void> {
@@ -69,34 +91,46 @@ export function createCommit(
   if (!COMMIT_REGEXP.test(message))
     throw `Message ${message} doesn't match the pattern`;
 
-  return execute("git add .", true).then(() =>
-    execute(
-      `git commit${!!options?.amend ? " --amend" : ""} -m ${message} -n`,
-      true,
-    ),
+  await execute("git add .", true);
+  await execute(
+    `git commit${!!options?.amend ? " --amend" : ""} -m ${message} -n`,
+    true,
   );
+
+  const remote = await getRemote();
+  if (!remote) return;
+
+  const branch = await getCurrentBranch();
+  if (!branch) return;
+
+  await execute(`git push -u ${remote} ${branch} --no-verify -f`, true);
 }
 
-export function getInitialCommit(): Promise<string | undefined> {
-  return execute("git rev-list --max-parents=0 HEAD", false).then(
+export async function getInitialCommit(): Promise<string | undefined> {
+  return await execute("git rev-list --max-parents=0 HEAD", false).then(
     (commit) => commit?.replace(EOL, "") || undefined,
   );
 }
 
 // <=============================== REMOTES ===============================> //
 
-export function getRemote(): Promise<string> {
-  return Promise.resolve("origin"); // TODO: get origin name.
+export async function getRemote(): Promise<string | undefined> {
+  return await execute("git remote", false)
+    .then((remote) => remote.replace(EOL, ""))
+    .catch(() => undefined);
 }
 
 // <================================= TAGS =================================> //
 
-const TAG_REGEXP = /^v([0-9]+)\.([0-9]+)\.([0-9]+)$/;
+const TAG_REGEXP = /^v(\d+)\.(\d+)\.(\d+)(-temp)?$/;
 
-export function getTags(
+export async function getTags(
   options?: Partial<{ merged: boolean }>,
 ): Promise<string[]> {
-  return execute(`git tag ${!!options?.merged ? " --merged" : ""}`, false)
+  return await execute("git fetch -p -P", true)
+    .then(() =>
+      execute(`git tag ${!!options?.merged ? " --merged" : ""}`, false),
+    )
     .then((tags) => tags?.split(EOL) || [])
     .then((tags) => tags.filter(filterTags))
     .then((tags) => tags.sort(sortTags));
@@ -132,31 +166,39 @@ export function getTagInfo(tag: string): {
   return { major: +tagInfo[1], minor: +tagInfo[2], patch: +tagInfo[3] };
 }
 
-export function createTag(tag: string): Promise<void> {
+export async function createTag(tag: string): Promise<void> {
   if (!TAG_REGEXP.test(tag)) throw `Tag ${tag} doesn't match the pattern`;
-  return execute(`git tag ${tag}`, true);
+  await execute(`git tag ${tag}`, true);
+
+  const remote = await getRemote();
+  if (!remote) return;
+
+  await execute(`git push ${remote} ${tag} --no-verify`, true);
 }
 
-export function deleteTag(tag: string): Promise<void> {
-  return execute(`git tag --delete ${tag}`, true);
-}
+export async function deleteTag(tag: string): Promise<void> {
+  await execute(`git tag --delete ${tag}`, true);
 
-export function pushTag(tag: string): Promise<void> {
-  return getRemote().then((remote) =>
-    execute(`git push ${remote} ${tag} --no-verify`, true),
-  );
+  const remote = await getRemote();
+  if (!remote) return;
+
+  await execute(`git push --delete ${remote} ${tag} --no-verify`, true);
 }
 
 // <================================ UTILS ================================> //
 
-export function isInsideRepository(): Promise<boolean> {
-  return execute("git rev-parse --is-inside-work-tree", false)
-    .then((result) => result === `true${EOL}`)
-    .catch(() => false);
+export async function checkout(sha: string): Promise<void> {
+  await execute(`git checkout ${sha}`, true);
 }
 
-export function getCreationDate(tagOrCommit: string): Promise<Date> {
-  return execute(`git show --no-patch --format=%ci ${tagOrCommit}`, false)
+export async function getCreationDate(sha: string): Promise<Date> {
+  return await execute(`git show --no-patch --format=%ci ${sha}`, false)
     .then((date) => date.split(EOL).at(-2) || "")
     .then((date) => new Date(date));
+}
+
+export async function isInsideRepository(): Promise<boolean> {
+  return await execute("git rev-parse --is-inside-work-tree", false)
+    .then((result) => result === `true${EOL}`)
+    .catch(() => false);
 }
