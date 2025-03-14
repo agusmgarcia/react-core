@@ -1,41 +1,34 @@
 import { useEffect, useState } from "react";
 
+import useDevicePixelRatio from "./useDevicePixelRatio";
+import useDimensions from "./useDimensions";
+
 export default function useElementAtTop<TElement extends HTMLElement>(
   elementRef: React.RefObject<TElement>,
   initialValue = true,
 ): boolean {
   const [atTop, setAtTop] = useState(initialValue);
-  const [resize, setResize] = useState(false);
+
+  const devicePixelRatio = useDevicePixelRatio();
+  const dimensions = useDimensions(elementRef);
 
   useEffect(() => {
     const element = elementRef.current;
-    if (!element) return;
-
-    const set = (e: TElement): void =>
-      setAtTop(e.scrollTop < window.devicePixelRatio);
-
-    function handle(event: Event) {
-      const target = event.target;
-      if (!target) return;
-      if (!("scrollTop" in target)) return;
-      if (typeof target.scrollTop !== "number") return;
-      set(target as TElement);
+    if (!element) {
+      setAtTop(initialValue);
+      return;
     }
 
-    set(element);
+    const handle = (event: Event | { target: TElement }) => {
+      const target = event.target as TElement;
+      setAtTop(target.scrollTop < devicePixelRatio);
+    };
+
+    handle({ target: element });
 
     element.addEventListener("scroll", handle);
     return () => element.removeEventListener("scroll", handle);
-  }, [elementRef, resize]);
-
-  useEffect(() => {
-    const element = elementRef.current;
-    if (!element) return;
-
-    const observer = new ResizeObserver(() => setResize((prev) => !prev));
-    observer.observe(element);
-    return () => observer.unobserve(element);
-  }, [elementRef]);
+  }, [dimensions, devicePixelRatio, elementRef, initialValue]);
 
   return atTop;
 }
