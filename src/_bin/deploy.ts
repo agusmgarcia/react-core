@@ -1,20 +1,30 @@
 import { EOL } from "os";
 
 import regenerate from "./_regenerate";
-import run from "./_run";
 import { execute, git } from "./utils";
 
 export default async function deploy(): Promise<void> {
+  if (!(await git.isInsideRepository())) return;
+
   if (!(await git.isCurrentBranchSynced())) {
     console.error("Your branch must be in synced with remote");
     return;
   }
 
-  const typeOfNewVersion = await git
+  const lastTagMerged = await git
     .getTags({ merged: true })
-    .then((tags) => tags.at(tags.length - 1))
-    .then(git.getCommits)
+    .then((tags) => tags.at(-1));
+
+  const typeOfNewVersion = await git
+    .getCommits(lastTagMerged)
     .then(findTypeOfNewVersion);
+
+  try {
+    await validatePositionOfTheTag(typeOfNewVersion, lastTagMerged);
+  } catch (error: any) {
+    console.error(error.message);
+    return;
+  }
 
   const newTag = await execute(`npm version ${typeOfNewVersion}`, false)
     .then((tag) => tag.replace(EOL, ""))
@@ -23,15 +33,10 @@ export default async function deploy(): Promise<void> {
   if (!newTag) return;
 
   await regenerate();
-
-  await run(
-    false,
-    () => git.deleteTag(newTag),
-    () => git.createCommit("chore: bump package version", { amend: true }),
-    () => git.createTag(newTag),
-    () => git.pushTag(newTag),
-    () => git.getCurrentBranch().then(git.pushBranch),
-  );
+  await git.deleteTag(newTag);
+  await git.createCommit("chore: bump package version", { amend: true });
+  await git.createTag(newTag);
+  await checkoutDefaultAndDeleteCurrent();
 }
 
 function findTypeOfNewVersion(commits: string[]): "major" | "minor" | "patch" {
@@ -53,6 +58,59 @@ function findTypeOfNewVersion(commits: string[]): "major" | "minor" | "patch" {
   return bump;
 }
 
+async function validatePositionOfTheTag(
+  typeOfNewVersion: ReturnType<typeof findTypeOfNewVersion>,
+  lastTagMerged: string | undefined,
+): Promise<void> {
+  const allTags = await git.getTags().then((tags) => tags.map(git.getTagInfo));
+  const lastTagMergedInfo = !!lastTagMerged
+    ? git.getTagInfo(lastTagMerged)
+    : { major: 0, minor: 0, patch: 0 };
+
+  if (typeOfNewVersion === "major") {
+    const lastTag = allTags.at(-1);
+
+    if (!lastTag) throw new Error("Unreachable scenario");
+
+    if (lastTagMergedInfo.major !== lastTag.major)
+      throw new Error(
+        `The major release needs to be created from v${lastTag.major}.x.x`,
+      );
+
+    return;
+  }
+
+  if (typeOfNewVersion === "minor") {
+    const lastTagOfMajor = allTags
+      .filter((t) => t.major === lastTagMergedInfo.major)
+      .at(-1);
+
+    if (!lastTagOfMajor) throw new Error("Unreachable scenario");
+
+    if (lastTagMergedInfo.minor !== lastTagOfMajor.minor)
+      throw new Error(
+        `The minor release needs to be created from v${lastTagOfMajor.major}.${lastTagOfMajor.minor}.x`,
+      );
+
+    return;
+  }
+
+  const lastTagOfMinor = allTags
+    .filter(
+      (t) =>
+        t.major === lastTagMergedInfo.major &&
+        t.minor === lastTagMergedInfo.minor,
+    )
+    .at(-1);
+
+  if (!lastTagOfMinor) throw new Error("Unreachable scenario");
+
+  if (lastTagMergedInfo.patch !== lastTagOfMinor.patch)
+    throw new Error(
+      `The patch release needs to be created from v${lastTagOfMinor.major}.${lastTagOfMinor.minor}.${lastTagOfMinor.patch}`,
+    );
+}
+
 function validateTag(tag: string): string | undefined {
   try {
     git.getTagInfo(tag);
@@ -63,6 +121,16 @@ function validateTag(tag: string): string | undefined {
     );
     return undefined;
   }
+}
+
+async function checkoutDefaultAndDeleteCurrent(): Promise<void> {
+  const defaultBranch = await git.getDefaultBranch();
+  const currentBranch = await git.getCurrentBranch();
+
+  if (!defaultBranch || currentBranch === defaultBranch) return;
+
+  await git.checkoutBranch(defaultBranch);
+  await git.deleteBranch(currentBranch);
 }
 
 deploy();
