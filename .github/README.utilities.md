@@ -309,6 +309,17 @@ function useHook() {
 }
 ```
 
+## Use dimensions
+
+```typescript
+import { useDimensions } from "@agusmgarcia/react-core";
+
+function useHook() {
+  const ref = useRef<HTMLElement>(null);
+  const dimensions = useDimensions(ref); // => The width and height of the element.
+}
+```
+
 ## Use element at bottom
 
 ```typescript
