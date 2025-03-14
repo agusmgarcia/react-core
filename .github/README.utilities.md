@@ -299,6 +299,16 @@ import { type UnionToTuple } from "@agusmgarcia/react-core";
 type ArrayOfAOrB = UnionToTuple<"a" | "b">; // => ["a", "b"]
 ```
 
+## Use device pixel ratio
+
+```typescript
+import { useDevicePixelRatio } from "@agusmgarcia/react-core";
+
+function useHook() {
+  const devicePixelRatio = useDevicePixelRatio(); // => window.devicePixelRatio
+}
+```
+
 ## Use element at bottom
 
 ```typescript
