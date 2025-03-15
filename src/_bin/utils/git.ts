@@ -8,6 +8,21 @@ export async function checkoutBranch(branch: string): Promise<void> {
   await execute(`git checkout ${branch}`, true);
 }
 
+export async function createBranch(
+  branch: string,
+  branchOrTagOrCommit?: string,
+): Promise<void> {
+  await execute(
+    `git checkout -b ${branch}${!!branchOrTagOrCommit ? ` ${branchOrTagOrCommit}` : ""}`,
+    true,
+  );
+
+  const remote = await getRemote();
+  if (!remote) return;
+
+  await execute(`git push -u ${remote} ${branch}`, true);
+}
+
 export async function deleteBranch(branch: string): Promise<void> {
   await execute(`git branch -D ${branch}`, true);
 
@@ -44,6 +59,13 @@ export async function isCurrentBranchSynced(): Promise<boolean> {
 }
 
 // <=============================== COMMITS ===============================> //
+
+export async function cherryPick(
+  initialCommit: string,
+  lastCommit: string,
+): Promise<void> {
+  await execute(`git cherry-pick ${initialCommit}..${lastCommit}`, true);
+}
 
 const COMMIT_REGEXP = /^"(chore|feat|fix|refactor)(?:\((.*)\))?(!)?:\s(.*)"$/;
 
