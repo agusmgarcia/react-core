@@ -1,4 +1,4 @@
-name: Publish library
+name: Publish lib
 permissions: write-all
 
 on:
@@ -6,13 +6,14 @@ on:
     tags:
       - v[0-9]+.[0-9]+.[0-9]+
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
 jobs:
   publish-lib:
-    name: Publish library
+    name: Publish lib
     runs-on: ubuntu-latest
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref_name }}
-      cancel-in-progress: true
 
     steps:
       - name: Get version from tag
@@ -59,23 +60,8 @@ jobs:
         run: npm test
         shell: bash
 
-      - name: Create release
-        id: create-release
-        uses: ncipollo/release-action@v1
-        with:
-          name: Version ${{ steps.get-version-from-tag.outputs.replaced }}
-          tag: ${{ github.ref_name }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Publish
         run: npm publish
         shell: bash
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Delete release and tag on error
-        if: ${{ (failure() || cancelled()) && steps.create-release.conclusion == 'success' }}
-        run: gh release delete ${{ github.ref_name }} --cleanup-tag
-        shell: bash
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

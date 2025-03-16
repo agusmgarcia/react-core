@@ -41,6 +41,13 @@ export async function isCurrentBranchSynced(): Promise<boolean> {
 
 // <=============================== COMMITS ===============================> //
 
+export async function cherryPick(
+  initialCommit: string,
+  lastCommit: string,
+): Promise<void> {
+  await execute(`git cherry-pick ${initialCommit}..${lastCommit}`, true);
+}
+
 const COMMIT_REGEXP = /^"(chore|feat|fix|refactor)(?:\((.*)\))?(!)?:\s(.*)"$/;
 
 export async function getCommits(

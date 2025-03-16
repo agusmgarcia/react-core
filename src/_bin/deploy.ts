@@ -43,6 +43,7 @@ export default async function deploy(): Promise<void> {
   await git.createCommit("chore: bump package version", { amend: true });
   await git.createTag(newTag);
   await checkoutTagAndDeleteCurrentBranch(newTag);
+  await createNextRelease(typeOfNewVersion, newTag, lastTagMerged);
 }
 
 function findTypeOfNewVersion(
@@ -145,6 +146,59 @@ async function checkoutTagAndDeleteCurrentBranch(
 
   await git.checkout(newTag);
   if (!!currentBranch) await git.deleteBranch(currentBranch);
+}
+
+async function createNextRelease(
+  typeOfNewVersion: NonNullable<ReturnType<typeof findTypeOfNewVersion>>,
+  newTag: string,
+  lastTagMerged: string | undefined,
+): Promise<void> {
+  if (!lastTagMerged) return;
+  if (typeOfNewVersion === "major") return;
+
+  const newTagInfo = git.getTagInfo(newTag);
+  const allTags = await git.getTags().then((tags) => tags.map(git.getTagInfo));
+
+  let nextTagInfo: ReturnType<typeof git.getTagInfo> | undefined;
+
+  if (typeOfNewVersion === "minor") {
+    const tagsGroupedByMajor = allTags.reduce<
+      Record<number, ReturnType<typeof git.getTagInfo>[]>
+    >((result, tag) => {
+      result[tag.major] ??= [];
+      result[tag.major].push(tag);
+      return result;
+    }, {});
+
+    nextTagInfo = tagsGroupedByMajor[newTagInfo.major + 1]?.at(-1);
+  } else {
+    const tagsGroupedByMajorAndMinor = allTags.reduce<
+      Record<number, Record<number, ReturnType<typeof git.getTagInfo>[]>>
+    >((result, tag) => {
+      result[tag.major] ??= {};
+      result[tag.major][tag.minor] ??= [];
+      result[tag.major][tag.minor].push(tag);
+      return result;
+    }, {});
+
+    nextTagInfo =
+      tagsGroupedByMajorAndMinor[newTagInfo.major][newTagInfo.minor + 1]?.at(
+        -1,
+      ) || tagsGroupedByMajorAndMinor[newTagInfo.major + 1]?.[0]?.at(-1);
+  }
+
+  if (!nextTagInfo) return;
+  const nextTag = `v${nextTagInfo.major}.${nextTagInfo.minor}.${nextTagInfo.patch}`;
+  await git.checkout(nextTag);
+
+  try {
+    await git.cherryPick(lastTagMerged, `${newTag}~1`);
+  } catch (error) {
+    console.error(error);
+    return;
+  }
+
+  await deploy();
 }
 
 deploy();

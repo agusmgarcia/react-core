@@ -134,18 +134,19 @@ const deploy_app = `name: Deploy app
 permissions: write-all
 
 on:
-  workflow_dispatch:
   push:
     tags:
-      - v*
+      - v[0-9]+.[0-9]+.[0-9]+
+  workflow_dispatch:
+
+concurrency:
+  group: \${{ github.workflow }}
+  cancel-in-progress: true
 
 jobs:
   deploy-app:
-    name: Deploy application
+    name: Deploy app
     runs-on: ubuntu-latest
-    concurrency:
-      group: \${{ github.workflow }}-\${{ github.ref_name }}
-      cancel-in-progress: true
 
     steps:
       - name: Check if the type is 'tag'
@@ -165,6 +166,19 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Extract version from package
+        id: extract-version-from-package
+        uses: sergeysova/jq-action@v2
+        with:
+          cmd: jq .version package.json -r
+
+      - name: Verify versions match
+        if: \${{ steps.get-version-from-tag.outputs.replaced != steps.extract-version-from-package.outputs.value }}
+        run: |
+          echo "::error::Version in the package.json and tag don't match"
+          exit 1
+        shell: bash
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -201,31 +215,15 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          name: github-pages
           path: out
-          retention-days: 1
-
-      - name: Create release
-        id: create-release
-        if: \${{ github.event_name != 'workflow_dispatch' }}
-        uses: ncipollo/release-action@v1
-        with:
-          name: Version \${{ steps.get-version-from-tag.outputs.replaced }}
-          tag: \${{ github.ref_name }}
-          token: \${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
-
-      - name: Delete release and tag on error
-        if: \${{ (failure() || cancelled()) && steps.create-release.conclusion == 'success' }}
-        run: gh release delete \${{ github.ref_name }} --cleanup-tag
-        shell: bash
-        env:
-          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+        with:
+          token: \${{ secrets.GITHUB_TOKEN }}
 `;
 
-const publish_lib = `name: Publish library
+const publish_lib = `name: Publish lib
 permissions: write-all
 
 on:
@@ -233,13 +231,14 @@ on:
     tags:
       - v[0-9]+.[0-9]+.[0-9]+
 
+concurrency:
+  group: \${{ github.workflow }}-\${{ github.ref_name }}
+  cancel-in-progress: true
+
 jobs:
   publish-lib:
-    name: Publish library
+    name: Publish lib
     runs-on: ubuntu-latest
-    concurrency:
-      group: \${{ github.workflow }}-\${{ github.ref_name }}
-      cancel-in-progress: true
 
     steps:
       - name: Get version from tag
@@ -286,24 +285,9 @@ jobs:
         run: npm test
         shell: bash
 
-      - name: Create release
-        id: create-release
-        uses: ncipollo/release-action@v1
-        with:
-          name: Version \${{ steps.get-version-from-tag.outputs.replaced }}
-          tag: \${{ github.ref_name }}
-          token: \${{ secrets.GITHUB_TOKEN }}
-
       - name: Publish
         run: npm publish
         shell: bash
         env:
           NODE_AUTH_TOKEN: \${{ secrets.GITHUB_TOKEN }}
-
-      - name: Delete release and tag on error
-        if: \${{ (failure() || cancelled()) && steps.create-release.conclusion == 'success' }}
-        run: gh release delete \${{ github.ref_name }} --cleanup-tag
-        shell: bash
-        env:
-          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
 `;
