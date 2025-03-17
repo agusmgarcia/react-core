@@ -113,21 +113,6 @@ In case you want to prevent one of the files of being regenerated, use the `--ig
 
 > In this example, it will ignore `.eslintrc` and `.prettierignore` files of being regenerated.
 
-## Simulated
-
-Sometimes you don't want to delete the `.tgz` file generated after packing the library. It is useful when doing some local testing before publishing it. To achive that, add the `--simulated` argument to the postpack script.
-
-```jsonc
-// ./package.json
-
-{
-  "scripts": {
-    // ...
-    "postpack": "agusmgarcia-react-core-postpack --simulated",
-  },
-}
-```
-
 ## Watch test files
 
 If you want to watch files for changes and rerun tests related to changed files use the `--watch` argument to the test script.
