@@ -32,7 +32,7 @@
     "@testing-library/react": "^16.0.0",
     "@types/eslint": "^9.0.0",
     "@types/jest": "^29.0.0",
-    "@types/node": "^20.0.0",
+    "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "async-mutex": "^0.5.x",
@@ -71,7 +71,7 @@
     "ts-node": "10.9.2"
   },
   "engines": {
-    "node": "^18.18.0 || ^19.0.0 || ^20.0.0"
+    "node": "^18.18.0 || ^19.0.0 || ^20.0.0 || ^21.0.0 || ^22.0.0"
   },
   "repository": {
     "type": "git",

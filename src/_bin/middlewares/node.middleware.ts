@@ -22,7 +22,7 @@ export default async function nodeMiddleware(
   await next();
 }
 
-const nvmrc = "20";
+const nvmrc = "22.14";
 
 const npmignore = `**/.*
 dist/**/*.test.d.ts

@@ -184,7 +184,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           cache: npm
-          node-version: 20
+          node-version: 22.14
 
       - name: Install dependencies
         run: npm ci --ignore-scripts
@@ -269,7 +269,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           cache: npm
-          node-version: 20
+          node-version: 22.14
 
       - name: Install dependencies
         run: npm ci --ignore-scripts
