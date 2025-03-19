@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.0.0](https://github.com/agusmgarcia/react-core/tree/v4.0.0)
+
+> March 19, 2025
+
+- start using node 22.14
+- change prettier config
+- bump to nextjs 15, react 19 and eslint 9
+- **deploy**: propagate release
+- **deploy**: validate tag position before publishing
+- **postpack**: stop using simulated flag
+- **useElementAtBottom**: handle scenarios where element is initially null
+- **useElementAtTop**: handle scenarios where element is initially null
+- **useDimensions**: add hook
+- **useDevicePixelRatio**: add hook
+- **README.md**: update file
+- bump dependencies
+
 ## [v3.9.1](https://github.com/agusmgarcia/react-core/tree/v3.9.1)
 
 > March 9, 2025
