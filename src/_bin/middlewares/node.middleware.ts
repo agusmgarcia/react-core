@@ -31,6 +31,7 @@ eslint.config.js
 jest.config.js
 package-lock.json
 postcss.config.js
+prettier.config.js
 tailwind.config.js
 tsconfig.json
 webpack.config.js`;

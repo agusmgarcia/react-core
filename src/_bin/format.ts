@@ -11,7 +11,7 @@ export default async function format(): Promise<void> {
       ),
     () =>
       execute(
-        "prettier . --cache --cache-location ./node_modules/.prettiercache --cache-strategy content --config ./.prettierrc --write",
+        "prettier . --cache --cache-location ./node_modules/.prettiercache --cache-strategy content --write",
         true,
       ),
   );

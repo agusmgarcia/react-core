@@ -11,7 +11,7 @@ export default async function check(): Promise<void> {
       ),
     () =>
       execute(
-        "prettier . --cache --cache-location ./node_modules/.prettiercache --cache-strategy content --config ./.prettierrc --check",
+        "prettier . --cache --cache-location ./node_modules/.prettiercache --cache-strategy content --check",
         true,
       ),
     () => execute("tsc --pretty --noEmit", true),

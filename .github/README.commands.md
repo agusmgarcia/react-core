@@ -87,12 +87,11 @@ When running `npm run regenerate` all the pertinent files will be regenerated. H
 - .gitignore
 - .npmignore
 - .nvmrc
-- .prettierignore
-- .prettierrc
 - eslint.config.js
 - jest.config.js
 - next.config.js
 - postcss.config.js
+- prettier.config.js
 - tailwind.config.js _(just creation phase)_
 - tsconfig.json
 - webpack.config.js
@@ -105,12 +104,12 @@ In case you want to prevent one of the files of being regenerated, use the `--ig
 {
   "scripts": {
     // ...
-    "regenerate": "agusmgarcia-react-core-regenerate --ignore=eslint.config.js --ignore=.prettierignore",
+    "regenerate": "agusmgarcia-react-core-regenerate --ignore=eslint.config.js --ignore=prettier.config.js",
   },
 }
 ```
 
-> In this example, it will ignore `eslint.config.js` and `.prettierignore` files of being regenerated.
+> In this example, it will ignore `eslint.config.js` and `prettier.config.js` files of being regenerated.
 
 ## Watch test files
 
