@@ -17,7 +17,7 @@ export default function createStore<
 >(...input: Input<TSliceFactories>): Output<TSliceFactories> {
   return {
     StoreProvider: (props) => {
-      const storeRef = useRef<Store<TSliceFactories>>();
+      const storeRef = useRef<Store<TSliceFactories>>(null);
 
       if (!storeRef.current)
         storeRef.current = create<StateOf<TSliceFactories>>()(

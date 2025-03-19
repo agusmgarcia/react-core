@@ -104,20 +104,26 @@ export function useFormResult() {
 ### Wrap the main component with the created store provider
 
 ```tsx
-// ./src/index.tsx
+// ./pages/_app.tsx
 
-import React from "react";
-import ReactDOM from "react-dom";
+import "./_app.css";
 
-import App from "./components/App";
-import { StoreProvider } from "./store";
+import { type AppProps } from "next/app";
+import Head from "next/head";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <StoreProvider>
-      <App />
-    </StoreProvider>
-  </React.StrictMode>,
-  document.getElementById("root"),
-);
+import { StoreProvider } from "#src/store";
+
+export default function App({ Component, pageProps }: AppProps<any>) {
+  return (
+    <>
+      <Head>
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
+      </Head>
+
+      <StoreProvider>
+        <Component {...pageProps} />
+      </StoreProvider>
+    </>
+  );
+}
 ```

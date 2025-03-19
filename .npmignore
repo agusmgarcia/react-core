@@ -1,6 +1,7 @@
 **/.*
 dist/**/*.test.d.ts
 src
+eslint.config.js
 jest.config.js
 package-lock.json
 postcss.config.js

@@ -27,6 +27,7 @@ const nvmrc = "20";
 const npmignore = `**/.*
 dist/**/*.test.d.ts
 src
+eslint.config.js
 jest.config.js
 package-lock.json
 postcss.config.js

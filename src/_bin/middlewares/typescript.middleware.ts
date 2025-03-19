@@ -28,17 +28,18 @@ const tsconfig_app = `{
     "jsx": "preserve",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "noEmit": true,
     "noImplicitOverride": true,
     "paths": {
       "#public/*": ["public/*"],
       "#src/*": ["src/*"]
     },
+    "plugins": [{ "name": "next" }],
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "es5",
+    "target": "ES2017",
     "tsBuildInfoFile": "node_modules/.typescriptcache"
   },
   "exclude": [".next", "node_modules"],

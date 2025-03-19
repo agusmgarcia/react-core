@@ -26,7 +26,7 @@ export type Output<
   TSliceFactories extends CreateGlobalSliceTypes.Output<any, any, any>[],
 > = {
   StoreProvider: Func<
-    JSX.Element,
+    React.ReactElement,
     [
       props: {
         children?: React.ReactNode;

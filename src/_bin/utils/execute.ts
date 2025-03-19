@@ -3,16 +3,12 @@ import { spawn } from "child_process";
 import { type Func } from "#src/utils";
 
 export default function execute(
-  // eslint-disable-next-line unused-imports/no-unused-vars
   command: string,
-  // eslint-disable-next-line unused-imports/no-unused-vars
   disassociated: true,
 ): Promise<void>;
 
 export default function execute(
-  // eslint-disable-next-line unused-imports/no-unused-vars
   command: string,
-  // eslint-disable-next-line unused-imports/no-unused-vars
   disassociated: false,
 ): Promise<string>;
 

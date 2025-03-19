@@ -1,7 +1,7 @@
 import type Func from "./Func.types";
 
 export default function getChildrenOfType<
-  TType extends Func<JSX.Element, [props: any]>,
+  TType extends Func<React.ReactElement, [props: any]>,
 >(
   type: TType,
   children: React.ReactNode,
@@ -34,7 +34,7 @@ export default function getChildrenOfType<TType extends "undefined">(
 
 export default function getChildrenOfType<
   TType extends
-    | Func<JSX.Element, [props: any]>
+    | Func<React.ReactElement, [props: any]>
     | "boolean"
     | "null"
     | "number"
@@ -48,7 +48,7 @@ export default function getChildrenOfType<
 
 function getChildrenOfTypeRecursive<
   TType extends
-    | Func<JSX.Element, [props: any]>
+    | Func<React.ReactElement, [props: any]>
     | "boolean"
     | "null"
     | "number"
@@ -75,5 +75,5 @@ function getChildrenOfTypeRecursive<
   if (typeof type === "function" && children.type === type)
     result.push(children);
 
-  getChildrenOfTypeRecursive(type, children.props.children, result);
+  getChildrenOfTypeRecursive(type, (children.props as any).children, result);
 }

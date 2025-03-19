@@ -78,8 +78,6 @@ By default `npm start` creates a server from <http://localhost:3000>. It also se
 
 When running `npm run regenerate` all the pertinent files will be regenerated. Here the list of the files:
 
-- .eslintignore
-- .eslintrc
 - .env _(just creation phase)_
 - .env.local _(just creation phase)_
 - .github/CHANGELOG.md
@@ -91,7 +89,8 @@ When running `npm run regenerate` all the pertinent files will be regenerated. H
 - .nvmrc
 - .prettierignore
 - .prettierrc
-- jest.config.ts
+- eslint.config.js
+- jest.config.js
 - next.config.js
 - postcss.config.js
 - tailwind.config.js _(just creation phase)_
@@ -106,12 +105,12 @@ In case you want to prevent one of the files of being regenerated, use the `--ig
 {
   "scripts": {
     // ...
-    "regenerate": "agusmgarcia-react-core-regenerate --ignore=.eslintrc --ignore=.prettierignore",
+    "regenerate": "agusmgarcia-react-core-regenerate --ignore=eslint.config.js --ignore=.prettierignore",
   },
 }
 ```
 
-> In this example, it will ignore `.eslintrc` and `.prettierignore` files of being regenerated.
+> In this example, it will ignore `eslint.config.js` and `.prettierignore` files of being regenerated.
 
 ## Watch test files
 
