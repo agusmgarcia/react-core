@@ -4,7 +4,7 @@ import useDevicePixelRatio from "./useDevicePixelRatio";
 import useDimensions from "./useDimensions";
 
 export default function useElementAtTop<TElement extends HTMLElement>(
-  elementRef: React.RefObject<TElement>,
+  elementRef: React.RefObject<TElement | null>,
   initialValue = true,
 ): boolean {
   const [atTop, setAtTop] = useState(initialValue);
