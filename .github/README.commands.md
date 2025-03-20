@@ -87,6 +87,8 @@ When running `npm run regenerate` all the pertinent files will be regenerated. H
 - .gitignore
 - .npmignore
 - .nvmrc
+- pages/\_app.tsx _(just creation phase)_
+- pages/\_app.css _(just creation phase)_
 - eslint.config.js
 - jest.config.js
 - next.config.js

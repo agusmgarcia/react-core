@@ -10,7 +10,22 @@ export default async function nextJSMiddleware(
   const library = await isLibrary();
 
   await Promise.all([
-    folders.upsertFolder("pages"),
+    folders.upsertFolder("pages").then(() =>
+      Promise.all([
+        !library
+          ? files.upsertFile("pages/_app.tsx", app, {
+              create: regenerate && !ignore.includes("pages/_app.tsx"),
+              update: false,
+            })
+          : Promise.resolve(),
+        !library
+          ? files.upsertFile("pages/_app.css", appCSS, {
+              create: regenerate && !ignore.includes("pages/_app.css"),
+              update: false,
+            })
+          : Promise.resolve(),
+      ]),
+    ),
     !library
       ? files.upsertFile(
           "next.config.js",
@@ -42,6 +57,29 @@ export default async function nextJSMiddleware(
     ]);
   }
 }
+
+const app = `import "./_app.css";
+
+import { type AppProps } from "next/app";
+import Head from "next/head";
+
+export default function App({ Component }: AppProps<any>) {
+  return (
+    <>
+      <Head>
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
+      </Head>
+
+      <Component />
+    </>
+  );
+}
+`;
+
+const appCSS = `@tailwind base;
+@tailwind components;
+@tailwind utilities;
+`;
 
 const nextConfig = `const { PHASE_PRODUCTION_BUILD } = require("next/constants");
 
