@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.0.2](https://github.com/agusmgarcia/react-core/tree/v4.0.2)
+
+> March 20, 2025
+
+- adjust peer dependencies
+
 ## [v4.0.1](https://github.com/agusmgarcia/react-core/tree/v4.0.1)
 
 > March 20, 2025
