@@ -5,7 +5,7 @@ type Dimensions = { height: number; width: number };
 const initialDimensions: Dimensions = { height: 0, width: 0 };
 
 export default function useDimensions<TElement extends Element>(
-  elementRef: React.RefObject<TElement>,
+  elementRef: React.RefObject<TElement | null>,
   initialValue = initialDimensions,
   options?: ResizeObserverOptions["box"],
 ): Dimensions {
