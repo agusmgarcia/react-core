@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.0.1](https://github.com/agusmgarcia/react-core/tree/v4.0.1)
+
+> March 20, 2025
+
+- **useElementAtBottom**: adjust compatibility with useRef
+- **useElementAtTop**: adjust compatibility with useRef
+- **useDimensions**: adjust compatibility with useRef
+
 ## [v4.0.0](https://github.com/agusmgarcia/react-core/tree/v4.0.0)
 
 > March 19, 2025
