@@ -14,14 +14,7 @@ export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
   get: Func<OmitFuncs<TSlice & TOtherSlices>>;
   set: Func<
     void,
-    [
-      state:
-        | OmitFuncs<ExtractStateOf<TSlice>>
-        | Func<
-            OmitFuncs<ExtractStateOf<TSlice>>,
-            [prevState: OmitFuncs<ExtractStateOf<TSlice>>]
-          >,
-    ]
+    [state: React.SetStateAction<OmitFuncs<ExtractStateOf<TSlice>>>]
   >;
   signal: AbortSignal;
 };
