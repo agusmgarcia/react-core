@@ -51,13 +51,6 @@ export default function createServerSlice<
       }
     }
 
-    async function reload(
-      args: Partial<ExtractSelectedOf<TSlice>> | undefined,
-      context: CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>,
-    ): Promise<void> {
-      return reloadHelper(args, context, (newData) => newData);
-    }
-
     async function loadMore(
       args: Partial<ExtractSelectedOf<TSlice>> | undefined,
       context: CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>,
@@ -67,6 +60,13 @@ export default function createServerSlice<
           ? [...prevData, ...newData]
           : newData,
       );
+    }
+
+    async function reload(
+      args: Partial<ExtractSelectedOf<TSlice>> | undefined,
+      context: CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>,
+    ): Promise<void> {
+      return reloadHelper(args, context, (newData) => newData);
     }
 
     const result = createGlobalSlice<TSlice, TOtherSlices>(
