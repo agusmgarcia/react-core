@@ -21,7 +21,6 @@ export type SliceOf<
       loading: boolean;
       loadMore: AsyncFunc<void, [args?: Partial<TSelected>]>;
       reload: AsyncFunc<void, [args?: Partial<TSelected>]>;
-      set: AsyncFunc<void, [data: React.SetStateAction<TData | undefined>]>;
     },
     TExtraMethods
   >
