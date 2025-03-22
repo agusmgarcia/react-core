@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.1.1](https://github.com/agusmgarcia/react-core/tree/v4.1.1)
+
+> March 22, 2025
+
+- **createServerSlice**: remove set method from type
+
 ## [v4.1.0](https://github.com/agusmgarcia/react-core/tree/v4.1.0)
 
 > March 22, 2025
