@@ -30,7 +30,11 @@ export type Input<TSlice extends SliceOf<any, any, any>, TOtherSlices> = [
   name: ExtractNameOf<TSlice>,
   fetcher: AsyncFunc<
     ExtractDataOf<TSlice>,
-    [args: ExtractSelectedOf<TSlice>, signal: AbortSignal]
+    [
+      args: ExtractSelectedOf<TSlice>,
+      signal: AbortSignal,
+      prevData: ExtractDataOf<TSlice>,
+    ]
   >,
   selector?: Func<ExtractSelectedOf<TSlice>, [state: OmitFuncs<TOtherSlices>]>,
 ];
