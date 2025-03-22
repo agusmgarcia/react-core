@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.1.0](https://github.com/agusmgarcia/react-core/tree/v4.1.0)
+
+> March 22, 2025
+
+- **createServerSlice**: add ability to support extra methods
+- **Merge**: add type
+- **createServerSlice**: make prevData available in fetcher
+- **nextjs.middleware**: start creating \_app files
+- **nextjs.middleware**: omit devIndicators
+- **createServerSlice**: readjust methods order
+- **createGlobalSlice**: adjust types
+
 ## [v4.0.2](https://github.com/agusmgarcia/react-core/tree/v4.0.2)
 
 > March 20, 2025
