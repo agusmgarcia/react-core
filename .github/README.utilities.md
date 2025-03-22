@@ -182,6 +182,16 @@ import { isSSR } from "@agusmgarcia/react-core";
 isSSR(); // => 'true' if server side and 'false' for client
 ```
 
+## Merge
+
+```typescript
+import { type Merge } from "@agusmgarcia/react-core";
+
+type ObjectA = { name: string };
+type ObjectB = { surname: string };
+type Result = Merge<ObjectA, ObjectB>; // => { name: string; surname: string; }
+```
+
 ## Merge refs
 
 ```tsx

@@ -14,6 +14,7 @@ export { default as isChildOf } from "./isChildOf";
 export { default as isOnlyId } from "./isOnlyId";
 export { default as isParentOf } from "./isParentOf";
 export { default as isSSR } from "./isSSR";
+export { type default as Merge } from "./Merge.types";
 export { default as mergeRefs } from "./mergeRefs";
 export * as merges from "./merges";
 export { type default as OmitFuncs } from "./OmitFuncs.types";
