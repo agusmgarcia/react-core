@@ -13,13 +13,14 @@ import {
 } from "./createServerSlice.types";
 
 export default function createServerSlice<
-  TSlice extends SliceOf<any, any, any>,
+  TSlice extends SliceOf<any, any, any, any>,
   TOtherSlices = {},
 >(...input: Input<TSlice, TOtherSlices>): Output<TSlice, TOtherSlices> {
   return (initialData) => {
     const name = input[0];
     const fetcher = input[1];
     const selector = input[2];
+    const factory = input[3];
 
     async function reloadHelper(
       args: Partial<ExtractSelectedOf<TSlice>> | undefined,
@@ -61,7 +62,7 @@ export default function createServerSlice<
     ): Promise<void> {
       return reloadHelper(args, context, (newData, prevData) =>
         Array.isArray(prevData) && Array.isArray(newData)
-          ? [...prevData, ...newData]
+          ? ([...prevData, ...newData] as ExtractDataOf<TSlice>)
           : newData,
       );
     }
@@ -79,12 +80,13 @@ export default function createServerSlice<
         subscribe((_, ctx) => reload(undefined, ctx), selector);
 
         return {
+          ...(factory?.(subscribe) as object),
           data: undefined,
           error: undefined,
           loading: true,
           loadMore,
           reload,
-        } as CreateGlobalSliceTypes.WithContext<TSlice, TOtherSlices>;
+        } as CreateGlobalSliceTypes.WithContext<TSlice, TOtherSlices, TSlice>;
       },
     );
 
