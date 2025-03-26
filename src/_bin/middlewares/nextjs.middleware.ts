@@ -1,24 +1,24 @@
 import { type AsyncFunc } from "#src/utils";
 
-import { files, folders, isLibrary } from "../utils";
+import { files, folders, getCore } from "../utils";
 
 export default async function nextJSMiddleware(
   next: AsyncFunc,
   regenerate: boolean,
   ignore: string[],
 ): Promise<void> {
-  const library = await isLibrary();
+  const core = await getCore();
 
   await Promise.all([
     folders.upsertFolder("pages").then(() =>
       Promise.all([
-        !library
+        core === "app"
           ? files.upsertFile("pages/_app.tsx", app, {
               create: regenerate && !ignore.includes("pages/_app.tsx"),
               update: false,
             })
           : files.removeFile("pages/_app.tsx"),
-        !library
+        core === "app"
           ? files.upsertFile("pages/_app.css", appCSS, {
               create: regenerate && !ignore.includes("pages/_app.css"),
               update: false,
@@ -26,20 +26,20 @@ export default async function nextJSMiddleware(
           : files.removeFile("pages/_app.css"),
       ]),
     ),
-    !library
+    core === "app"
       ? files.upsertFile(
           "next.config.js",
           nextConfig,
           regenerate && !ignore.includes("next.config.js"),
         )
       : files.removeFile("next.config.js"),
-    !library
+    core === "app"
       ? files.upsertFile(".env", env, {
           create: regenerate && !ignore.includes(".env"),
           update: false,
         })
       : files.removeFile(".env"),
-    !library
+    core === "app"
       ? files.upsertFile(".env.local", envLocal, {
           create: regenerate && !ignore.includes(".env.local"),
           update: false,
@@ -51,9 +51,9 @@ export default async function nextJSMiddleware(
     await next();
   } finally {
     await Promise.all([
-      library ? files.removeFile("next-env.d.ts") : Promise.resolve(),
-      library ? folders.removeFolder(".next") : Promise.resolve(),
-      library ? folders.removeFolder("pages") : Promise.resolve(),
+      core !== "app" ? files.removeFile("next-env.d.ts") : Promise.resolve(),
+      core !== "app" ? folders.removeFolder(".next") : Promise.resolve(),
+      core !== "app" ? folders.removeFolder("pages") : Promise.resolve(),
     ]);
   }
 }

@@ -1,21 +1,21 @@
 import { type AsyncFunc } from "#src/utils";
 
-import { files, isLibrary } from "../utils";
+import { files, getCore } from "../utils";
 
 export default async function webpackMiddleware(
   next: AsyncFunc,
   regenerate: boolean,
   ignore: string[],
 ): Promise<void> {
-  const library = await isLibrary();
+  const core = await getCore();
 
-  if (library)
+  if (core === "app") await files.removeFile("webpack.config.js");
+  else
     await files.upsertFile(
       "webpack.config.js",
       webpackConfig,
       regenerate && !ignore.includes("webpack.config.js"),
     );
-  else await files.removeFile("webpack.config.js");
 
   await next();
 }

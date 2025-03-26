@@ -1,8 +1,8 @@
 import run from "./_run";
-import { execute, isLibrary } from "./utils";
+import { execute, getCore } from "./utils";
 
 export default async function build(): Promise<void> {
-  if (await isLibrary()) return;
+  if ((await getCore()) !== "app") return;
 
   await run(
     false,

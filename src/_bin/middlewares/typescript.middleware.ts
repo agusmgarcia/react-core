@@ -1,17 +1,17 @@
 import { type AsyncFunc } from "#src/utils";
 
-import { files, isLibrary } from "../utils";
+import { files, getCore } from "../utils";
 
 export default async function typescriptMiddleware(
   next: AsyncFunc,
   regenerate: boolean,
   ignore: string[],
 ): Promise<void> {
-  const library = await isLibrary();
+  const core = await getCore();
 
   await files.upsertFile(
     "tsconfig.json",
-    !library ? tsconfig_app : tsconfig_lib,
+    core === "app" ? tsconfig_app : tsconfig_lib,
     regenerate && !ignore.includes("tsconfig.json"),
   );
 

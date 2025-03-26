@@ -1,8 +1,8 @@
 import run from "./_run";
-import { args, execute, isLibrary } from "./utils";
+import { args, execute, getCore } from "./utils";
 
 export default async function start(): Promise<void> {
-  if (await isLibrary()) return;
+  if ((await getCore()) !== "app") return;
 
   const port = args.get("port").find((_, i) => !i);
 

@@ -12,52 +12,36 @@ Set of opinionated commands to run, check, format and build react applications a
 
 ## Setup
 
-In your _package.json_ file, make sure you have set `private: true` in case it is a web application.
+In your _package.json_ file, make sure you have set `core: "app"` in case it is a web application or `core: "lib"` for library.
 
 ```jsonc
 // ./package.json
 
 {
-  "private": true,
+  "core": "app",
 }
 ```
 
-> Mark it as `false` or not defined it in case it is a library.
-
-Then, place add the following commands within the scripts section of the _package.json_.
+Then, add the following command within the scripts section of the _package.json_.
 
 ```jsonc
 // ./package.json
 
 {
   "scripts": {
-    "build": "agusmgarcia-react-core-build",
-    "check": "agusmgarcia-react-core-check",
-    "deploy": "agusmgarcia-react-core-deploy",
-    "format": "agusmgarcia-react-core-format",
-    "postpack": "agusmgarcia-react-core-postpack",
-    "prepack": "agusmgarcia-react-core-prepack",
-    "start": "agusmgarcia-react-core-start",
+    // ...
     "regenerate": "agusmgarcia-react-core-regenerate",
-    "test": "agusmgarcia-react-core-test",
   },
 }
 ```
 
-In case of library, to link the package with a repository, you need to specify the URL in the _package.json_.
+And run:
 
-```jsonc
-// ./package.json
-
-{
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/<REPOSITORY_OWNER>/<REPOSITORY_NAME>.git",
-  },
-}
+```bash
+npm run regenerate
 ```
 
-> For example, this package would be `git+https://github.com/agusmgarcia/react-core.git`.
+This will create all the necessary files to run the application.
 
 ## Change port
 

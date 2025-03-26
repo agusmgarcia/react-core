@@ -1,13 +1,13 @@
 import { type AsyncFunc } from "#src/utils";
 
-import { files, isLibrary } from "../utils";
+import { files, getCore } from "../utils";
 
 export default async function tailwindcssMiddleware(
   next: AsyncFunc,
   regenerate: boolean,
   ignore: string[],
 ): Promise<void> {
-  const library = await isLibrary();
+  const core = await getCore();
 
   await Promise.all([
     files.upsertFile(
@@ -17,7 +17,7 @@ export default async function tailwindcssMiddleware(
     ),
     files.upsertFile(
       "tailwind.config.js",
-      !library ? tailwindConfig_app : tailwindConfig_lib,
+      core === "app" ? tailwindConfig_app : tailwindConfig_lib,
       {
         create: regenerate && !ignore.includes("tailwind.config.js"),
         update: false,

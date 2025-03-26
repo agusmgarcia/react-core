@@ -28,6 +28,16 @@ async function addMissingAttributes(
   if (!packageJSON.name && !!repositoryDetails)
     packageJSON.name = `@${repositoryDetails.owner}/${repositoryDetails.name}`;
 
+  if (packageJSON.core !== "app" && packageJSON.core !== "lib")
+    packageJSON.core =
+      typeof packageJSON.private === "string"
+        ? packageJSON.private === "true"
+          ? "app"
+          : "lib"
+        : !!packageJSON.private
+          ? "app"
+          : "lib";
+
   const version = await git
     .getTags({ merged: true })
     .then((tags) => tags.at(-1))
@@ -36,20 +46,18 @@ async function addMissingAttributes(
 
   packageJSON.version = version;
 
-  if (typeof packageJSON.private === "string")
-    packageJSON.private = packageJSON.private === "true";
+  packageJSON.private = packageJSON.core === "app";
 
-  if (!packageJSON.private) packageJSON.private = false;
-
-  if (!packageJSON.private && !packageJSON.main)
+  if (packageJSON.core === "lib" && !packageJSON.main)
     packageJSON.main = "dist/index.js";
 
-  if (!!packageJSON.private && !!packageJSON.main) delete packageJSON.main;
+  if (packageJSON.core !== "lib" && !!packageJSON.main) delete packageJSON.main;
 
-  if (!packageJSON.private && !packageJSON.types)
+  if (packageJSON.core === "lib" && !packageJSON.types)
     packageJSON.types = "dist/index.d.ts";
 
-  if (!!packageJSON.private && !!packageJSON.types) delete packageJSON.types;
+  if (packageJSON.core !== "lib" && !!packageJSON.types)
+    delete packageJSON.types;
 
   if (!packageJSON.author) packageJSON.author = repositoryDetails?.owner || "";
 
@@ -75,17 +83,18 @@ async function addMissingAttributes(
 
   const remoteURL = await git.getRemoteURL();
 
-  if (!packageJSON.private && !packageJSON.repository && !!remoteURL)
+  if (packageJSON.core === "lib" && !packageJSON.repository && !!remoteURL)
     packageJSON.repository = {
       type: "git",
       url: `git+${remoteURL}.git`,
     };
 
-  if (!!packageJSON.private && !!packageJSON.repository)
+  if (packageJSON.core !== "lib" && !!packageJSON.repository)
     delete packageJSON.repository;
 
   const newPackageJSON = createObjectWithPropertiesSorted(packageJSON, [
     "name",
+    "core",
     "version",
     "private",
     "main",

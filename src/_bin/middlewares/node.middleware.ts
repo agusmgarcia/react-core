@@ -1,6 +1,6 @@
 import { type AsyncFunc } from "#src/utils";
 
-import { files, isLibrary } from "../utils";
+import { files, getCore } from "../utils";
 
 export default async function nodeMiddleware(
   next: AsyncFunc,
@@ -9,14 +9,14 @@ export default async function nodeMiddleware(
 ): Promise<void> {
   await Promise.all([
     files.upsertFile(".nvmrc", nvmrc, regenerate && !ignore.includes(".nvmrc")),
-    isLibrary().then((library) =>
-      library
-        ? files.upsertFile(
+    getCore().then((core) =>
+      core === "app"
+        ? files.removeFile(".npmignore")
+        : files.upsertFile(
             ".npmignore",
             npmignore,
             regenerate && !ignore.includes(".npmignore"),
-          )
-        : files.removeFile(".npmignore"),
+          ),
     ),
   ]);
 

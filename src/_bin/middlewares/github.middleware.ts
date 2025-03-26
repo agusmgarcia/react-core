@@ -2,22 +2,22 @@ import { EOL } from "os";
 
 import { type AsyncFunc } from "#src/utils";
 
-import { files, folders, git, isLibrary } from "../utils";
+import { files, folders, getCore, git } from "../utils";
 
 export default async function githubMiddleware(
   next: AsyncFunc,
   regenerate: boolean,
   ignore: string[],
 ): Promise<void> {
-  const [library] = await Promise.all([
-    isLibrary(),
+  const [core] = await Promise.all([
+    getCore(),
     folders.upsertFolder(".github"),
   ]);
 
   await Promise.all([
     files.upsertFile(
       ".gitignore",
-      !library ? gitignore_app : gitignore_lib,
+      core === "app" ? gitignore_app : gitignore_lib,
       regenerate && !ignore.includes(".gitignore"),
     ),
     files.upsertFile(".github/README.md", readme, {
@@ -31,19 +31,19 @@ export default async function githubMiddleware(
     ),
     folders
       .upsertFolder(".github/workflows")
-      .then(() => (!library ? "deploy-app.yml" : "publish-lib.yml"))
+      .then(() => (core === "app" ? "deploy-app.yml" : "publish-lib.yml"))
       .then((workflowName) => `.github/workflows/${workflowName}`)
       .then((fileName) =>
         files.upsertFile(
           fileName,
-          !library ? deploy_app : publish_lib,
+          core === "app" ? deploy_app : publish_lib,
           regenerate && !ignore.includes(fileName),
         ),
       ),
     files.removeFile(
       ".github/workflows/continuous-integration-and-deployment.yml",
     ),
-    !library
+    core === "app"
       ? files.removeFile(".github/workflows/publish-lib.yml")
       : files.removeFile(".github/workflows/deploy-app.yml"),
   ]);

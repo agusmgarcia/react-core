@@ -3,6 +3,7 @@ import fs from "fs";
 type PackageJSON = {
   author?: string;
   bin?: Record<string, string>;
+  core?: "app" | "lib";
   dependencies?: Record<string, string>;
   description?: string;
   devDependencies?: Record<string, string>;

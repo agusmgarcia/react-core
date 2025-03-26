@@ -1,20 +1,20 @@
 import { type AsyncFunc } from "#src/utils";
 
-import { files, isLibrary } from "../utils";
+import { files, getCore } from "../utils";
 
 export default async function eslintMiddleware(
   next: AsyncFunc,
   regenerate: boolean,
   ignore: string[],
 ): Promise<void> {
-  const library = await isLibrary();
+  const core = await getCore();
 
   await Promise.all([
     files.removeFile(".eslintrc"),
     files.removeFile(".eslintignore"),
     files.upsertFile(
       "eslint.config.js",
-      !library ? eslintConfig_app : eslintConfig_lib,
+      core === "app" ? eslintConfig_app : eslintConfig_lib,
       regenerate && !ignore.includes("eslint.config.js"),
     ),
   ]);
