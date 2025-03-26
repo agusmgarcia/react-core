@@ -8,11 +8,13 @@ export default async function typescriptMiddleware(
   ignore: string[],
 ): Promise<void> {
   const library = await isLibrary();
+
   await files.upsertFile(
     "tsconfig.json",
     !library ? tsconfig_app : tsconfig_lib,
     regenerate && !ignore.includes("tsconfig.json"),
   );
+
   await next();
 }
 

@@ -17,13 +17,13 @@ export default async function nextJSMiddleware(
               create: regenerate && !ignore.includes("pages/_app.tsx"),
               update: false,
             })
-          : Promise.resolve(),
+          : files.removeFile("pages/_app.tsx"),
         !library
           ? files.upsertFile("pages/_app.css", appCSS, {
               create: regenerate && !ignore.includes("pages/_app.css"),
               update: false,
             })
-          : Promise.resolve(),
+          : files.removeFile("pages/_app.css"),
       ]),
     ),
     !library
@@ -32,19 +32,19 @@ export default async function nextJSMiddleware(
           nextConfig,
           regenerate && !ignore.includes("next.config.js"),
         )
-      : Promise.resolve(),
+      : files.removeFile("next.config.js"),
     !library
       ? files.upsertFile(".env", env, {
           create: regenerate && !ignore.includes(".env"),
           update: false,
         })
-      : Promise.resolve(),
+      : files.removeFile(".env"),
     !library
       ? files.upsertFile(".env.local", envLocal, {
           create: regenerate && !ignore.includes(".env.local"),
           update: false,
         })
-      : Promise.resolve(),
+      : files.removeFile(".env.local"),
   ]);
 
   try {

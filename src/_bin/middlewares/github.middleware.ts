@@ -40,11 +40,12 @@ export default async function githubMiddleware(
           regenerate && !ignore.includes(fileName),
         ),
       ),
-    Promise.resolve(
+    files.removeFile(
       ".github/workflows/continuous-integration-and-deployment.yml",
-    ).then((f) =>
-      !ignore.includes(f) ? files.removeFile(f) : Promise.resolve(),
     ),
+    !library
+      ? files.removeFile(".github/workflows/publish-lib.yml")
+      : files.removeFile(".github/workflows/deploy-app.yml"),
   ]);
 
   await next();

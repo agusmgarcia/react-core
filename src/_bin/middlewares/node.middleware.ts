@@ -16,9 +16,10 @@ export default async function nodeMiddleware(
             npmignore,
             regenerate && !ignore.includes(".npmignore"),
           )
-        : Promise.resolve(),
+        : files.removeFile(".npmignore"),
     ),
   ]);
+
   await next();
 }
 

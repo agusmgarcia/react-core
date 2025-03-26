@@ -8,12 +8,15 @@ export default async function webpackMiddleware(
   ignore: string[],
 ): Promise<void> {
   const library = await isLibrary();
+
   if (library)
     await files.upsertFile(
       "webpack.config.js",
       webpackConfig,
       regenerate && !ignore.includes("webpack.config.js"),
     );
+  else await files.removeFile("webpack.config.js");
+
   await next();
 }
 
