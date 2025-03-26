@@ -92,6 +92,7 @@ When running `npm run regenerate` all the pertinent files will be regenerated. H
 - eslint.config.js
 - jest.config.js
 - next.config.js
+- package.json
 - postcss.config.js
 - prettier.config.js
 - tailwind.config.js _(just creation phase)_
