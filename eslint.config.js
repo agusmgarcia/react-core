@@ -23,6 +23,8 @@ module.exports = defineConfig([
       "plugin:import/recommended",
     ),
 
+    ignores: ["**/*.d.ts"],
+
     languageOptions: {
       ecmaVersion: 5,
       globals: {},
@@ -145,38 +147,6 @@ module.exports = defineConfig([
           varsIgnorePattern: "^_",
         },
       ],
-    },
-  },
-  {
-    files: ["**/*.types.ts"],
-
-    rules: {
-      "unused-imports/no-unused-vars": "off",
-    },
-  },
-  {
-    files: ["**/*.d.ts"],
-
-    rules: {
-      "@typescript-eslint/consistent-type-imports": "off",
-      "import/first": "off",
-      "import/newline-after-import": "off",
-      "import/no-duplicates": "off",
-      "react/jsx-boolean-value": "off",
-      "react/jsx-sort-props": "off",
-      "simple-import-sort/exports": "off",
-      "simple-import-sort/imports": "off",
-      "sort/destructuring-properties": "off",
-      "sort/export-members": "off",
-      "sort/exports": "off",
-      "sort/import-members": "off",
-      "sort/imports": "off",
-      "sort/object-properties": "off",
-      "sort/string-enums": "off",
-      "sort/string-unions": "off",
-      "sort/type-properties": "off",
-      "unused-imports/no-unused-imports": "off",
-      "unused-imports/no-unused-vars": "off",
     },
   },
 ]);
