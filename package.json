@@ -28,7 +28,6 @@
     "agusmgarcia-react-core-test": "bin/test.js"
   },
   "peerDependencies": {
-    "@eslint/compat": "^1.0.0",
     "@testing-library/react": "^16.0.0",
     "@types/eslint": "^9.0.0",
     "@types/jest": "^29.0.0",
