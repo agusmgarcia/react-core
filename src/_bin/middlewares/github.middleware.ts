@@ -2,7 +2,7 @@ import { EOL } from "os";
 
 import { type AsyncFunc } from "#src/utils";
 
-import { files, folders, getPackageJSON, git, isLibrary } from "../utils";
+import { files, folders, git, isLibrary } from "../utils";
 
 export default async function githubMiddleware(
   next: AsyncFunc,
@@ -76,12 +76,7 @@ async function createChangelogFile(): Promise<string> {
     return `- ${!!commitInfo.scope ? `**${commitInfo.scope}**: ` : ""}${commitInfo.message}`;
   }
 
-  const projectName = await getPackageJSON()
-    .then((json) => json.name)
-    .then((name) => name?.replace("@", ""));
-
-  if (!projectName)
-    throw "Project name must be defined within the package.json file";
+  const remoteURL = await git.getRemoteURL();
 
   let fragments = "";
 
@@ -114,7 +109,7 @@ async function createChangelogFile(): Promise<string> {
 
         tag = tag.replace("-temp", "");
 
-        return `## [${tag}](https://github.com/${projectName}/tree/${tag})
+        return `## ${!!remoteURL ? `[${tag}](${remoteURL}/tree/${tag})` : tag}
 
 > ${date}
 
