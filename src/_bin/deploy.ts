@@ -165,7 +165,7 @@ async function createNextRelease(
     const tagsGroupedByMajor = allTags.reduce<
       Record<number, ReturnType<typeof git.getTagInfo>[]>
     >((result, tag) => {
-      result[tag.major] ??= [];
+      result[tag.major] ||= [];
       result[tag.major].push(tag);
       return result;
     }, {});
@@ -175,8 +175,8 @@ async function createNextRelease(
     const tagsGroupedByMajorAndMinor = allTags.reduce<
       Record<number, Record<number, ReturnType<typeof git.getTagInfo>[]>>
     >((result, tag) => {
-      result[tag.major] ??= {};
-      result[tag.major][tag.minor] ??= [];
+      result[tag.major] ||= {};
+      result[tag.major][tag.minor] ||= [];
       result[tag.major][tag.minor].push(tag);
       return result;
     }, {});
