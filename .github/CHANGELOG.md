@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.1.2](https://github.com/agusmgarcia/react-core/tree/v4.1.2)
+
+> March 28, 2025
+
+- **isLibrary**: consider private property as string
+- remove @eslint/compat peers
+- remove react-dom peer
+
 ## [v4.1.1](https://github.com/agusmgarcia/react-core/tree/v4.1.1)
 
 > March 22, 2025
