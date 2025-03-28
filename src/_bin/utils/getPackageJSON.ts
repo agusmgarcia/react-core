@@ -1,6 +1,10 @@
 import fs from "fs";
 
-type PackageJSON = { name?: string; private?: boolean; version?: string };
+type PackageJSON = {
+  name?: string;
+  private?: boolean | string;
+  version?: string;
+};
 
 export default function getPackageJSON(): Promise<PackageJSON> {
   return new Promise<PackageJSON>((resolve, reject) =>
