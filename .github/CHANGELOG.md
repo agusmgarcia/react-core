@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.2.0](https://github.com/agusmgarcia/react-core/tree/v4.2.0)
+
+> March 28, 2025
+
+- add core property under package.json file
+- regenerate package.json
+- **git**: add getRepositoryDetails function
+- remove files from the other type of app
+- **eslint.config.js**: ignore d.ts files
+- adjust libraries dependencies
+- **deploy.ts**: stop using ??
+
 ## [v4.1.4](https://github.com/agusmgarcia/react-core/tree/v4.1.4)
 
 > March 28, 2025
