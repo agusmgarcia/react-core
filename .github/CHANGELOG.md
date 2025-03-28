@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.1.3](https://github.com/agusmgarcia/react-core/tree/v4.1.3)
+
+> March 28, 2025
+
+- **github.middleware**: regenerate changelog file using remote url
+
 ## [v4.1.2](https://github.com/agusmgarcia/react-core/tree/v4.1.2)
 
 > March 28, 2025
