@@ -223,6 +223,23 @@ export async function getCreationDate(sha: string): Promise<Date> {
     .then((date) => new Date(date));
 }
 
+const REPOSITORY_DETAILS_REGEXP = /^(?:.+?):\/\/(?:.+?)\/(.+?)\/(.+?)$/;
+
+export async function getRepositoryDetails(): Promise<
+  { name: string; owner: string } | undefined
+> {
+  return await getRemoteURL().then((remoteURL) => {
+    {
+      if (!remoteURL) return undefined;
+
+      const matches = REPOSITORY_DETAILS_REGEXP.exec(remoteURL);
+      if (!matches || matches.length !== 3) return undefined;
+
+      return { name: matches[2], owner: matches[1] };
+    }
+  });
+}
+
 export async function isInsideRepository(): Promise<boolean> {
   return await execute("git rev-parse --is-inside-work-tree", false)
     .then((result) => result === `true${EOL}`)
