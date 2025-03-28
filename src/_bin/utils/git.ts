@@ -121,10 +121,29 @@ export async function getInitialCommit(): Promise<string | undefined> {
 
 // <=============================== REMOTES ===============================> //
 
+const REMOTE_URL_REGEXP =
+  /^(.+?):\/\/(?:.+?:)?(?:.+?@)?(.+?)\/(.+?)\/(.+?).git$/;
+
 export async function getRemote(): Promise<string | undefined> {
   return await execute("git remote", false)
     .then((remote) => remote.replace(EOL, ""))
     .catch(() => undefined);
+}
+
+export async function getRemoteURL(): Promise<string | undefined> {
+  return await getRemote()
+    .then((remote) =>
+      !!remote ? execute(`git remote get-url ${remote}`, false) : undefined,
+    )
+    .then((remoteURL) => remoteURL?.replace(EOL, ""))
+    .then((remoteURL) => {
+      if (!remoteURL) return undefined;
+
+      const matches = REMOTE_URL_REGEXP.exec(remoteURL);
+      if (!matches || matches.length !== 5) return undefined;
+
+      return `${matches[1]}://${matches[2]}/${matches[3]}/${matches[4]}`.toLowerCase();
+    });
 }
 
 // <================================= TAGS =================================> //
