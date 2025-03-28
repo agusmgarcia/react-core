@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.0.5](https://github.com/agusmgarcia/react-core/tree/v4.0.5)
+
+> March 28, 2025
+
+- stop importing React for libraries
+
 ## [v4.0.4](https://github.com/agusmgarcia/react-core/tree/v4.0.4)
 
 > March 28, 2025
