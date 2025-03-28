@@ -1,5 +1,3 @@
-import React from "react";
-
 import getChildrenOfType from "./getChildrenOfType";
 
 describe("getChildrenOfType", () => {
