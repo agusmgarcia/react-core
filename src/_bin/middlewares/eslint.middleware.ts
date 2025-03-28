@@ -268,7 +268,6 @@ module.exports = defineConfig([
         },
       ],
 
-      "react/react-in-jsx-scope": "error",
       "simple-import-sort/exports": "off",
       "simple-import-sort/imports": "error",
       "sort/destructuring-properties": "error",

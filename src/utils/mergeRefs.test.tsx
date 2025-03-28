@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import type Func from "./Func.types";
 import mergeRefs from "./mergeRefs";

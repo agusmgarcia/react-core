@@ -26,7 +26,7 @@ module.exports = [
               loader: "ts-loader",
               options: {
                 compilerOptions: {
-                  jsx: "react",
+                  jsx: "react-jsx",
                 },
                 getCustomTransformers,
               },
@@ -83,7 +83,7 @@ module.exports = [
               options: {
                 compilerOptions: {
                   declaration: false,
-                  jsx: "react",
+                  jsx: "react-jsx",
                 },
               },
             },
