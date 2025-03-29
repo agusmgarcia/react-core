@@ -17,7 +17,11 @@ export default async function githubMiddleware(
   await Promise.all([
     files.upsertFile(
       ".gitignore",
-      core === "app" ? gitignore_app : gitignore_lib,
+      core === "app"
+        ? gitignore_app
+        : core === "azure-func"
+          ? gitignore_azure_func
+          : gitignore_lib,
       regenerate && !ignore.includes(".gitignore"),
     ),
     files.upsertFile(".github/README.md", readme, {
@@ -31,12 +35,22 @@ export default async function githubMiddleware(
     ),
     folders
       .upsertFolder(".github/workflows")
-      .then(() => (core === "app" ? "deploy-app.yml" : "publish-lib.yml"))
+      .then(() =>
+        core === "app"
+          ? "deploy-app.yml"
+          : core === "azure-func"
+            ? "deploy-azure-func.yml"
+            : "publish-lib.yml",
+      )
       .then((workflowName) => `.github/workflows/${workflowName}`)
       .then((fileName) =>
         files.upsertFile(
           fileName,
-          core === "app" ? deploy_app : publish_lib,
+          core === "app"
+            ? deploy_app
+            : core === "azure-func"
+              ? deploy_azure_func
+              : publish_lib,
           regenerate && !ignore.includes(fileName),
         ),
       ),
@@ -44,8 +58,19 @@ export default async function githubMiddleware(
       ".github/workflows/continuous-integration-and-deployment.yml",
     ),
     core === "app"
-      ? files.removeFile(".github/workflows/publish-lib.yml")
-      : files.removeFile(".github/workflows/deploy-app.yml"),
+      ? Promise.all([
+          files.removeFile(".github/workflows/deploy-azure-func.yml"),
+          files.removeFile(".github/workflows/publish-lib.yml"),
+        ])
+      : core === "azure-func"
+        ? Promise.all([
+            files.removeFile(".github/workflows/deploy-app.yml"),
+            files.removeFile(".github/workflows/publish-lib.yml"),
+          ])
+        : Promise.all([
+            files.removeFile(".github/workflows/deploy-app.yml"),
+            files.removeFile(".github/workflows/deploy-azure-func.yml"),
+          ]),
   ]);
 
   await next();
@@ -55,6 +80,11 @@ const gitignore_app = `.env.local
 .next
 node_modules
 out`;
+
+const gitignore_azure_func = `.next
+dist
+local.settings.json
+node_modules`;
 
 const gitignore_lib = `.next
 bin
@@ -222,6 +252,118 @@ jobs:
         uses: actions/deploy-pages@v4
         with:
           token: \${{ secrets.GITHUB_TOKEN }}
+`;
+
+const deploy_azure_func = `name: Deploy Azure func
+permissions: write-all
+
+on:
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+
+  workflow_dispatch:
+
+concurrency:
+  group: \${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  deploy-azure-func:
+    name: Deploy Azure func
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if the type is 'tag'
+        if: \${{ github.event_name == 'workflow_dispatch' && github.ref_type != 'tag' }}
+        run: |
+          echo "::error::Workflow needs to be dispatched from a tag"
+          exit 1
+        shell: bash
+
+      - name: Get version from tag
+        id: get-version-from-tag
+        uses: frabert/replace-string-action@v2
+        with:
+          pattern: ^v(\\d+)\\.(\\d+)\\.(\\d+)$
+          replace-with: $1.$2.$3
+          string: \${{ github.ref_name }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Extract version from package
+        id: extract-version-from-package
+        uses: sergeysova/jq-action@v2
+        with:
+          cmd: jq .version package.json -r
+
+      - name: Verify versions match
+        if: \${{ steps.get-version-from-tag.outputs.replaced != steps.extract-version-from-package.outputs.value }}
+        run: |
+          echo "::error::Version in the package.json and tag don't match"
+          exit 1
+        shell: bash
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version: 22.14
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+        shell: bash
+        env:
+          NODE_AUTH_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check
+        run: npm run check
+        shell: bash
+
+      - name: Test
+        run: npm test
+        shell: bash
+
+      - name: Build
+        run: npm run build
+        shell: bash
+
+      - name: Azure login
+        id: azure-login
+        uses: azure/login@v2
+        with:
+          allow-no-subscriptions: \${{ secrets.AZURE_ALLOW_NO_SUBSCRIPTIONS }}
+          audience: \${{ secrets.AZURE_AUDIENCE }}
+          auth-type: \${{ secrets.AZURE_AUTH_TYPE }}
+          client-id: \${{ secrets.AZURE_CLIENT_ID }}
+          creds: \${{ secrets.AZURE_CREDS }}
+          environment: \${{ secrets.AZURE_ENVIRONMENT }}
+          tenant-id: \${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: \${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Add app settings
+        uses: azure/appservice-settings@v1
+        with:
+          app-name: \${{ vars.AZURE_APP_NAME }}
+          app-settings-json: |
+            [
+              {
+                "name": "APP_VERSION",
+                "value": "\${{ steps.get-version-from-tag.outputs.replaced }}",
+                "slotSetting": false
+              }
+            ]
+
+      - name: Deploy function
+        uses: azure/functions-action@v1
+        with:
+          app-name: \${{ vars.AZURE_APP_NAME }}
+          respect-funcignore: true
+
+      - name: Azure logout
+        if: \${{ always() && steps.azure-login.conclusion == 'success' }}
+        run: az logout
+        shell: bash
 `;
 
 const publish_lib = `name: Publish lib

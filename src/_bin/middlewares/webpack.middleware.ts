@@ -13,14 +13,84 @@ export default async function webpackMiddleware(
   else
     await files.upsertFile(
       "webpack.config.js",
-      webpackConfig,
+      core === "azure-func" ? webpackConfig_azure_func : webpackConfig_lib,
       regenerate && !ignore.includes("webpack.config.js"),
     );
 
   await next();
 }
 
-const webpackConfig = `const fs = require("fs");
+const webpackConfig_azure_func = `const fs = require("fs");
+const path = require("path");
+const getCustomTransformers = require("ts-transform-paths").default;
+
+const packageJSON = require("./package.json");
+
+/** @type import("webpack").Configuration */
+module.exports = {
+  entry: {
+    index: path.resolve(__dirname, "src", "index.ts"),
+    ...(fs.existsSync(path.resolve(__dirname, "src", "functions"))
+      ? fs
+          .readdirSync(path.resolve(__dirname, "src", "functions"))
+          .filter(
+            (file) =>
+              !file.startsWith("_") &&
+              !file.endsWith(".test.ts") &&
+              file.endsWith(".ts") &&
+              file !== "index.ts",
+          )
+          .reduce((result, file) => {
+            result[file.split(".ts")[0]] = path.resolve(
+              __dirname,
+              "src",
+              "functions",
+              file,
+            );
+            return result;
+          }, {})
+      : {}),
+  },
+  externals: Object.keys(packageJSON.dependencies || {}),
+  module: {
+    rules: [
+      {
+        exclude: /node_modules/,
+        test: /\\.ts$/,
+        use: [
+          {
+            loader: "ts-loader",
+            options: { getCustomTransformers },
+          },
+        ],
+      },
+    ],
+  },
+  output: {
+    filename: (data) =>
+      data.chunk?.name === "index"
+        ? "index.js"
+        : \`functions\${path.sep}\${data.chunk?.name || "[name]"}.js\`,
+    globalObject: "this",
+    library: {
+      name: packageJSON.name,
+      type: "umd",
+    },
+    path: path.resolve(__dirname, "dist"),
+    umdNamedDefine: true,
+  },
+  resolve: {
+    alias: { "#src": path.resolve(__dirname, "src") },
+    extensions: [".js", ".ts"],
+  },
+  target: "node",
+  watchOptions: {
+    ignored: /node_modules/,
+  },
+};
+`;
+
+const webpackConfig_lib = `const fs = require("fs");
 const path = require("path");
 const RemovePlugin = require("remove-files-webpack-plugin");
 const getCustomTransformers = require("ts-transform-paths").default;
