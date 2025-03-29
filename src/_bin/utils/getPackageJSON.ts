@@ -1,4 +1,4 @@
-import fs from "fs";
+import * as files from "./files";
 
 type PackageJSON = {
   name?: string;
@@ -7,9 +7,7 @@ type PackageJSON = {
 };
 
 export default function getPackageJSON(): Promise<PackageJSON> {
-  return new Promise<PackageJSON>((resolve, reject) =>
-    fs.readFile("package.json", { encoding: "utf-8" }, (error, data) =>
-      !error ? resolve(JSON.parse(data)) : reject(error),
-    ),
-  );
+  return files
+    .readRequiredFile("package.json")
+    .then((data) => JSON.parse(data));
 }
