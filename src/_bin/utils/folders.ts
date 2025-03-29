@@ -6,6 +6,10 @@ export function exists(path: string): Promise<boolean> {
   );
 }
 
+export async function isEmpty(path: string): Promise<boolean> {
+  return readFolder(path, { recursive: true }).then((files) => !files.length);
+}
+
 export async function readFolder(
   path: string,
   options?: { recursive?: boolean },
