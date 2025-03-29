@@ -6,6 +6,19 @@ export function exists(path: string): Promise<boolean> {
   );
 }
 
+export async function readFile(path: string): Promise<string | undefined> {
+  if (!(await exists(path))) return undefined;
+  return await readRequiredFile(path);
+}
+
+export function readRequiredFile(path: string): Promise<string> {
+  return new Promise<string>((resolve, reject) =>
+    fs.readFile(path, { encoding: "utf-8" }, (error, data) =>
+      !error ? resolve(data) : reject(error),
+    ),
+  );
+}
+
 export function removeFile(path: string): Promise<void> {
   return new Promise((resolve, reject) =>
     fs.rm(path, { force: true, recursive: true }, (error) =>
