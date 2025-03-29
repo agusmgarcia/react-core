@@ -1,3 +1,4 @@
+export { default as azureFunctionMiddleware } from "./azureFunction.middleware";
 export { default as eslintMiddleware } from "./eslint.middleware";
 export { default as githubMiddleware } from "./github.middleware";
 export { default as jestMiddleware } from "./jest.middleware";

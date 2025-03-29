@@ -10,19 +10,23 @@ export default async function tailwindcssMiddleware(
   const core = await getCore();
 
   await Promise.all([
-    files.upsertFile(
-      "postcss.config.js",
-      postCSSConfig,
-      regenerate && !ignore.includes("postcss.config.js"),
-    ),
-    files.upsertFile(
-      "tailwind.config.js",
-      core === "app" ? tailwindConfig_app : tailwindConfig_lib,
-      {
-        create: regenerate && !ignore.includes("tailwind.config.js"),
-        update: false,
-      },
-    ),
+    core === "app" || core === "lib"
+      ? files.upsertFile(
+          "postcss.config.js",
+          postCSSConfig,
+          regenerate && !ignore.includes("postcss.config.js"),
+        )
+      : files.removeFile("postcss.config.js"),
+    core === "app" || core === "lib"
+      ? files.upsertFile(
+          "tailwind.config.js",
+          core === "app" ? tailwindConfig_app : tailwindConfig_lib,
+          {
+            create: regenerate && !ignore.includes("tailwind.config.js"),
+            update: false,
+          },
+        )
+      : files.removeFile("tailwind.config.js"),
   ]);
 
   await next();

@@ -3,7 +3,7 @@ import * as files from "./files";
 type PackageJSON = {
   author?: string;
   bin?: Record<string, string>;
-  core?: "app" | "lib";
+  core?: "app" | "azure-func" | "lib";
   dependencies?: Record<string, string>;
   description?: string;
   devDependencies?: Record<string, string>;

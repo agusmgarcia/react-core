@@ -17,7 +17,11 @@ export default async function githubMiddleware(
   await Promise.all([
     files.upsertFile(
       ".gitignore",
-      core === "app" ? gitignore_app : gitignore_lib,
+      core === "app"
+        ? gitignore_app
+        : core === "azure-func"
+          ? gitignore_azure_func
+          : gitignore_lib,
       regenerate && !ignore.includes(".gitignore"),
     ),
     files.upsertFile(".github/README.md", readme, {
@@ -31,12 +35,22 @@ export default async function githubMiddleware(
     ),
     folders
       .upsertFolder(".github/workflows")
-      .then(() => (core === "app" ? "deploy-app.yml" : "publish-lib.yml"))
+      .then(() =>
+        core === "app"
+          ? "deploy-app.yml"
+          : core === "azure-func"
+            ? "deploy-azure-func.yml"
+            : "publish-lib.yml",
+      )
       .then((workflowName) => `.github/workflows/${workflowName}`)
       .then((fileName) =>
         files.upsertFile(
           fileName,
-          core === "app" ? deploy_app : publish_lib,
+          core === "app"
+            ? deploy_app
+            : core === "azure-func"
+              ? deploy_azure_func
+              : publish_lib,
           regenerate && !ignore.includes(fileName),
         ),
       ),
@@ -44,8 +58,19 @@ export default async function githubMiddleware(
       ".github/workflows/continuous-integration-and-deployment.yml",
     ),
     core === "app"
-      ? files.removeFile(".github/workflows/publish-lib.yml")
-      : files.removeFile(".github/workflows/deploy-app.yml"),
+      ? Promise.all([
+          files.removeFile(".github/workflows/deploy-azure-func.yml"),
+          files.removeFile(".github/workflows/publish-lib.yml"),
+        ])
+      : core === "azure-func"
+        ? Promise.all([
+            files.removeFile(".github/workflows/deploy-app.yml"),
+            files.removeFile(".github/workflows/publish-lib.yml"),
+          ])
+        : Promise.all([
+            files.removeFile(".github/workflows/deploy-app.yml"),
+            files.removeFile(".github/workflows/deploy-azure-func.yml"),
+          ]),
   ]);
 
   await next();
@@ -55,6 +80,11 @@ const gitignore_app = `.env.local
 .next
 node_modules
 out`;
+
+const gitignore_azure_func = `.next
+dist
+local.settings.json
+node_modules`;
 
 const gitignore_lib = `.next
 bin
@@ -218,6 +248,8 @@ jobs:
         with:
           token: \${{ secrets.GITHUB_TOKEN }}
 `;
+
+const deploy_azure_func = ``; // TODO:
 
 const publish_lib = `name: Publish lib
 permissions: write-all
