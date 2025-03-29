@@ -62,17 +62,17 @@ By default `npm start` creates a server from <http://localhost:3000>. It also se
 
 When running `npm run regenerate` all the pertinent files will be regenerated. Here the list of the files:
 
-- .env _(just creation phase)_
-- .env.local _(just creation phase)_
 - .github/CHANGELOG.md
 - .github/README.md _(just creation phase)_
 - .github/workflows/deploy-app.yml
 - .github/workflows/publish-lib.yml
+- pages/\_app.css _(just creation phase)_
+- pages/\_app.tsx _(just creation phase)_
+- .env _(just creation phase)_
+- .env.local _(just creation phase)_
 - .gitignore
 - .npmignore
 - .nvmrc
-- pages/\_app.tsx _(just creation phase)_
-- pages/\_app.css _(just creation phase)_
 - eslint.config.js
 - jest.config.js
 - next.config.js
