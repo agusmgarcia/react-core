@@ -85,6 +85,7 @@ module.exports = [
                   declaration: false,
                   jsx: "react-jsx",
                 },
+                getCustomTransformers,
               },
             },
           ],
