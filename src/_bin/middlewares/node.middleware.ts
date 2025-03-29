@@ -10,13 +10,13 @@ export default async function nodeMiddleware(
   await Promise.all([
     files.upsertFile(".nvmrc", nvmrc, regenerate && !ignore.includes(".nvmrc")),
     getCore().then((core) =>
-      core === "app"
-        ? files.removeFile(".npmignore")
-        : files.upsertFile(
+      core === "lib"
+        ? files.upsertFile(
             ".npmignore",
             npmignore,
             regenerate && !ignore.includes(".npmignore"),
-          ),
+          )
+        : files.removeFile(".npmignore"),
     ),
   ]);
 
