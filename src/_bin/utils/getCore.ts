@@ -1,6 +1,8 @@
 import getPackageJSON from "./getPackageJSON";
 
-export default function getCore(): Promise<"app" | "lib"> {
+export default function getCore(): Promise<
+  Awaited<ReturnType<typeof getPackageJSON>>["core"]
+> {
   return getPackageJSON().then((json) =>
     !!json.core
       ? json.core
