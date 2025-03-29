@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.2.1](https://github.com/agusmgarcia/react-core/tree/v4.2.1)
+
+> March 29, 2025
+
+- **webpack.middleware**: add getCustomTransformers
+
 ## [v4.2.0](https://github.com/agusmgarcia/react-core/tree/v4.2.0)
 
 > March 28, 2025
