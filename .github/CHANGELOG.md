@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.0.7](https://github.com/agusmgarcia/react-core/tree/v4.0.7)
+
+> March 31, 2025
+
+- **git**: stop using quotes for commit message
+- **github.middleware**: aggregate server calls when creating changelog
+- **git**: add --no-verify flag when deleting branch
+- **webpack**: let script decide whether deleting output project
+
 ## [v4.0.6](https://github.com/agusmgarcia/react-core/tree/v4.0.6)
 
 > March 29, 2025
