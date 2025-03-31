@@ -7,11 +7,9 @@ export default async function packageJSONMiddleware(
   regenerate: boolean,
   ignore: string[],
 ): Promise<void> {
-  const packageJSON = await getPackageJSON();
-
   await files.upsertFile(
     "package.json",
-    await addMissingAttributes(packageJSON),
+    await createPackageFile(),
     regenerate && !ignore.includes("package.json"),
   );
 
@@ -20,9 +18,9 @@ export default async function packageJSONMiddleware(
   await next();
 }
 
-async function addMissingAttributes(
-  packageJSON: Awaited<ReturnType<typeof getPackageJSON>>,
-): Promise<string> {
+async function createPackageFile(): Promise<string> {
+  let packageJSON = await getPackageJSON();
+
   const repositoryDetails = await git.getRepositoryDetails();
 
   if (!packageJSON.name && !!repositoryDetails)
