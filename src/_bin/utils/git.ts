@@ -48,7 +48,7 @@ export async function cherryPick(
   await execute(`git cherry-pick ${initialCommit}..${lastCommit}`, true);
 }
 
-const COMMIT_REGEXP = /^"(chore|feat|fix|refactor)(?:\((.*)\))?(!)?:\s(.*)"$/;
+const COMMIT_REGEXP = /^(chore|feat|fix|refactor)(?:\((.*)\))?(!)?:\s(.*)$/;
 
 export async function getCommits(
   initialCommit?: string,
@@ -76,7 +76,7 @@ export async function getDetailedCommits(
     .then((commits) =>
       commits.map((c) => {
         const [sha, commit] = c.replaceAll('"', "").split("-----");
-        return { commit: `"${commit}"`, sha };
+        return { commit, sha };
       }),
     )
     .then((commits) => commits.reverse())
@@ -108,14 +108,12 @@ export async function createCommit(
   message: string,
   options?: Partial<{ amend: boolean }>,
 ): Promise<void> {
-  message = `"${message}"`;
-
   if (!COMMIT_REGEXP.test(message))
     throw `Message ${message} doesn't match the pattern`;
 
   await execute("git add .", true);
   await execute(
-    `git commit${!!options?.amend ? " --amend" : ""} -m ${message} -n`,
+    `git commit${!!options?.amend ? " --amend" : ""} -m "${message}" -n`,
     true,
   );
 
