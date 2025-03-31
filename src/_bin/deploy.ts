@@ -16,6 +16,7 @@ export default async function deploy(): Promise<void> {
 
   const typeOfNewVersion = await git
     .getCommits(lastTagMerged)
+    .then((commits) => commits.reverse())
     .then(findTypeOfNewVersion);
 
   if (!typeOfNewVersion) return;
