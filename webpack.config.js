@@ -36,7 +36,6 @@ module.exports = [
       ],
     },
     output: {
-      clean: true,
       filename: "index.js",
       globalObject: "this",
       library: {
@@ -93,7 +92,6 @@ module.exports = [
       ],
     },
     output: {
-      clean: true,
       filename: "[name].js",
       globalObject: "this",
       library: {
