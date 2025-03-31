@@ -81,30 +81,35 @@ async function createChangelogFile(): Promise<string> {
     fragments = await Promise.all(
       detailedTags
         .map(async (tag, index) => {
-          const initialCommitSHA = !!index
-            ? detailedTags[index - 1].sha
-            : undefined;
+          const initialCommitIndex =
+            detailedCommits.findIndex(
+              (dc) => dc.sha === detailedTags[index - 1]?.sha,
+            ) + 1;
 
-          const lastCommitSHA = tag.sha;
+          const lastCommitIndex = detailedCommits.findIndex(
+            (dc) => dc.sha === tag.sha,
+          );
 
           const commits = detailedCommits
             .slice(
-              detailedCommits.findIndex((dc) => dc.sha === initialCommitSHA) +
-                1,
-              detailedCommits.findIndex((dc) => dc.sha === lastCommitSHA),
+              initialCommitIndex,
+              detailedCommits[lastCommitIndex].commit ===
+                "chore: bump package version"
+                ? lastCommitIndex
+                : lastCommitIndex + 1,
             )
             .map(transformCommit)
             .reverse()
             .join(EOL);
 
-          const date = await git.getCreationDate(tag.tag).then((date) =>
-            date.toLocaleDateString("en-US", {
-              day: "numeric",
-              month: "long",
-              timeZone: "UTC",
-              year: "numeric",
-            }),
-          );
+          const date = detailedCommits[
+            lastCommitIndex
+          ].createdAt.toLocaleDateString("en-US", {
+            day: "numeric",
+            month: "long",
+            timeZone: "UTC",
+            year: "numeric",
+          });
 
           const tagValue = tag.tag.replace("-temp", "");
 
