@@ -81,12 +81,7 @@ export async function getDetailedCommits(
         sha,
       })),
     )
-    .then((commits) => commits.reverse())
-    .then((commits) => commits.filter(filterCommits));
-}
-
-function filterCommits({ commit }: { commit: string }): boolean {
-  return COMMIT_REGEXP.test(commit);
+    .then((commits) => commits.reverse());
 }
 
 export function getCommitInfo(commit: string): {
@@ -96,7 +91,13 @@ export function getCommitInfo(commit: string): {
   type: "chore" | "feat" | "fix" | "refactor";
 } {
   const commitInfo = COMMIT_REGEXP.exec(commit);
-  if (!commitInfo) throw `Commit ${commit} doesn't match the pattern`;
+  if (!commitInfo)
+    return {
+      isBreakingChange: false,
+      message: commit,
+      scope: undefined,
+      type: "chore",
+    };
 
   return {
     isBreakingChange: commitInfo[3] === "!",
@@ -241,12 +242,6 @@ export async function deleteTag(tag: string): Promise<void> {
 
 export async function checkout(sha: string): Promise<void> {
   await execute(`git checkout ${sha}`, true);
-}
-
-export async function getCreationDate(sha: string): Promise<Date> {
-  return await execute(`git show --no-patch --format=%ci ${sha}`, false)
-    .then((date) => date.split(EOL).at(-2) || "")
-    .then((date) => new Date(date));
 }
 
 const REPOSITORY_DETAILS_REGEXP = /^(?:.+?):\/\/(?:.+?)\/(.+?)\/(.+?)$/;
