@@ -53,22 +53,37 @@ const COMMIT_REGEXP = /^"(chore|feat|fix|refactor)(?:\((.*)\))?(!)?:\s(.*)"$/;
 export async function getCommits(
   initialCommit?: string,
   lastCommit = "HEAD",
-  format = "%s",
 ): Promise<string[]> {
+  return await getDetailedCommits(initialCommit, lastCommit).then((commits) =>
+    commits.map((c) => c.commit),
+  );
+}
+
+export async function getDetailedCommits(
+  initialCommit?: string,
+  lastCommit = "HEAD",
+): Promise<{ commit: string; sha: string }[]> {
   return await execute("git fetch -p -P", true)
     .then(() =>
       execute(
         !!initialCommit
-          ? `git log --pretty=format:"${format}" ${initialCommit}...${lastCommit}`
-          : `git log --pretty=format:"${format}" ${lastCommit}`,
+          ? `git log --pretty=format:"%H-----%s" ${initialCommit}...${lastCommit}`
+          : `git log --pretty=format:"%H-----%s" ${lastCommit}`,
         false,
       ),
     )
     .then((commits) => commits?.split(EOL) || [])
+    .then((commits) =>
+      commits.map((c) => {
+        const [sha, commit] = c.replaceAll('"', "").split("-----");
+        return { commit: `"${commit}"`, sha };
+      }),
+    )
+    .then((commits) => commits.reverse())
     .then((commits) => commits.filter(filterCommits));
 }
 
-function filterCommits(commit: string): boolean {
+function filterCommits({ commit }: { commit: string }): boolean {
   return COMMIT_REGEXP.test(commit);
 }
 
@@ -153,13 +168,24 @@ const TAG_REGEXP = /^v(\d+)\.(\d+)\.(\d+)(-temp)?$/;
 export async function getTags(
   options?: Partial<{ merged: boolean }>,
 ): Promise<string[]> {
-  return await execute("git fetch -p -P", true)
+  return await getDetailedTags(options).then((dts) => dts.map((dt) => dt.tag));
+}
+
+export async function getDetailedTags(
+  options?: Partial<{ merged: boolean }>,
+): Promise<{ sha: string; tag: string }[]> {
+  const tags = await execute("git fetch -p -P", true)
     .then(() =>
       execute(`git tag ${!!options?.merged ? " --merged" : ""}`, false),
     )
     .then((tags) => tags?.split(EOL) || [])
     .then((tags) => tags.filter(filterTags))
     .then((tags) => tags.sort(sortTags));
+
+  return await execute(`git rev-parse ${tags.join(" ")}`, false)
+    .then((output) => output?.split(EOL) || [])
+    .then((outputs) => outputs.filter((sha) => !!sha))
+    .then((outputs) => outputs.map((sha, i) => ({ sha, tag: tags[i] })));
 }
 
 function filterTags(tag: string): boolean {

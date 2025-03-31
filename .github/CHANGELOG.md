@@ -501,7 +501,6 @@ All notable changes to this project will be documented in this file.
 
 > October 30, 2023
 
-- bump pakcage version
 - delete bin folder after pack
 - add force flag
 
@@ -518,7 +517,6 @@ All notable changes to this project will be documented in this file.
 
 > October 27, 2023
 
-- bum package version
 - **withContext.prettier**: adjust ignore file
 - **withContext.eslint**: adjust ignore file
 
@@ -550,3 +548,4 @@ All notable changes to this project will be documented in this file.
 - **IgnorableError**: add class
 - **exists**: add utils
 - **createFolder**: add utils
+- setup project

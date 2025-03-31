@@ -64,14 +64,7 @@ node_modules
 const readme = "";
 
 async function createChangelogFile(): Promise<string> {
-  function filterCommits(commit: string): boolean {
-    return (
-      commit !== '"chore: bump package version"' &&
-      commit !== '"chore(CHANGELOG.md): update file"'
-    );
-  }
-
-  function transformCommit(commit: string): string {
+  function transformCommit({ commit }: { commit: string }): string {
     const commitInfo = git.getCommitInfo(commit);
     return `- ${!!commitInfo.scope ? `**${commitInfo.scope}**: ` : ""}${commitInfo.message}`;
   }
@@ -81,41 +74,48 @@ async function createChangelogFile(): Promise<string> {
   let fragments = "";
 
   if (await git.isInsideRepository()) {
-    const initialCommit = await git.getInitialCommit();
+    const detailedTags = await git.getDetailedTags({ merged: true });
 
-    const tags = await git
-      .getTags({ merged: true })
-      .then((tags) => tags.reverse());
+    const detailedCommits = await git.getDetailedCommits();
 
     fragments = await Promise.all(
-      tags.map(async (tag, index) => {
-        const nextTag =
-          index < tags.length - 1 ? tags[index + 1] : initialCommit;
+      detailedTags
+        .map(async (tag, index) => {
+          const initialCommitSHA = !!index
+            ? detailedTags[index - 1].sha
+            : undefined;
 
-        const commits = await git
-          .getCommits(tag, nextTag)
-          .then((commits) => commits.filter(filterCommits))
-          .then((commits) => commits.map(transformCommit))
-          .then((commits) => commits.join(EOL));
+          const lastCommitSHA = tag.sha;
 
-        const date = await git.getCreationDate(tag).then((date) =>
-          date.toLocaleDateString("en-US", {
-            day: "numeric",
-            month: "long",
-            timeZone: "UTC",
-            year: "numeric",
-          }),
-        );
+          const commits = detailedCommits
+            .slice(
+              detailedCommits.findIndex((dc) => dc.sha === initialCommitSHA) +
+                1,
+              detailedCommits.findIndex((dc) => dc.sha === lastCommitSHA),
+            )
+            .map(transformCommit)
+            .reverse()
+            .join(EOL);
 
-        tag = tag.replace("-temp", "");
+          const date = await git.getCreationDate(tag.tag).then((date) =>
+            date.toLocaleDateString("en-US", {
+              day: "numeric",
+              month: "long",
+              timeZone: "UTC",
+              year: "numeric",
+            }),
+          );
 
-        return `## ${!!remoteURL ? `[${tag}](${remoteURL}/tree/${tag})` : tag}
+          const tagValue = tag.tag.replace("-temp", "");
+
+          return `## ${!!remoteURL ? `[${tagValue}](${remoteURL}/tree/${tagValue})` : tagValue}
 
 > ${date}
 
 ${!!commits ? commits : "- No compatible changes to show"}
 `;
-      }),
+        })
+        .reverse(),
     ).then((fragments) => fragments.join(EOL));
   }
 
