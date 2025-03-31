@@ -62,22 +62,24 @@ export async function getCommits(
 export async function getDetailedCommits(
   initialCommit?: string,
   lastCommit = "HEAD",
-): Promise<{ commit: string; sha: string }[]> {
+): Promise<{ commit: string; createdAt: Date; sha: string }[]> {
   return await execute("git fetch -p -P", true)
     .then(() =>
       execute(
         !!initialCommit
-          ? `git log --pretty=format:"%H-----%s" ${initialCommit}...${lastCommit}`
-          : `git log --pretty=format:"%H-----%s" ${lastCommit}`,
+          ? `git log --pretty=format:"%H-----%ci-----%s" ${initialCommit}...${lastCommit}`
+          : `git log --pretty=format:"%H-----%ci-----%s" ${lastCommit}`,
         false,
       ),
     )
     .then((commits) => commits?.split(EOL) || [])
+    .then((commits) => commits.map((c) => c.replaceAll('"', "").split("-----")))
     .then((commits) =>
-      commits.map((c) => {
-        const [sha, commit] = c.replaceAll('"', "").split("-----");
-        return { commit, sha };
-      }),
+      commits.map(([sha, createdAt, commit]) => ({
+        commit,
+        createdAt: new Date(createdAt),
+        sha,
+      })),
     )
     .then((commits) => commits.reverse())
     .then((commits) => commits.filter(filterCommits));
