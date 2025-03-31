@@ -10,7 +10,7 @@ export async function deleteBranch(branch: string): Promise<void> {
   const remote = await getRemote();
   if (!remote) return;
 
-  await execute(`git push --delete ${remote} ${branch}`, true);
+  await execute(`git push --delete ${remote} ${branch} --no-verify`, true);
 }
 
 export async function getCurrentBranch(): Promise<string | undefined> {
