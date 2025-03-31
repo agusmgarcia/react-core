@@ -17,12 +17,7 @@ export default function execute(
   disassociated: boolean,
 ): Promise<void | string> {
   return new Promise((resolve, reject) => {
-    const [cmd, ...args] = command
-      .replace(/\s"(.+?)"\s?/g, ' @@"$1"@@ ')
-      .split("@@")
-      .flatMap((r) => (r.startsWith('"') ? r : r.split(" ")))
-      .filter((r) => !!r)
-      .map((r) => r.replace(/^"(.*)"$/g, "$1"));
+    const [cmd, ...args] = parseCommandAndArgs(command);
 
     const child = spawn(cmd, args, {
       shell: process.platform === "win32" ? true : undefined,
@@ -81,6 +76,33 @@ export default function execute(
       })(),
     );
   });
+}
+
+function parseCommandAndArgs(command: string): string[] {
+  const result = new Array<string>();
+
+  let element = "";
+  let doubleQuoutesEncountered = false;
+
+  for (let i = 0; i < command.length; i++) {
+    const char = command[i];
+
+    if (char === " " && !doubleQuoutesEncountered) {
+      if (!!element) {
+        result.push(element);
+        element = "";
+      }
+      continue;
+    }
+
+    if (char === '"') doubleQuoutesEncountered = !doubleQuoutesEncountered;
+
+    element += char;
+  }
+
+  if (!!element) result.push(element);
+
+  return result;
 }
 
 function emptyFunction(): void {}
