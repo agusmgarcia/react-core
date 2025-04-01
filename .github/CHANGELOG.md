@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.0.8](https://github.com/agusmgarcia/react-core/tree/v4.0.8)
+
+> April 1, 2025
+
+- **github.middleware**: adjust logic to create changelog file
+- **git**: adjust the way commits are being extracted
+- **execute**: adjust the command and args resolution strategy
+
 ## [v4.0.7](https://github.com/agusmgarcia/react-core/tree/v4.0.7)
 
 > March 31, 2025
