@@ -118,6 +118,7 @@ export async function createCommit(
   await execute(
     `git commit${!!options?.amend ? " --amend" : ""} -m "${message}" -n`,
     true,
+    { excludeQuotes: true },
   );
 
   const remote = await getRemote();
