@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.0.9](https://github.com/agusmgarcia/react-core/tree/v4.0.9)
+
+> April 1, 2025
+
+- **git**: remove quotes from commit msg
+
 ## [v4.0.8](https://github.com/agusmgarcia/react-core/tree/v4.0.8)
 
 > April 1, 2025
