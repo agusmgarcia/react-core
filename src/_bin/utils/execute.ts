@@ -5,19 +5,25 @@ import { type Func } from "#src/utils";
 export default function execute(
   command: string,
   disassociated: true,
+  options?: { excludeQuotes?: boolean },
 ): Promise<void>;
 
 export default function execute(
   command: string,
   disassociated: false,
+  options?: { excludeQuotes?: boolean },
 ): Promise<string>;
 
 export default function execute(
   command: string,
   disassociated: boolean,
+  options?: { excludeQuotes?: boolean },
 ): Promise<void | string> {
   return new Promise((resolve, reject) => {
-    const [cmd, ...args] = parseCommandAndArgs(command);
+    const [cmd, ...args] = parseCommandAndArgs(
+      command,
+      !!options?.excludeQuotes,
+    );
 
     const child = spawn(cmd, args, {
       shell: process.platform === "win32" ? true : undefined,
@@ -78,16 +84,19 @@ export default function execute(
   });
 }
 
-function parseCommandAndArgs(command: string): string[] {
+function parseCommandAndArgs(
+  command: string,
+  excludeQuotes: boolean,
+): string[] {
   const result = new Array<string>();
 
   let element = "";
-  let doubleQuoutesEncountered = false;
+  let doubleQuotesEncountered = false;
 
   for (let i = 0; i < command.length; i++) {
     const char = command[i];
 
-    if (char === " " && !doubleQuoutesEncountered) {
+    if (char === " " && !doubleQuotesEncountered) {
       if (!!element) {
         result.push(element);
         element = "";
@@ -95,7 +104,11 @@ function parseCommandAndArgs(command: string): string[] {
       continue;
     }
 
-    if (char === '"') doubleQuoutesEncountered = !doubleQuoutesEncountered;
+    if (char === '"') {
+      doubleQuotesEncountered = !doubleQuotesEncountered;
+      if (!excludeQuotes) element += char;
+      continue;
+    }
 
     element += char;
   }
