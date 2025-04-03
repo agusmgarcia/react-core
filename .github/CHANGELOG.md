@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.2.5](https://github.com/agusmgarcia/react-core/tree/v4.2.5)
+
+> April 3, 2025
+
+- **test**: include the --pattern argument
+
 ## [v4.2.4](https://github.com/agusmgarcia/react-core/tree/v4.2.4)
 
 > April 1, 2025
