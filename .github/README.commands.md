@@ -98,6 +98,21 @@ In case you want to prevent one of the files of being regenerated, use the `--ig
 
 > In this example, it will ignore `eslint.config.js` and `prettier.config.js` files of being regenerated.
 
+## Select test files
+
+If you want to run some tests for specific files use the `--pattern` argument to the test script.
+
+```jsonc
+// ./package.json
+
+{
+  "scripts": {
+    // ...
+    "test": "agusmgarcia-react-core-test --pattern=src/mytest.test.ts",
+  },
+}
+```
+
 ## Watch test files
 
 If you want to watch files for changes and rerun tests related to changed files use the `--watch` argument to the test script.
