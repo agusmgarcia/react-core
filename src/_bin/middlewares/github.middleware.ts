@@ -354,6 +354,12 @@ jobs:
               }
             ]
 
+      - name: Install dependencies
+        run: npm ci --ignore-scripts --omit=dev
+        shell: bash
+        env:
+          NODE_AUTH_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+
       - name: Deploy function
         uses: azure/functions-action@v1
         with:
