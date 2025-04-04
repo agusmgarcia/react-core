@@ -161,11 +161,11 @@ const funcignore = `__azurite_db*__.json
 __blobstorage__
 __queuestorage__
 **/.*
-node_modules
 src
 eslint.config.js
 jest.config.js
 local.settings.json
+package-lock.json
 prettier.config.js
 tsconfig.json
 webpack.config.js`;
