@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.3.1](https://github.com/agusmgarcia/react-core/tree/v4.3.1)
+
+> April 4, 2025
+
+- **github.middleware**: remove dev deps before deploying azure function
+- **azureFunction.middleware**: adjust funcignore
+
 ## [v4.3.0](https://github.com/agusmgarcia/react-core/tree/v4.3.0)
 
 > April 4, 2025
