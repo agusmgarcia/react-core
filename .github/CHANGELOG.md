@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.1.10](https://github.com/agusmgarcia/react-core/tree/v4.1.10)
+
+> April 4, 2025
+
+- **webpack.middleware**: make jsx-runtime external
+
 ## [v4.1.9](https://github.com/agusmgarcia/react-core/tree/v4.1.9)
 
 > April 3, 2025
