@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.3.0](https://github.com/agusmgarcia/react-core/tree/v4.3.0)
+
+> April 4, 2025
+
+- add azure-function support
+- **folders**: add isEmpty method
+- **folders**: add readFolder method
+- **files**: move readFile method into a separated file
+- **getCore**: adjust return type
+- **createObjectWithPropertiesSorted**: move it into a separated file
+- **node.middleware**: rewrite condition
+- **README.commands**: adjust order of regenerated files
+- **packageJSON.middleware**: read file inside method
+
 ## [v4.2.6](https://github.com/agusmgarcia/react-core/tree/v4.2.6)
 
 > April 4, 2025
