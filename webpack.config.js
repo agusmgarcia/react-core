@@ -10,7 +10,10 @@ const packageJSON = require("./package.json");
 module.exports = [
   {
     entry: path.resolve(__dirname, "src", "index.ts"),
-    externals: Object.keys(packageJSON.peerDependencies || {}),
+    externals: [
+      ...Object.keys(packageJSON.peerDependencies || {}),
+      "react/jsx-runtime",
+    ],
     module: {
       rules: [
         {
@@ -70,7 +73,10 @@ module.exports = [
             return result;
           }, {})
       : {},
-    externals: Object.keys(packageJSON.peerDependencies || {}),
+    externals: [
+      ...Object.keys(packageJSON.peerDependencies || {}),
+      "react/jsx-runtime",
+    ],
     module: {
       rules: [
         {
