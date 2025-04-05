@@ -34,7 +34,7 @@ export default async function packageJSONMiddleware(
   } else {
     await execute("npm uninstall @azure/functions", false);
     // TODO: remove this line when azure-functions-core-tools were lighther
-    await execute("npm uninstall azure-functions-core-tools@", false);
+    await execute("npm uninstall azure-functions-core-tools", false);
   }
 
   await execute("npm i", false);
