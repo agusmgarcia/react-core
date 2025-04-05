@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.3.2](https://github.com/agusmgarcia/react-core/tree/v4.3.2)
+
+> April 5, 2025
+
+- **github.middleware**: add missing app settings for azure functions
+- **packageJSON.middleware**: remove unwanted character
+
 ## [v4.3.1](https://github.com/agusmgarcia/react-core/tree/v4.3.1)
 
 > April 4, 2025
