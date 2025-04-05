@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.3.3](https://github.com/agusmgarcia/react-core/tree/v4.3.3)
+
+> April 5, 2025
+
+- adjust libraries dependencies
+
 ## [v4.3.2](https://github.com/agusmgarcia/react-core/tree/v4.3.2)
 
 > April 5, 2025
