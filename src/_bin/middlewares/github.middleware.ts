@@ -351,6 +351,21 @@ jobs:
                 "name": "APP_VERSION",
                 "value": "\${{ steps.get-version-from-tag.outputs.replaced }}",
                 "slotSetting": false
+              },
+              {
+                "name": "FUNCTIONS_EXTENSION_VERSION",
+                "value": "~4",
+                "slotSetting": false
+              },
+              {
+                "name": "FUNCTIONS_WORKER_RUNTIME",
+                "value": "node",
+                "slotSetting": false
+              },
+              {
+                "name": "WEBSITE_NODE_DEFAULT_VERSION",
+                "value": "~22",
+                "slotSetting": false
               }
             ]
 
