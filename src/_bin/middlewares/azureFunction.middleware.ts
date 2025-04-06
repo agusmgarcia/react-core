@@ -118,9 +118,10 @@ async function deleteAzureFunctions(
 const localSettingsJSON = `{
   "IsEncrypted": false,
   "Values": {
-    "AzureWebJobsStorage": "",
     "APP_VERSION": "1.0.0",
-    "FUNCTIONS_WORKER_RUNTIME": "node"
+    "FUNCTIONS_EXTENSION_VERSION": "~4",
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "WEBSITE_NODE_DEFAULT_VERSION": "~22"
   }
 }
 `;
