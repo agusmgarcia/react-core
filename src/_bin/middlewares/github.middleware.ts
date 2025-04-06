@@ -332,12 +332,12 @@ jobs:
         id: azure-login
         uses: azure/login@v2
         with:
-          allow-no-subscriptions: \${{ secrets.AZURE_ALLOW_NO_SUBSCRIPTIONS }}
-          audience: \${{ secrets.AZURE_AUDIENCE }}
-          auth-type: \${{ secrets.AZURE_AUTH_TYPE }}
+          allow-no-subscriptions: \${{ vars.AZURE_ALLOW_NO_SUBSCRIPTIONS }}
+          audience: \${{ vars.AZURE_AUDIENCE }}
+          auth-type: \${{ vars.AZURE_AUTH_TYPE }}
           client-id: \${{ secrets.AZURE_CLIENT_ID }}
           creds: \${{ secrets.AZURE_CREDS }}
-          environment: \${{ secrets.AZURE_ENVIRONMENT }}
+          environment: \${{ vars.AZURE_ENVIRONMENT }}
           tenant-id: \${{ secrets.AZURE_TENANT_ID }}
           subscription-id: \${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
