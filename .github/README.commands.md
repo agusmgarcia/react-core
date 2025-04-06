@@ -1,18 +1,10 @@
 # Commands
 
-Set of opinionated commands to run, check, format and build react applications and libraries. It uses the following packages:
-
-- Eslint
-- Jest
-- NextJS
-- Prettier
-- TailwindCSS
-- Typescript
-- Webpack
+Set of opinionated commands to build, check, deploy, format, pack, run and test NextJS applications and libraries and Azure functions.
 
 ## Setup
 
-In your _package.json_ file, make sure you have set `core: "app"` in case it is a web application or `core: "lib"` for library.
+In your _package.json_ file, make sure you have set `core: "app"` in case it is a NextJS application, `core: "lib"` for library or `core: "azure-func"` for Azure functions.
 
 ```jsonc
 // ./package.json
@@ -45,7 +37,7 @@ This will create all the necessary files to run the application.
 
 ## Change port
 
-By default `npm start` creates a server from <http://localhost:3000>. It also selects an available port in case 3000 is beign used by another process. In case you want to set the port explicitly, append the `--port=` parameter.
+By default `npm start` creates a server from <http://localhost:3000>. In case you want to set another port explicitly, append the `--port=` parameter.
 
 ```jsonc
 // ./package.json
@@ -101,7 +93,7 @@ In case you want to prevent one of the files of being regenerated, use the `--ig
 }
 ```
 
-> In this example, it will ignore `eslint.config.js` and `prettier.config.js` files of being regenerated.
+> In this example, it will ignore `eslint.config.js` and `prettier.config.js` files of being regenerated. The generated files vary on the type of the application.
 
 ## Select test files
 

@@ -1,6 +1,6 @@
 # React Core
 
-Set of opinionated commands, utilities and state manager for react applications and libraries.
+Set of opinionated commands, state manager and utilities for NextJS applications, libraries and Azure functions.
 
 - [Commands](/.github/README.commands.md)
 - [Store](/.github/README.store.md)

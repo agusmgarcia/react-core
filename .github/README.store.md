@@ -1,10 +1,10 @@
 # Store
 
-An opinionated react state manager based on hooks. It provides tools to create global and server slices.
+An opinionated state manager. It provides tools to create global and server states.
 
 ## Global slice
 
-This is the information that is going to be consumed globally across the app. It is handled by `createGlobalSlice` function from the library.
+This is the state that is going to be consumed globally across the app. It is handled by `createGlobalSlice` function. It can be **read and written**.
 
 ```ts
 // ./src/store/FormSearchSlice.ts
@@ -37,7 +37,7 @@ export default createGlobalSlice<FormSearchSlice>("formSearch", () => ({
 
 ## Server slice
 
-The state that is populated from an API or an external resource. It also handles automatic revalidation.
+The state that is populated from an API or an external resource. It is handled by `createServerSlice` function. Due the way it gets originated, it can be **read** only.
 
 ```ts
 // ./src/store/FormResultSlice.ts
@@ -65,6 +65,8 @@ export default createServerSlice<FormResultSlice, FormSearchSlice>(
 ```
 
 ## Store
+
+The slices are gathered into a store object. It is handled by `createStore` function. The slices are passed as arguments. Then, they can be accessed thru the `useSelector` hook. You can create custom hooks that access the different pieces of each slice as described in the example below:
 
 ```typescript
 // ./src/store/index.ts
@@ -101,7 +103,9 @@ export function useFormResult() {
 }
 ```
 
-### Wrap the main component with the created store provider
+> Make sure to export the `StoreProvider` component as it is going to be used in the entry point of the app.
+
+### Wrap the main component with the created StoreProvider component
 
 ```tsx
 // ./pages/_app.tsx

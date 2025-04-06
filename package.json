@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Agus Garcia",
-  "description": "Set of utilities to run, lint, format and build applications and libraries",
+  "description": "Set of opinionated commands, state manager and utilities for NextJS applications, libraries and Azure functions",
   "bin": {
     "agusmgarcia-react-core-build": "bin/build.js",
     "agusmgarcia-react-core-check": "bin/check.js",
