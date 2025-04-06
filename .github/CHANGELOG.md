@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.3.4](https://github.com/agusmgarcia/react-core/tree/v4.3.4)
+
+> April 6, 2025
+
+- **github.middleware**: move some properties to vars
+- **azureFunction.middleware**: adjust local.settings.json data
+- update README's files
+
 ## [v4.3.3](https://github.com/agusmgarcia/react-core/tree/v4.3.3)
 
 > April 5, 2025
