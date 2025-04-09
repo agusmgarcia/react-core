@@ -35,27 +35,19 @@ export default function createGlobalSlice<
 
         if (equals.shallow(selection, prevSelection, 2)) return;
 
-        const ctx = buildContext<TSlice, TOtherSlices>(
-          name,
-          controller,
-          get,
-          set,
+        listener(
+          buildContext<TSlice, TOtherSlices>(name, controller, get, set),
         );
-
-        listener(ctx);
       });
 
       if (!isSSR()) {
-        setTimeout(() => {
-          const ctx = buildContext<TSlice, TOtherSlices>(
-            name,
-            controller,
-            get,
-            set,
-          );
-
-          listener(ctx);
-        }, 0);
+        setTimeout(
+          () =>
+            listener(
+              buildContext<TSlice, TOtherSlices>(name, controller, get, set),
+            ),
+          0,
+        );
       }
 
       return unsubscribe;

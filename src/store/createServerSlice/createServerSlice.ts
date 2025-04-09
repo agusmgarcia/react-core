@@ -1,15 +1,22 @@
-import { type Func, type OmitFuncs } from "#src/utils";
+import {
+  type AddArgumentToObject,
+  type Func,
+  type OmitFuncs,
+} from "#src/utils";
 
 import createGlobalSlice, {
   type CreateGlobalSliceTypes,
 } from "../createGlobalSlice";
 import {
+  type Context,
   type ExtractDataOf,
+  type ExtractExtraMethodsOf,
   type ExtractNameOf,
   type ExtractSelectedOf,
   type Input,
   type Output,
   type SliceOf,
+  type Subscribe,
 } from "./createServerSlice.types";
 
 export default function createServerSlice<
@@ -79,14 +86,42 @@ export default function createServerSlice<
       (subscribe) => {
         subscribe((ctx) => reload(undefined, ctx), selector);
 
+        const serverSubscribe: Subscribe<TSlice, TOtherSlices> = (
+          listener,
+          selector,
+        ) => subscribe((ctx) => listener(buildContext(ctx)), selector);
+
+        const serverExtraMethods =
+          factory?.(serverSubscribe) ||
+          ({} as AddArgumentToObject<
+            ExtractExtraMethodsOf<TSlice>,
+            Context<TSlice, TOtherSlices>
+          >);
+
+        const extraMethods = Object.keys(serverExtraMethods).reduce(
+          (result, key) => {
+            const element = serverExtraMethods[key];
+            result[key] = (...args: any[]) =>
+              element(...args.slice(0, -1), buildContext(args.at(-1)));
+            return result;
+          },
+          {} as AddArgumentToObject<
+            ExtractExtraMethodsOf<TSlice>,
+            CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>
+          >,
+        );
+
         return {
-          ...(factory?.(subscribe) as object),
+          ...extraMethods,
           data: undefined,
           error: undefined,
           loading: true,
           loadMore,
           reload,
-        } as CreateGlobalSliceTypes.WithContext<TSlice, TOtherSlices, TSlice>;
+        } as AddArgumentToObject<
+          CreateGlobalSliceTypes.ExtractStateOf<TSlice>,
+          CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>
+        >;
       },
     );
 
@@ -100,5 +135,19 @@ export default function createServerSlice<
       ExtractNameOf<TSlice>,
       OmitFuncs<CreateGlobalSliceTypes.ExtractStateOf<TSlice>>
     >);
+  };
+}
+
+function buildContext<TSlice extends SliceOf<any, any>, TOtherSlices>(
+  context: CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>,
+): Context<TSlice, TOtherSlices> {
+  return {
+    get: context.get,
+    set: (state) =>
+      context.set((prev) => ({
+        ...prev,
+        data: state instanceof Function ? state(prev.data) : state,
+      })),
+    signal: context.signal,
   };
 }

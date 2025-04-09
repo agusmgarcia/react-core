@@ -1,6 +1,10 @@
 import { type StateCreator } from "zustand";
 
-import { type Func, type OmitFuncs } from "#src/utils";
+import {
+  type AddArgumentToObject,
+  type Func,
+  type OmitFuncs,
+} from "#src/utils";
 
 export type SliceOf<TName extends string, TState> = Record<TName, TState>;
 
@@ -19,25 +23,6 @@ export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
   signal: AbortSignal;
 };
 
-export type WithContext<
-  TSlice extends SliceOf<any, any>,
-  TOtherSlices,
-  TSliceInContext extends SliceOf<any, any>,
-> =
-  ExtractStateOf<TSlice> extends object
-    ? {
-        [TProperty in keyof ExtractStateOf<TSlice>]: ExtractStateOf<TSlice>[TProperty] extends Func<
-          infer TResult,
-          infer TArgs
-        >
-          ? Func<
-              TResult,
-              [...args: TArgs, context: Context<TSliceInContext, TOtherSlices>]
-            >
-          : ExtractStateOf<TSlice>[TProperty];
-      }
-    : ExtractStateOf<TSlice>;
-
 export type Subscribe<TSlice extends SliceOf<any, any>, TOtherSlices> = (
   listener: Func<void, [context: Context<TSlice, TOtherSlices>]>,
   selector?: Func<any, [state: OmitFuncs<TOtherSlices>]>,
@@ -45,8 +30,8 @@ export type Subscribe<TSlice extends SliceOf<any, any>, TOtherSlices> = (
 
 export type Input<TSlice extends SliceOf<any, any>, TOtherSlices> = [
   name: ExtractNameOf<TSlice>,
-  factory: Func<
-    WithContext<TSlice, TOtherSlices, TSlice>,
+  sliceFactory: Func<
+    AddArgumentToObject<ExtractStateOf<TSlice>, Context<TSlice, TOtherSlices>>,
     [subscribe: Subscribe<TSlice, TOtherSlices>]
   >,
 ];
