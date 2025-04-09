@@ -1,4 +1,5 @@
 import {
+  type AddArgumentToObject,
   type AsyncFunc,
   type Func,
   type Merge,
@@ -40,6 +41,17 @@ export type ExtractExtraMethodsOf<TSlice extends SliceOf<any, any, any, any>> =
     ? TExtraMethods
     : never;
 
+export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
+  get: Func<OmitFuncs<TSlice & TOtherSlices>>;
+  set: Func<void, [state: React.SetStateAction<ExtractDataOf<TSlice>>]>;
+  signal: AbortSignal;
+};
+
+export type Subscribe<TSlice extends SliceOf<any, any>, TOtherSlices> = (
+  listener: Func<void, [context: Context<TSlice, TOtherSlices>]>,
+  selector?: Func<any, [state: OmitFuncs<TOtherSlices>]>,
+) => Func;
+
 export type Input<TSlice extends SliceOf<any, any, any, any>, TOtherSlices> = [
   name: ExtractNameOf<TSlice>,
   fetcher: AsyncFunc<
@@ -52,15 +64,11 @@ export type Input<TSlice extends SliceOf<any, any, any, any>, TOtherSlices> = [
   >,
   selector?: Func<ExtractSelectedOf<TSlice>, [state: OmitFuncs<TOtherSlices>]>,
   factory?: Func<
-    CreateGlobalSliceTypes.WithContext<
-      CreateGlobalSliceTypes.SliceOf<
-        ExtractNameOf<TSlice>,
-        ExtractExtraMethodsOf<TSlice>
-      >,
-      TOtherSlices,
-      TSlice
+    AddArgumentToObject<
+      ExtractExtraMethodsOf<TSlice>,
+      Context<TSlice, TOtherSlices>
     >,
-    [subscribe: CreateGlobalSliceTypes.Subscribe<TSlice, TOtherSlices>]
+    [subscribe: Subscribe<TSlice, TOtherSlices>]
   >,
 ];
 
