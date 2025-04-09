@@ -24,12 +24,9 @@ export default async function packageJSONMiddleware(
 
   if (core === "azure-func") {
     if (regenerate && !ignore.includes("package.json")) {
-      await execute("npm i @azure/functions@4 --save-exact", false);
+      await execute("npm i @azure/functions@4", false);
       // TODO: remove this line when azure-functions-core-tools were lighther
-      await execute(
-        "npm i azure-functions-core-tools@4 --save-dev --save-exact",
-        false,
-      );
+      await execute("npm i azure-functions-core-tools@4 --save-dev", false);
     }
   } else {
     await execute("npm uninstall @azure/functions", false);
