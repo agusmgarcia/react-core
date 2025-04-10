@@ -1,6 +1,6 @@
 import { EOL } from "os";
 
-import { type AsyncFunc } from "#src/utils";
+import { type AsyncFunc, merges } from "#src/utils";
 
 import { files, folders, git, isLibrary } from "../utils";
 
@@ -17,7 +17,7 @@ export default async function githubMiddleware(
   await Promise.all([
     files.upsertFile(
       ".gitignore",
-      !library ? gitignore_app : gitignore_lib,
+      await createGitignoreFile(library),
       regenerate && !ignore.includes(".gitignore"),
     ),
     files.upsertFile(".github/README.md", readme, {
@@ -50,16 +50,23 @@ export default async function githubMiddleware(
   await next();
 }
 
-const gitignore_app = `.env.local
-.next
-node_modules
-out`;
+async function createGitignoreFile(library: boolean): Promise<string> {
+  const gitignore = await files
+    .readFile(".gitignore")
+    .then((result) => (!!result ? result.split(EOL) : []));
 
-const gitignore_lib = `.next
-bin
-dist
-node_modules
-*.tgz`;
+  const source = !library
+    ? [".env.local", ".next", "node_modules", "out,"]
+    : [".next", "bin", "dist", "node_modules", "*.tgz"];
+
+  return merges
+    .deep(gitignore, source, {
+      arrayConcat: true,
+      arrayRemoveDuplicated: true,
+      sort: true,
+    })
+    .join(EOL);
+}
 
 const readme = "";
 
