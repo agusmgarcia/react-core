@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.1.12](https://github.com/agusmgarcia/react-core/tree/v4.1.12)
+
+> April 10, 2025
+
+- **store**: adjust extra methods context
+- **AddArgumentToObject**: add type
+- **store**: stop receiving selected state on subscribe
+- **.gitignore**: adjust ignored list for app
+- **.env.local**: allow custom properties
+- **.env**: stop creating the file
+- **tsconfig.json**: allow custom properties
+- **.npmignore**: allow custom ignored files
+- **.gitignore**: allow custom ignored files
+- **files**: move readFile method into a separated file
+- **merges**: add ability to concat, filter and sort arrays
+- **filters**: add ability to set custom comparator
+- **deploy**: add interactive mode
+- **question**: add utility
+- **regenerate**: stop using echo in favor of console.log
+- stop using fixed versions
+- allow the usage of path from tsconfig
+
 ## [v4.1.11](https://github.com/agusmgarcia/react-core/tree/v4.1.11)
 
 > April 5, 2025
