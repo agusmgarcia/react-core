@@ -18,12 +18,7 @@ export default async function nextJSMiddleware(
           regenerate && !ignore.includes("next.config.js"),
         )
       : Promise.resolve(),
-    !library
-      ? files.upsertFile(".env", env, {
-          create: regenerate && !ignore.includes(".env"),
-          update: false,
-        })
-      : Promise.resolve(),
+    files.removeFile(".env"),
     !library
       ? files.upsertFile(".env.local", envLocal, {
           create: regenerate && !ignore.includes(".env.local"),
@@ -52,7 +47,5 @@ module.exports = (phase) => ({
   reactStrictMode: true,
 });
 `;
-
-const env = "";
 
 const envLocal = "NEXT_PUBLIC_APP_VERSION=1.0.0";
