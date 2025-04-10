@@ -1,3 +1,4 @@
+export { type default as AddArgumentToObject } from "./AddArgumentToObject.types";
 export { type default as AsyncFunc } from "./AsyncFunc.types";
 export { default as blockUntil } from "./blockUntil";
 export { default as Cache } from "./Cache";
