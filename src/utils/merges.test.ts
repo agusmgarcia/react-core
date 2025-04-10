@@ -36,6 +36,31 @@ describe("merges", () => {
     expect(
       merges.shallow(
         {
+          address: { street: "Foo1" },
+          deep: { myFunction: functionA },
+          name: "John",
+          places: ["Rome", "Las Vegas", { name: "California" }],
+        },
+        {
+          address: { number: 281 },
+          deep2: { myFunction: functionB },
+          places: ["London", { name: "Manchester" }, { country: "USA" }],
+          surname: "Doe",
+        },
+        { arrayConcat: true },
+      ),
+    ).toStrictEqual({
+      address: { number: 281 },
+      deep: { myFunction: functionA },
+      deep2: { myFunction: functionB },
+      name: "John",
+      places: ["London", { name: "Manchester" }, { country: "USA" }],
+      surname: "Doe",
+    });
+
+    expect(
+      merges.shallow(
+        {
           person1: {
             name: "John",
             pets: [{ name: "Jackson", setName: functionA }],
@@ -99,6 +124,38 @@ describe("merges", () => {
         "London",
         { name: "Manchester" },
         { country: "USA", name: "California" },
+      ],
+      surname: "Doe",
+    });
+
+    expect(
+      merges.deep(
+        {
+          address: { street: "Foo1" },
+          deep: { myFunction: functionA },
+          name: "John",
+          places: ["Rome", "Las Vegas", { name: "California" }],
+        },
+        {
+          address: { number: 281 },
+          deep2: { myFunction: functionB },
+          places: ["London", { name: "Manchester" }, { country: "USA" }],
+          surname: "Doe",
+        },
+        { arrayConcat: true },
+      ),
+    ).toStrictEqual({
+      address: { number: 281, street: "Foo1" },
+      deep: { myFunction: functionA },
+      deep2: { myFunction: functionB },
+      name: "John",
+      places: [
+        "Rome",
+        "Las Vegas",
+        { name: "California" },
+        "London",
+        { name: "Manchester" },
+        { country: "USA" },
       ],
       surname: "Doe",
     });
