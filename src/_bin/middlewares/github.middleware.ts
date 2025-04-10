@@ -56,7 +56,7 @@ async function createGitignoreFile(library: boolean): Promise<string> {
     .then((result) => (!!result ? result.split(EOL) : []));
 
   const source = !library
-    ? [".env.local", ".next", "node_modules", "out,"]
+    ? [".env.local", ".next", "node_modules", "out"]
     : [".next", "bin", "dist", "node_modules", "*.tgz"];
 
   return merges
