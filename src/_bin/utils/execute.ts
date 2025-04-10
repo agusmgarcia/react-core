@@ -1,6 +1,6 @@
 import { spawn } from "child_process";
 
-import { type Func } from "#src/utils";
+import { emptyFunction, type Func } from "#src/utils";
 
 export default function execute(
   command: string,
@@ -117,5 +117,3 @@ function parseCommandAndArgs(
 
   return result;
 }
-
-function emptyFunction(): void {}
