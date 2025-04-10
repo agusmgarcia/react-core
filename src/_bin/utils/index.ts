@@ -5,3 +5,4 @@ export * as folders from "./folders";
 export { default as getPackageJSON } from "./getPackageJSON";
 export * as git from "./git";
 export { default as isLibrary } from "./isLibrary";
+export { default as question } from "./question";
