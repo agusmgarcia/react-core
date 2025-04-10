@@ -86,7 +86,6 @@ npm run deploy -- --interactive
 
 When running `npm run regenerate` all the pertinent files will be regenerated. Here the list of the files:
 
-- .env _(just creation phase)_
 - .env.local _(just creation phase)_
 - .github/CHANGELOG.md
 - .github/README.md _(just creation phase)_
