@@ -1,6 +1,8 @@
-import { type AsyncFunc } from "#src/utils";
+import { EOL } from "os";
 
-import { files, folders, isLibrary } from "../utils";
+import { type AsyncFunc, merges } from "#src/utils";
+
+import { files, folders, git, isLibrary } from "../utils";
 
 export default async function nextJSMiddleware(
   next: AsyncFunc,
@@ -20,10 +22,11 @@ export default async function nextJSMiddleware(
       : Promise.resolve(),
     files.removeFile(".env"),
     !library
-      ? files.upsertFile(".env.local", envLocal, {
-          create: regenerate && !ignore.includes(".env.local"),
-          update: false,
-        })
+      ? files.upsertFile(
+          ".env.local",
+          await createEnvLocalFile(),
+          regenerate && !ignore.includes(".env.local"),
+        )
       : Promise.resolve(),
   ]);
 
@@ -48,4 +51,40 @@ module.exports = (phase) => ({
 });
 `;
 
-const envLocal = "NEXT_PUBLIC_APP_VERSION=1.0.0";
+async function createEnvLocalFile(): Promise<string> {
+  const envLocal = await files.readFile(".env.local").then((result) =>
+    !!result
+      ? result.split(EOL).reduce(
+          (result, line) => {
+            const [key, value] = line.split("=", 2);
+            if (!key) return result;
+
+            result[key] = value || "";
+            return result;
+          },
+          {} as Record<string, string>,
+        )
+      : {},
+  );
+
+  const source = {
+    BASE_PATH: "",
+    NEXT_PUBLIC_APP_VERSION: await git
+      .getTags({ merged: true })
+      .then((tags) => tags.at(-1))
+      .then((tag) => git.getTagInfo(tag || "v0.0.0"))
+      .then((info) => `${info.major}.${info.minor}.${info.patch}`),
+  };
+
+  return Object.entries(
+    merges.deep(envLocal, source, {
+      arrayConcat: true,
+      arrayRemoveDuplicated: true,
+      sort: true,
+    }),
+  ).reduce(
+    (result, [key, value], index) =>
+      `${result}${!!index ? EOL : ""}${key}=${value}`,
+    "",
+  );
+}
