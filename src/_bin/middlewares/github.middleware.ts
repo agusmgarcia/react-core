@@ -81,7 +81,7 @@ async function createGitignoreFile(
 
   const source =
     core === "app"
-      ? [".env.local", ".next", "node_modules", "out,"]
+      ? [".env.local", ".next", "node_modules", "out"]
       : core === "azure-func"
         ? [".next", "dist", "local.settings.json", "node_modules"]
         : [".next", "bin", "dist", "node_modules", "*.tgz"];
