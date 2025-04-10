@@ -1,4 +1,6 @@
-import { type AsyncFunc } from "#src/utils";
+import { EOL } from "os";
+
+import { type AsyncFunc, merges } from "#src/utils";
 
 import { files, isLibrary } from "../utils";
 
@@ -9,11 +11,11 @@ export default async function nodeMiddleware(
 ): Promise<void> {
   await Promise.all([
     files.upsertFile(".nvmrc", nvmrc, regenerate && !ignore.includes(".nvmrc")),
-    isLibrary().then((library) =>
+    isLibrary().then(async (library) =>
       library
         ? files.upsertFile(
             ".npmignore",
-            npmignore,
+            await createNpmignoreFile(),
             regenerate && !ignore.includes(".npmignore"),
           )
         : Promise.resolve(),
@@ -24,14 +26,30 @@ export default async function nodeMiddleware(
 
 const nvmrc = "22.14";
 
-const npmignore = `**/.*
-dist/**/*.test.d.ts
-src
-eslint.config.js
-jest.config.js
-package-lock.json
-postcss.config.js
-prettier.config.js
-tailwind.config.js
-tsconfig.json
-webpack.config.js`;
+async function createNpmignoreFile(): Promise<string> {
+  const npmignore = await files
+    .readFile(".npmignore")
+    .then((result) => (!!result ? result.split(EOL) : []));
+
+  const source = [
+    "**/.*",
+    "dist/**/*.test.d.ts",
+    "eslint.config.js",
+    "jest.config.js",
+    "package-lock.json",
+    "postcss.config.js",
+    "prettier.config.js",
+    "src",
+    "tailwind.config.js",
+    "tsconfig.json",
+    "webpack.config.js",
+  ];
+
+  return merges
+    .deep(npmignore, source, {
+      arrayConcat: true,
+      arrayRemoveDuplicated: true,
+      sort: true,
+    })
+    .join(EOL);
+}
