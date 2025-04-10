@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.0.14](https://github.com/agusmgarcia/react-core/tree/v4.0.14)
+
+> April 10, 2025
+
+- **.gitignore**: adjust ignored list for app
+
 ## [v4.0.13](https://github.com/agusmgarcia/react-core/tree/v4.0.13)
 
 > April 10, 2025
