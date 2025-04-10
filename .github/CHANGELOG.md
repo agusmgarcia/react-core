@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.0.13](https://github.com/agusmgarcia/react-core/tree/v4.0.13)
+
+> April 10, 2025
+
+- **.env.local**: allow custom properties
+- **.env**: stop creating the file
+- **tsconfig.json**: allow custom properties
+- **.npmignore**: allow custom ignored files
+- **.gitignore**: allow custom ignored files
+- **files**: move readFile method into a separated file
+- **merges**: add ability to concat, filter and sort arrays
+- **filters**: add ability to set custom comparator
+- **deploy**: add interactive mode
+- **question**: add utility
+- **regenerate**: stop using echo in favor of console.log
+- stop using fixed versions
+- allow the usage of path from tsconfig
+
 ## [v4.0.12](https://github.com/agusmgarcia/react-core/tree/v4.0.12)
 
 > April 5, 2025
