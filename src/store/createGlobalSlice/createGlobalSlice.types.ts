@@ -38,14 +38,9 @@ export type WithContext<
       }
     : ExtractStateOf<TSlice>;
 
-export type Subscribe<TSlice extends SliceOf<any, any>, TOtherSlices> = <
-  TSelected,
->(
-  listener: Func<
-    void,
-    [state: TSelected, context: Context<TSlice, TOtherSlices>]
-  >,
-  selector?: Func<TSelected, [state: OmitFuncs<TOtherSlices>]>,
+export type Subscribe<TSlice extends SliceOf<any, any>, TOtherSlices> = (
+  listener: Func<void, [context: Context<TSlice, TOtherSlices>]>,
+  selector?: Func<any, [state: OmitFuncs<TOtherSlices>]>,
 ) => Func;
 
 export type Input<TSlice extends SliceOf<any, any>, TOtherSlices> = [
