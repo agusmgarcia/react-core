@@ -70,7 +70,7 @@ When running `npm run regenerate` all the pertinent files will be regenerated. H
 - pages/\_app.css _(just creation phase)_
 - pages/\_app.tsx _(just creation phase)_
 - src/index.ts _(just creation phase)_
-- .env.local _(just creation phase)_
+- .env.local
 - .funcignore
 - .gitignore
 - .npmignore
