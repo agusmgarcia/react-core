@@ -42,7 +42,7 @@ export default function createGlobalSlice<
           set,
         );
 
-        listener(selection, ctx);
+        listener(ctx);
       });
 
       if (!isSSR()) {
@@ -54,11 +54,7 @@ export default function createGlobalSlice<
             set,
           );
 
-          const selection = !!selector
-            ? selector(ctx.get() as OmitFuncs<TOtherSlices>)
-            : ({} as ReturnType<NonNullable<typeof selector>>);
-
-          listener(selection, ctx);
+          listener(ctx);
         }, 0);
       }
 
