@@ -6,15 +6,15 @@
   "author": "Agus Garcia",
   "description": "Set of utilities to run, lint, format and build applications and libraries",
   "scripts": {
-    "build": "ts-node src/_bin/build.ts",
-    "check": "ts-node src/_bin/check.ts",
-    "deploy": "ts-node src/_bin/deploy.ts",
-    "format": "ts-node src/_bin/format.ts",
-    "postpack": "ts-node src/_bin/postpack.ts",
-    "prepack": "ts-node src/_bin/prepack.ts",
-    "regenerate": "ts-node src/_bin/regenerate.ts",
-    "start": "ts-node src/_bin/start.ts",
-    "test": "ts-node src/_bin/test.ts"
+    "build": "ts-node -r tsconfig-paths/register src/_bin/build.ts",
+    "check": "ts-node -r tsconfig-paths/register src/_bin/check.ts",
+    "deploy": "ts-node -r tsconfig-paths/register src/_bin/deploy.ts",
+    "format": "ts-node -r tsconfig-paths/register src/_bin/format.ts",
+    "postpack": "ts-node -r tsconfig-paths/register src/_bin/postpack.ts",
+    "prepack": "ts-node -r tsconfig-paths/register src/_bin/prepack.ts",
+    "regenerate": "ts-node -r tsconfig-paths/register src/_bin/regenerate.ts",
+    "start": "ts-node -r tsconfig-paths/register src/_bin/start.ts",
+    "test": "ts-node -r tsconfig-paths/register src/_bin/test.ts"
   },
   "bin": {
     "agusmgarcia-react-core-build": "bin/build.js",
@@ -65,7 +65,8 @@
     "zustand": "^5.0.0"
   },
   "devDependencies": {
-    "ts-node": "10.9.2"
+    "ts-node": "10.9.2",
+    "tsconfig-paths": "4.2.0"
   },
   "engines": {
     "node": "^18.18.0 || ^19.0.0 || ^20.0.0 || ^21.0.0 || ^22.0.0"
