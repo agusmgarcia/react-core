@@ -1,6 +1,6 @@
 import { EOL } from "os";
 
-import { type AsyncFunc } from "#src/utils";
+import { type AsyncFunc, merges } from "#src/utils";
 
 import { files, folders, getCore, git } from "../utils";
 
@@ -17,11 +17,7 @@ export default async function githubMiddleware(
   await Promise.all([
     files.upsertFile(
       ".gitignore",
-      core === "app"
-        ? gitignore_app
-        : core === "azure-func"
-          ? gitignore_azure_func
-          : gitignore_lib,
+      await createGitignoreFile(core),
       regenerate && !ignore.includes(".gitignore"),
     ),
     files.upsertFile(".github/README.md", readme, {
@@ -76,21 +72,28 @@ export default async function githubMiddleware(
   await next();
 }
 
-const gitignore_app = `.env.local
-.next
-node_modules
-out`;
+async function createGitignoreFile(
+  core: Awaited<ReturnType<typeof getCore>>,
+): Promise<string> {
+  const gitignore = await files
+    .readFile(".gitignore")
+    .then((result) => (!!result ? result.split(EOL) : []));
 
-const gitignore_azure_func = `.next
-dist
-local.settings.json
-node_modules`;
+  const source =
+    core === "app"
+      ? [".env.local", ".next", "node_modules", "out,"]
+      : core === "azure-func"
+        ? [".next", "dist", "local.settings.json", "node_modules"]
+        : [".next", "bin", "dist", "node_modules", "*.tgz"];
 
-const gitignore_lib = `.next
-bin
-dist
-node_modules
-*.tgz`;
+  return merges
+    .deep(gitignore, source, {
+      arrayConcat: true,
+      arrayRemoveDuplicated: true,
+      sort: true,
+    })
+    .join(EOL);
+}
 
 const readme = "";
 
