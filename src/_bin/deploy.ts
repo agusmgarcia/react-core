@@ -1,6 +1,6 @@
 import { EOL } from "os";
 
-import { execute, git } from "./utils";
+import { args, execute, git, question } from "./utils";
 
 export default async function deploy(): Promise<void> {
   if (!(await git.isInsideRepository())) return;
@@ -190,6 +190,17 @@ async function createNextRelease(
 
   if (!nextTagInfo) return;
   const nextTag = `v${nextTagInfo.major}.${nextTagInfo.minor}.${nextTagInfo.patch}`;
+  const interactive = args.has("interactive");
+
+  if (interactive) {
+    const response = await question(`Merge changes into ${nextTag}? (Y/n)`);
+
+    if (response === "n") {
+      console.log("Deploy finished!");
+      return;
+    }
+  }
+
   await git.checkout(nextTag);
 
   try {
@@ -197,6 +208,16 @@ async function createNextRelease(
   } catch (error) {
     console.error(error);
     return;
+  }
+
+  if (interactive) {
+    const response = await question(`Deploy changes into ${nextTag}? (Y/n)`);
+    if (response === "n") {
+      console.log(
+        "Deploy stopped! You can add more commits to the current branch and then run npm run deploy again",
+      );
+      return;
+    }
   }
 
   await deploy();

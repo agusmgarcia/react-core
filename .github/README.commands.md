@@ -74,6 +74,14 @@ By default `npm start` creates a server from <http://localhost:3000>. It also se
 }
 ```
 
+## Interactive mode
+
+When running `npm run deploy`, the process start merging commits into the differents tags. That's made to propagate changes across upper versions automatically. In case you want to go step by step use the `--interactive` flag.
+
+```bash
+npm run deploy -- --interactive
+```
+
 ## Skip regenerating files
 
 When running `npm run regenerate` all the pertinent files will be regenerated. Here the list of the files:
