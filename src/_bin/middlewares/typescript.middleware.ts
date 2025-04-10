@@ -1,4 +1,4 @@
-import { type AsyncFunc } from "#src/utils";
+import { type AsyncFunc, merges } from "#src/utils";
 
 import { files, getCore } from "../utils";
 
@@ -11,106 +11,118 @@ export default async function typescriptMiddleware(
 
   await files.upsertFile(
     "tsconfig.json",
-    core === "app"
-      ? tsconfig_app
-      : core === "azure-func"
-        ? tsconfig_azure_func
-        : tsconfig_lib,
+    await createTsconfigFile(core),
     regenerate && !ignore.includes("tsconfig.json"),
   );
 
   await next();
 }
 
-const tsconfig_app = `{
-  "compilerOptions": {
-    "allowJs": true,
-    "baseUrl": "./",
-    "declaration": false,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "incremental": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "noEmit": true,
-    "noImplicitOverride": true,
-    "paths": {
-      "#public/*": ["public/*"],
-      "#src/*": ["src/*"]
-    },
-    "plugins": [{ "name": "next" }],
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "ES2017",
-    "tsBuildInfoFile": "node_modules/.typescriptcache"
-  },
-  "exclude": [".next", "node_modules"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
-}
-`;
+async function createTsconfigFile(
+  core: Awaited<ReturnType<typeof getCore>>,
+): Promise<string> {
+  const tsconfig = await files
+    .readFile("tsconfig.json")
+    .then((result) => (!!result ? JSON.parse(result) : {}));
 
-const tsconfig_azure_func = `{
-  "compilerOptions": {
-    "allowJs": true,
-    "baseUrl": "./",
-    "declaration": false,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "incremental": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "noEmit": false,
-    "noImplicitOverride": true,
-    "paths": {
-      "#src/*": ["src/*"]
-    },
-    "outDir": "./dist",
-    "resolveJsonModule": true,
-    "rootDir": "./src",
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "es5",
-    "tsBuildInfoFile": "node_modules/.typescriptcache"
-  },
-  "exclude": ["node_modules"],
-  "include": ["**/*.ts"]
-}
-`;
+  const source =
+    core === "app"
+      ? {
+          compilerOptions: {
+            allowJs: true,
+            baseUrl: "./",
+            declaration: false,
+            esModuleInterop: true,
+            forceConsistentCasingInFileNames: true,
+            incremental: true,
+            isolatedModules: true,
+            jsx: "preserve",
+            lib: ["DOM", "DOM.Iterable", "ESNext"],
+            module: "esnext",
+            moduleResolution: "bundler",
+            noEmit: true,
+            noImplicitOverride: true,
+            paths: {
+              "#public/*": ["public/*"],
+              "#src/*": ["src/*"],
+            },
+            plugins: [{ name: "next" }],
+            resolveJsonModule: true,
+            skipLibCheck: true,
+            strict: true,
+            target: "ES2017",
+            tsBuildInfoFile: "node_modules/.typescriptcache",
+          },
+          exclude: [".next", "node_modules"],
+          include: ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+        }
+      : core === "azure-func"
+        ? {
+            compilerOptions: {
+              allowJs: true,
+              baseUrl: "./",
+              declaration: false,
+              esModuleInterop: true,
+              forceConsistentCasingInFileNames: true,
+              incremental: true,
+              isolatedModules: true,
+              jsx: "preserve",
+              lib: ["DOM", "DOM.Iterable", "ESNext"],
+              module: "commonjs",
+              moduleResolution: "node",
+              noEmit: false,
+              noImplicitOverride: true,
+              outDir: "./dist",
+              paths: {
+                "#src/*": ["src/*"],
+              },
+              resolveJsonModule: true,
+              rootDir: "./src",
+              skipLibCheck: true,
+              strict: true,
+              target: "es5",
+              tsBuildInfoFile: "node_modules/.typescriptcache",
+            },
+            exclude: ["node_modules"],
+            include: ["**/*.ts"],
+          }
+        : {
+            compilerOptions: {
+              allowJs: true,
+              baseUrl: "./",
+              declaration: true,
+              esModuleInterop: true,
+              forceConsistentCasingInFileNames: true,
+              incremental: true,
+              isolatedModules: true,
+              jsx: "preserve",
+              lib: ["DOM", "DOM.Iterable", "ESNext"],
+              module: "commonjs",
+              moduleResolution: "node",
+              noEmit: false,
+              noImplicitOverride: true,
+              outDir: "./dist",
+              paths: {
+                "#src/*": ["src/*"],
+              },
+              resolveJsonModule: true,
+              rootDir: "./src",
+              skipLibCheck: true,
+              strict: true,
+              target: "es5",
+              tsBuildInfoFile: "node_modules/.typescriptcache",
+            },
+            exclude: ["node_modules"],
+            include: ["**/*.ts", "**/*.tsx"],
+          };
 
-const tsconfig_lib = `{
-  "compilerOptions": {
-    "allowJs": true,
-    "baseUrl": "./",
-    "declaration": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "incremental": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "noEmit": false,
-    "noImplicitOverride": true,
-    "paths": {
-      "#src/*": ["src/*"]
-    },
-    "outDir": "./dist",
-    "resolveJsonModule": true,
-    "rootDir": "./src",
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "es5",
-    "tsBuildInfoFile": "node_modules/.typescriptcache"
-  },
-  "exclude": ["node_modules"],
-  "include": ["**/*.ts", "**/*.tsx"]
+  return JSON.stringify(
+    merges.deep(tsconfig, source, {
+      arrayConcat: true,
+      arrayRemoveDuplicated: true,
+      sort: true,
+    }),
+    undefined,
+    2,
+  );
 }
-`;
