@@ -7,3 +7,4 @@ export { default as getCore } from "./getCore";
 export { default as getPackageJSON } from "./getPackageJSON";
 export * as git from "./git";
 export { default as question } from "./question";
+export { default as sortProperties } from "./sortProperties";
