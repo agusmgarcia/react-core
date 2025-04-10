@@ -60,7 +60,7 @@ async function createGitignoreFile(
 
   const source =
     core === "app"
-      ? [".env.local", ".next", "node_modules", "out,"]
+      ? [".env.local", ".next", "node_modules", "out"]
       : [".next", "bin", "dist", "node_modules", "*.tgz"];
 
   return merges
