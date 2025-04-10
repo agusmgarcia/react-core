@@ -2,6 +2,15 @@
 
 A set of functions and types that can be used in the consumer projects.
 
+## Add argument to object
+
+```typescript
+import { type AddArgumentToObject } from "@agusmgarcia/react-core";
+
+type Person = { name: string; setName: Func<void, [name: string]> };
+type PersonWithContext = AddArgumentToObject<Person, number>; // => { name: string; setName: Func<void, [name: string, parameter: number]> }
+```
+
 ## Async func
 
 ```typescript
