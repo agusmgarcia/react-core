@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.3.6](https://github.com/agusmgarcia/react-core/tree/v4.3.6)
+
+> April 11, 2025
+
+- **local.settings.json**: adjust creation process
+
 ## [v4.3.5](https://github.com/agusmgarcia/react-core/tree/v4.3.5)
 
 > April 11, 2025
