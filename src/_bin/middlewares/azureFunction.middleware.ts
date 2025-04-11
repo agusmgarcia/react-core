@@ -144,6 +144,7 @@ async function createLocalSettingsFile(): Promise<string> {
   ]);
 
   const source = {
+    isEncrypted: false,
     values: {
       APP_VERSION: version,
       FUNCTIONS_EXTENSION_VERSION: "~4",
