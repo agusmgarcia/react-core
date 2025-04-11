@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.2.9](https://github.com/agusmgarcia/react-core/tree/v4.2.9)
+
+> April 11, 2025
+
+- **package.json**: align logic to detect core
+- **getCore**: adjust the way of getting the value
+
 ## [v4.2.8](https://github.com/agusmgarcia/react-core/tree/v4.2.8)
 
 > April 11, 2025
