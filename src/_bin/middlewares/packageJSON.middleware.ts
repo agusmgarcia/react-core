@@ -1,26 +1,19 @@
-import { type AsyncFunc } from "#src/utils";
+import { type AsyncFunc, merges } from "#src/utils";
 
-import {
-  createObjectWithPropertiesSorted,
-  execute,
-  files,
-  getCore,
-  getPackageJSON,
-  git,
-} from "../utils";
+import { execute, files, getCore, getPackageJSON, git } from "../utils";
 
 export default async function packageJSONMiddleware(
   next: AsyncFunc,
   regenerate: boolean,
   ignore: string[],
 ): Promise<void> {
+  const core = await getCore();
+
   await files.upsertFile(
     "package.json",
-    await createPackageFile(),
+    await createPackageJSONFile(core),
     regenerate && !ignore.includes("package.json"),
   );
-
-  const core = await getCore();
 
   if (core === "azure-func") {
     if (regenerate && !ignore.includes("package.json")) {
@@ -39,110 +32,134 @@ export default async function packageJSONMiddleware(
   await next();
 }
 
-async function createPackageFile(): Promise<string> {
-  let packageJSON = await getPackageJSON();
+async function createPackageJSONFile(
+  core: Awaited<ReturnType<typeof getCore>>,
+): Promise<string> {
+  const [packageJSON, repositoryDetails, version, remoteURL] =
+    await Promise.all([
+      getPackageJSON(),
+      git.getRepositoryDetails(),
+      git
+        .getTags({ merged: true })
+        .then((tags) => tags.at(-1))
+        .then((tag) => git.getTagInfo(tag || "v0.0.0"))
+        .then((info) => `${info.major}.${info.minor}.${info.patch}`),
+      git.getRemoteURL(),
+    ]);
 
-  const repositoryDetails = await git.getRepositoryDetails();
+  const template = {
+    author: !!repositoryDetails?.owner || "",
+    description: "",
+    name: !!repositoryDetails
+      ? `@${repositoryDetails.owner}/${repositoryDetails.name}`
+      : "",
+    repository:
+      !!remoteURL && core === "lib"
+        ? {
+            type: "git",
+            url: `git+${remoteURL}.git`,
+          }
+        : undefined,
+    scripts: {
+      build: "agusmgarcia-react-core-build",
+      check: "agusmgarcia-react-core-check",
+      deploy: "agusmgarcia-react-core-deploy",
+      format: "agusmgarcia-react-core-format",
+      postpack: "agusmgarcia-react-core-postpack",
+      prepack: "agusmgarcia-react-core-prepack",
+      regenerate: "agusmgarcia-react-core-regenerate",
+      start: "agusmgarcia-react-core-start",
+      test: "agusmgarcia-react-core-test",
+    },
+  };
 
-  if (!packageJSON.name && !!repositoryDetails)
-    packageJSON.name = `@${repositoryDetails.owner}/${repositoryDetails.name}`;
+  const source =
+    core === "app"
+      ? {
+          core,
+          main: undefined,
+          private: true,
+          repository: undefined,
+          types: undefined,
+          version,
+        }
+      : core === "azure-func"
+        ? {
+            core,
+            main: "dist/{index.js,functions/*.js}",
+            private: true,
+            repository: undefined,
+            types: undefined,
+            version,
+          }
+        : {
+            core,
+            main: "dist/index.js",
+            private: false,
+            types: "dist/index.d.ts",
+            version,
+          };
 
-  if (
-    packageJSON.core !== "app" &&
-    packageJSON.core !== "azure-func" &&
-    packageJSON.core !== "lib"
-  )
-    packageJSON.core =
-      typeof packageJSON.private === "string"
-        ? packageJSON.private === "true"
-          ? "app"
-          : "lib"
-        : !!packageJSON.private
-          ? "app"
-          : "lib";
+  return JSON.stringify(
+    sortProperties(
+      merges.deep(
+        merges.deep(template, packageJSON, {
+          arrayConcat: true,
+          arrayRemoveDuplicated: true,
+          sort: true,
+        }),
+        source,
+        {
+          arrayConcat: true,
+          arrayRemoveDuplicated: true,
+          sort: true,
+        },
+      ),
+      [
+        "name",
+        "core",
+        "version",
+        "private",
+        "main",
+        "types",
+        "author",
+        "description",
+        "bin",
+        "scripts",
+        "dependencies",
+        "peerDependencies",
+        "devDependencies",
+        "optionalDependencies",
+        "engines",
+        "repository",
+      ],
+    ),
+    undefined,
+    2,
+  );
+}
 
-  const version = await git
-    .getTags({ merged: true })
-    .then((tags) => tags.at(-1))
-    .then((tag) => git.getTagInfo(tag || "v0.0.0"))
-    .then((info) => `${info.major}.${info.minor}.${info.patch}`);
+function sortProperties<TElement extends Record<string, any>>(
+  input: TElement,
+  preferred: (keyof TElement)[] = [],
+): TElement {
+  const sortKeys = (key1: string, key2: string): number => {
+    const indexOfKey1 = preferred.indexOf(key1 as keyof TElement);
+    const indexOfKey2 = preferred.indexOf(key2 as keyof TElement);
 
-  packageJSON.version = version;
+    if (indexOfKey1 === -1 && indexOfKey2 === -1)
+      return +(key1 > key2) || -(key2 > key1);
 
-  packageJSON.private =
-    packageJSON.core === "app" || packageJSON.core === "azure-func";
+    if (indexOfKey1 === -1) return 1;
+    if (indexOfKey2 === -1) return -1;
 
-  if (packageJSON.core === "app" && !!packageJSON.main) delete packageJSON.main;
+    return indexOfKey1 - indexOfKey2;
+  };
 
-  if (packageJSON.core === "azure-func" && !packageJSON.main)
-    packageJSON.main = "dist/{index.js,functions/*.js}";
-
-  if (packageJSON.core === "lib" && !packageJSON.main)
-    packageJSON.main = "dist/index.js";
-
-  if (
-    (packageJSON.core === "app" || packageJSON.core === "azure-func") &&
-    !!packageJSON.types
-  )
-    delete packageJSON.types;
-
-  if (packageJSON.core === "lib" && !packageJSON.types)
-    packageJSON.types = "dist/index.d.ts";
-
-  if (!packageJSON.author) packageJSON.author = repositoryDetails?.owner || "";
-
-  if (!packageJSON.description) packageJSON.description = "";
-
-  if (!packageJSON.scripts) packageJSON.scripts = {};
-
-  const commands = [
-    "build",
-    "check",
-    "deploy",
-    "format",
-    "postpack",
-    "prepack",
-    "regenerate",
-    "start",
-    "test",
-  ];
-
-  for (const command of commands)
-    if (!packageJSON.scripts[command])
-      packageJSON.scripts[command] = `agusmgarcia-react-core-${command}`;
-
-  const remoteURL = await git.getRemoteURL();
-
-  if (
-    (packageJSON.core === "app" || packageJSON.core === "azure-func") &&
-    !!packageJSON.repository
-  )
-    delete packageJSON.repository;
-
-  if (packageJSON.core === "lib" && !packageJSON.repository && !!remoteURL)
-    packageJSON.repository = {
-      type: "git",
-      url: `git+${remoteURL}.git`,
-    };
-
-  const newPackageJSON = createObjectWithPropertiesSorted(packageJSON, [
-    "name",
-    "core",
-    "version",
-    "private",
-    "main",
-    "types",
-    "author",
-    "description",
-    "bin",
-    "scripts",
-    "dependencies",
-    "peerDependencies",
-    "devDependencies",
-    "optionalDependencies",
-    "engines",
-    "repository",
-  ]);
-
-  return JSON.stringify(newPackageJSON, undefined, 2);
+  return Object.keys(input)
+    .sort(sortKeys)
+    .reduce((result, key) => {
+      (result as any)[key] = input[key];
+      return result;
+    }, {} as TElement);
 }
