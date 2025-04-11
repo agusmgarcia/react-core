@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.2.8](https://github.com/agusmgarcia/react-core/tree/v4.2.8)
+
+> April 11, 2025
+
+- **packageJSON**: enforce main and types for lib
+- **merge**: sort properties in all the cases
+- **store**: adjust extra methods context
+- **AddArgumentToObject**: add type
+- **store**: stop receiving selected state on subscribe
+- **.gitignore**: adjust ignored list for app
+- **.env.local**: allow custom properties
+- **.env**: stop creating the file
+- **tsconfig.json**: allow custom properties
+- **.npmignore**: allow custom ignored files
+- **.gitignore**: allow custom ignored files
+- **files**: move readFile method into a separated file
+- **merges**: add ability to concat, filter and sort arrays
+- **filters**: add ability to set custom comparator
+- **deploy**: add interactive mode
+- **question**: add utility
+- **regenerate**: stop using echo in favor of console.log
+- stop using fixed versions
+- allow the usage of path from tsconfig
+
 ## [v4.2.7](https://github.com/agusmgarcia/react-core/tree/v4.2.7)
 
 > April 5, 2025
