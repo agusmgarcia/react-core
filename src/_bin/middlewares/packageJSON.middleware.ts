@@ -1,4 +1,4 @@
-import { type AsyncFunc } from "#src/utils";
+import { type AsyncFunc, merges } from "#src/utils";
 
 import { execute, files, getPackageJSON, git } from "../utils";
 
@@ -7,11 +7,9 @@ export default async function packageJSONMiddleware(
   regenerate: boolean,
   ignore: string[],
 ): Promise<void> {
-  const packageJSON = await getPackageJSON();
-
   await files.upsertFile(
     "package.json",
-    await addMissingAttributes(packageJSON),
+    await createPackageJSONFile(),
     regenerate && !ignore.includes("package.json"),
   );
 
@@ -20,101 +18,112 @@ export default async function packageJSONMiddleware(
   await next();
 }
 
-async function addMissingAttributes(
-  packageJSON: Awaited<ReturnType<typeof getPackageJSON>>,
-): Promise<string> {
-  const repositoryDetails = await git.getRepositoryDetails();
+async function createPackageJSONFile(): Promise<string> {
+  const [packageJSON, repositoryDetails, version, remoteURL] =
+    await Promise.all([
+      getPackageJSON(),
+      git.getRepositoryDetails(),
+      git
+        .getTags({ merged: true })
+        .then((tags) => tags.at(-1))
+        .then((tag) => git.getTagInfo(tag || "v0.0.0"))
+        .then((info) => `${info.major}.${info.minor}.${info.patch}`),
+      git.getRemoteURL(),
+    ]);
 
-  if (!packageJSON.name && !!repositoryDetails)
-    packageJSON.name = `@${repositoryDetails.owner}/${repositoryDetails.name}`;
+  const core =
+    typeof packageJSON.private === "string"
+      ? packageJSON.private === "true"
+        ? "app"
+        : "lib"
+      : !!packageJSON.private
+        ? "app"
+        : "lib";
 
-  if (packageJSON.core !== "app" && packageJSON.core !== "lib")
-    packageJSON.core =
-      typeof packageJSON.private === "string"
-        ? packageJSON.private === "true"
-          ? "app"
-          : "lib"
-        : !!packageJSON.private
-          ? "app"
-          : "lib";
+  const template = {
+    author: !!repositoryDetails?.owner || "",
+    description: "",
+    name: !!repositoryDetails
+      ? `@${repositoryDetails.owner}/${repositoryDetails.name}`
+      : "",
+    repository:
+      !!remoteURL && core === "lib"
+        ? {
+            type: "git",
+            url: `git+${remoteURL}.git`,
+          }
+        : undefined,
+    scripts: {
+      build: "agusmgarcia-react-core-build",
+      check: "agusmgarcia-react-core-check",
+      deploy: "agusmgarcia-react-core-deploy",
+      format: "agusmgarcia-react-core-format",
+      postpack: "agusmgarcia-react-core-postpack",
+      prepack: "agusmgarcia-react-core-prepack",
+      regenerate: "agusmgarcia-react-core-regenerate",
+      start: "agusmgarcia-react-core-start",
+      test: "agusmgarcia-react-core-test",
+    },
+  };
 
-  const version = await git
-    .getTags({ merged: true })
-    .then((tags) => tags.at(-1))
-    .then((tag) => git.getTagInfo(tag || "v0.0.0"))
-    .then((info) => `${info.major}.${info.minor}.${info.patch}`);
+  const source =
+    core === "app"
+      ? {
+          core,
+          main: undefined,
+          private: true,
+          repository: undefined,
+          types: undefined,
+          version,
+        }
+      : {
+          core,
+          main: "dist/index.js",
+          private: false,
+          types: "dist/index.d.ts",
+          version,
+        };
 
-  packageJSON.version = version;
-
-  packageJSON.private = packageJSON.core === "app";
-
-  if (packageJSON.core === "lib" && !packageJSON.main)
-    packageJSON.main = "dist/index.js";
-
-  if (packageJSON.core !== "lib" && !!packageJSON.main) delete packageJSON.main;
-
-  if (packageJSON.core === "lib" && !packageJSON.types)
-    packageJSON.types = "dist/index.d.ts";
-
-  if (packageJSON.core !== "lib" && !!packageJSON.types)
-    delete packageJSON.types;
-
-  if (!packageJSON.author) packageJSON.author = repositoryDetails?.owner || "";
-
-  if (!packageJSON.description) packageJSON.description = "";
-
-  if (!packageJSON.scripts) packageJSON.scripts = {};
-
-  const commands = [
-    "build",
-    "check",
-    "deploy",
-    "format",
-    "postpack",
-    "prepack",
-    "regenerate",
-    "start",
-    "test",
-  ];
-
-  for (const command of commands)
-    if (!packageJSON.scripts[command])
-      packageJSON.scripts[command] = `agusmgarcia-react-core-${command}`;
-
-  const remoteURL = await git.getRemoteURL();
-
-  if (packageJSON.core === "lib" && !packageJSON.repository && !!remoteURL)
-    packageJSON.repository = {
-      type: "git",
-      url: `git+${remoteURL}.git`,
-    };
-
-  if (packageJSON.core !== "lib" && !!packageJSON.repository)
-    delete packageJSON.repository;
-
-  const newPackageJSON = createObjectWithPropertiesSorted(packageJSON, [
-    "name",
-    "core",
-    "version",
-    "private",
-    "main",
-    "types",
-    "author",
-    "description",
-    "bin",
-    "scripts",
-    "dependencies",
-    "peerDependencies",
-    "devDependencies",
-    "optionalDependencies",
-    "engines",
-    "repository",
-  ]);
-
-  return JSON.stringify(newPackageJSON, undefined, 2);
+  return JSON.stringify(
+    sortProperties(
+      merges.deep(
+        merges.deep(template, packageJSON, {
+          arrayConcat: true,
+          arrayRemoveDuplicated: true,
+          sort: true,
+        }),
+        source,
+        {
+          arrayConcat: true,
+          arrayRemoveDuplicated: true,
+          sort: true,
+        },
+      ),
+      [
+        "name",
+        "core",
+        "version",
+        "private",
+        "main",
+        "types",
+        "author",
+        "description",
+        "bin",
+        "scripts",
+        "dependencies",
+        "peerDependencies",
+        "devDependencies",
+        "optionalDependencies",
+        "engines",
+        "repository",
+      ],
+    ),
+    undefined,
+    2,
+  );
 }
 
-function createObjectWithPropertiesSorted<TElement extends object>(
+function sortProperties<TElement extends Record<string, any>>(
   input: TElement,
   preferred: (keyof TElement)[] = [],
 ): TElement {
@@ -134,11 +143,7 @@ function createObjectWithPropertiesSorted<TElement extends object>(
   return Object.keys(input)
     .sort(sortKeys)
     .reduce((result, key) => {
-      const property = input[key as keyof TElement];
-      result[key as keyof TElement] =
-        typeof property !== "object" || !property
-          ? property
-          : createObjectWithPropertiesSorted(property);
+      (result as any)[key] = input[key];
       return result;
     }, {} as TElement);
 }
