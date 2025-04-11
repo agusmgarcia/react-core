@@ -1,10 +1,10 @@
 import getPackageJSON from "./getPackageJSON";
 
 export default function getCore(): Promise<
-  Awaited<ReturnType<typeof getPackageJSON>>["core"]
+  NonNullable<Awaited<ReturnType<typeof getPackageJSON>>["core"]>
 > {
   return getPackageJSON().then((json) =>
-    !!json.core
+    json.core === "app" || json.core === "azure-func" || json.core === "lib"
       ? json.core
       : typeof json.private === "string"
         ? json.private === "true"
