@@ -78,7 +78,7 @@ When running `npm run regenerate` all the pertinent files will be regenerated. H
 - eslint.config.js
 - host.json
 - jest.config.js
-- local.settings.json _(just creation phase)_
+- local.settings.json
 - next.config.js
 - package.json
 - postcss.config.js

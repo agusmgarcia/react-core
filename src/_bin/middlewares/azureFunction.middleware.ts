@@ -1,11 +1,8 @@
-import { type AsyncFunc } from "#src/utils";
+import { EOL } from "os";
 
-import {
-  createObjectWithPropertiesSorted,
-  files,
-  folders,
-  getCore,
-} from "../utils";
+import { type AsyncFunc, merges } from "#src/utils";
+
+import { files, folders, getCore, git, sortProperties } from "../utils";
 
 export default async function azureFunctionMiddleware(
   next: AsyncFunc,
@@ -23,10 +20,11 @@ export default async function azureFunctionMiddleware(
         )
       : files.removeFile("host.json"),
     core === "azure-func"
-      ? files.upsertFile("local.settings.json", localSettingsJSON, {
-          create: regenerate && !ignore.includes("local.settings.json"),
-          update: false,
-        })
+      ? files.upsertFile(
+          "local.settings.json",
+          await craeteLocalSettingsFile(),
+          regenerate && !ignore.includes("local.settings.json"),
+        )
       : files.removeFile("local.settings.json"),
     folders.upsertFolder("src").then(() =>
       core === "azure-func"
@@ -48,7 +46,7 @@ export default async function azureFunctionMiddleware(
     core === "azure-func"
       ? files.upsertFile(
           ".funcignore",
-          funcignore,
+          await createFuncignoreFile(),
           regenerate && !ignore.includes(".funcignore"),
         )
       : files.removeFile(".funcignore"),
@@ -58,34 +56,52 @@ export default async function azureFunctionMiddleware(
 }
 
 async function createHostFile(): Promise<string> {
-  let hostJSON = await files
+  const hostJSON = await files
     .readFile("host.json")
-    .then((result) => (!!result ? JSON.parse(result) : undefined));
+    .then((result) => (!!result ? JSON.parse(result) : {}));
 
-  if (!hostJSON) hostJSON = {};
-
-  hostJSON.version = "2.0";
-
-  if (!hostJSON.extensions) hostJSON.extensions = {};
-  if (!hostJSON.extensions.http) hostJSON.extensions.http = { routePrefix: "" };
-
-  hostJSON.extensionBundle = {
-    id: "Microsoft.Azure.Functions.ExtensionBundle",
-    version: "[4.*, 5.0.0)",
+  const template = {
+    extensions: {
+      http: { routePrefix: "" },
+    },
+    logging: {
+      applicationInsights: {
+        samplingSettings: {
+          excludedTypes: "Request",
+          isEnabled: true,
+        },
+      },
+    },
   };
 
-  if (!hostJSON.logging) hostJSON.logging = {};
-  if (!hostJSON.logging.applicationInsights)
-    hostJSON.logging.applicationInsights = {};
-  if (!hostJSON.logging.applicationInsights.samplingSettings)
-    hostJSON.logging.applicationInsights.samplingSettings = {
-      excludedTypes: "Request",
-      isEnabled: true,
-    };
+  const source = {
+    extensionBundle: {
+      id: "Microsoft.Azure.Functions.ExtensionBundle",
+      version: "[4.*, 5.0.0)",
+    },
+    version: "2.0",
+  };
 
-  hostJSON = createObjectWithPropertiesSorted(hostJSON, ["version"]);
-
-  return JSON.stringify(hostJSON, undefined, 2);
+  return JSON.stringify(
+    sortProperties(
+      merges.deep(
+        merges.deep(template, hostJSON, {
+          arrayConcat: true,
+          arrayRemoveDuplicated: true,
+          sort: true,
+        }),
+        source,
+        {
+          arrayConcat: true,
+          arrayRemoveDuplicated: true,
+          sort: true,
+        },
+      ),
+      ["version"],
+    ),
+    undefined,
+    2,
+  );
 }
 
 async function deleteAzureFunctions(
@@ -115,16 +131,37 @@ async function deleteAzureFunctions(
     await folders.removeFolder("src");
 }
 
-const localSettingsJSON = `{
-  "IsEncrypted": false,
-  "Values": {
-    "APP_VERSION": "1.0.0",
-    "FUNCTIONS_EXTENSION_VERSION": "~4",
-    "FUNCTIONS_WORKER_RUNTIME": "node",
-    "WEBSITE_NODE_DEFAULT_VERSION": "~22"
-  }
+async function craeteLocalSettingsFile(): Promise<string> {
+  const [localSettings, version] = await Promise.all([
+    files
+      .readFile(".funcignore")
+      .then((result) => (!!result ? JSON.parse(result) : {})),
+    git
+      .getTags({ merged: true })
+      .then((tags) => tags.at(-1))
+      .then((tag) => git.getTagInfo(tag || "v0.0.0"))
+      .then((info) => `${info.major}.${info.minor}.${info.patch}`),
+  ]);
+
+  const source = {
+    values: {
+      APP_VERSION: version,
+      FUNCTIONS_EXTENSION_VERSION: "~4",
+      FUNCTIONS_WORKER_RUNTIME: "node",
+      WEBSITE_NODE_DEFAULT_VERSION: "~22",
+    },
+  };
+
+  return JSON.stringify(
+    merges.deep(localSettings, source, {
+      arrayConcat: true,
+      arrayRemoveDuplicated: true,
+      sort: true,
+    }),
+    undefined,
+    2,
+  );
 }
-`;
 
 const index = `import { app } from "@azure/functions";
 
@@ -158,15 +195,31 @@ app.http("httpTrigger1", {
 });
 `;
 
-const funcignore = `__azurite_db*__.json
-__blobstorage__
-__queuestorage__
-**/.*
-src
-eslint.config.js
-jest.config.js
-local.settings.json
-package-lock.json
-prettier.config.js
-tsconfig.json
-webpack.config.js`;
+async function createFuncignoreFile(): Promise<string> {
+  const funcignore = await files
+    .readFile(".funcignore")
+    .then((result) => (!!result ? result.split(EOL) : []));
+
+  const source = [
+    "__azurite_db*__.json",
+    "__blobstorage__",
+    "__queuestorage__",
+    "**/.*",
+    "src",
+    "eslint.config.js",
+    "jest.config.js",
+    "local.settings.json",
+    "package-lock.json",
+    "prettier.config.js",
+    "tsconfig.json",
+    "webpack.config.js",
+  ];
+
+  return merges
+    .deep(funcignore, source, {
+      arrayConcat: true,
+      arrayRemoveDuplicated: true,
+      sort: true,
+    })
+    .join(EOL);
+}
