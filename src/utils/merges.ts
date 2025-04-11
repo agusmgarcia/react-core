@@ -50,8 +50,8 @@ export function deep(
 }
 
 function merge(
-  target: unknown,
-  source: unknown,
+  target: any,
+  source: any,
   level: number | undefined,
   sort: boolean,
   arrayConcat: boolean,
@@ -61,8 +61,8 @@ function merge(
   if (target === source) return source;
   if (typeof level === "number" && !level) return source;
 
-  if (Array.isArray(target)) {
-    if (!Array.isArray(source)) return source;
+  if (Array.isArray(source)) {
+    if (!Array.isArray(target)) target = [];
 
     let result: any[];
 
@@ -83,8 +83,22 @@ function merge(
                 arrayRemoveDuplicated,
               )
             : i < source.length
-              ? source[i]
-              : target[i];
+              ? merge(
+                  undefined,
+                  source[i],
+                  !!level ? level - 1 : undefined,
+                  sort,
+                  arrayConcat,
+                  arrayRemoveDuplicated,
+                )
+              : merge(
+                  undefined,
+                  target[i],
+                  !!level ? level - 1 : undefined,
+                  sort,
+                  arrayConcat,
+                  arrayRemoveDuplicated,
+                );
     }
 
     return result
@@ -92,9 +106,9 @@ function merge(
       .filter(!arrayRemoveDuplicated ? () => true : filters.distinct("deep"));
   }
 
-  if (typeof target === "object" && !!target) {
-    if (Array.isArray(source)) return source;
-    if (typeof source !== "object" || !source) return source;
+  if (typeof source === "object" && !!source) {
+    if (Array.isArray(target) || typeof target !== "object" || !target)
+      target = {};
 
     const keys = [...Object.keys(target), ...Object.keys(source)]
       .sort(!sort ? () => 0 : undefined)
@@ -114,8 +128,22 @@ function merge(
               arrayRemoveDuplicated,
             )
           : key in source
-            ? source[key as keyof typeof source]
-            : target[key as keyof typeof target];
+            ? merge(
+                undefined,
+                source[key as keyof typeof source],
+                !!level ? level - 1 : undefined,
+                sort,
+                arrayConcat,
+                arrayRemoveDuplicated,
+              )
+            : merge(
+                undefined,
+                target[key as keyof typeof target],
+                !!level ? level - 1 : undefined,
+                sort,
+                arrayConcat,
+                arrayRemoveDuplicated,
+              );
     }
 
     return result;
