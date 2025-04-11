@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.0.15](https://github.com/agusmgarcia/react-core/tree/v4.0.15)
+
+> April 11, 2025
+
+- **merge**: sort properties in all the cases
+
 ## [v4.0.14](https://github.com/agusmgarcia/react-core/tree/v4.0.14)
 
 > April 10, 2025
