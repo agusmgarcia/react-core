@@ -22,7 +22,7 @@ export default async function azureFunctionMiddleware(
     core === "azure-func"
       ? files.upsertFile(
           "local.settings.json",
-          await craeteLocalSettingsFile(),
+          await createLocalSettingsFile(),
           regenerate && !ignore.includes("local.settings.json"),
         )
       : files.removeFile("local.settings.json"),
@@ -131,10 +131,10 @@ async function deleteAzureFunctions(
     await folders.removeFolder("src");
 }
 
-async function craeteLocalSettingsFile(): Promise<string> {
+async function createLocalSettingsFile(): Promise<string> {
   const [localSettings, version] = await Promise.all([
     files
-      .readFile(".funcignore")
+      .readFile("local.settings.json")
       .then((result) => (!!result ? JSON.parse(result) : {})),
     git
       .getTags({ merged: true })
