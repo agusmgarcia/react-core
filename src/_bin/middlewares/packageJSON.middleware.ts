@@ -1,15 +1,17 @@
 import { type AsyncFunc, merges } from "#src/utils";
 
-import { execute, files, getPackageJSON, git } from "../utils";
+import { execute, files, getCore, getPackageJSON, git } from "../utils";
 
 export default async function packageJSONMiddleware(
   next: AsyncFunc,
   regenerate: boolean,
   ignore: string[],
 ): Promise<void> {
+  const core = await getCore();
+
   await files.upsertFile(
     "package.json",
-    await createPackageJSONFile(),
+    await createPackageJSONFile(core),
     regenerate && !ignore.includes("package.json"),
   );
 
@@ -18,7 +20,9 @@ export default async function packageJSONMiddleware(
   await next();
 }
 
-async function createPackageJSONFile(): Promise<string> {
+async function createPackageJSONFile(
+  core: Awaited<ReturnType<typeof getCore>>,
+): Promise<string> {
   const [packageJSON, repositoryDetails, version, remoteURL] =
     await Promise.all([
       getPackageJSON(),
@@ -30,15 +34,6 @@ async function createPackageJSONFile(): Promise<string> {
         .then((info) => `${info.major}.${info.minor}.${info.patch}`),
       git.getRemoteURL(),
     ]);
-
-  const core =
-    typeof packageJSON.private === "string"
-      ? packageJSON.private === "true"
-        ? "app"
-        : "lib"
-      : !!packageJSON.private
-        ? "app"
-        : "lib";
 
   const template = {
     author: !!repositoryDetails?.owner || "",
