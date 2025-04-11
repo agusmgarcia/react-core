@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.3.7](https://github.com/agusmgarcia/react-core/tree/v4.3.7)
+
+> April 11, 2025
+
+- **local.settings.json**: add isEncrypted flag
+
 ## [v4.3.6](https://github.com/agusmgarcia/react-core/tree/v4.3.6)
 
 > April 11, 2025
