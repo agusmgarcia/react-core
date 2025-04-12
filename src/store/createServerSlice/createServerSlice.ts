@@ -147,6 +147,8 @@ function buildContext<TSlice extends SliceOf<any, any>, TOtherSlices>(
       context.set((prev) => ({
         ...prev,
         data: state instanceof Function ? state(prev.data) : state,
+        error: undefined,
+        loading: false,
       })),
     signal: context.signal,
   };
