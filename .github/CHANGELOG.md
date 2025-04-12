@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.3.8](https://github.com/agusmgarcia/react-core/tree/v4.3.8)
+
+> April 12, 2025
+
+- **createServerSlice**: reset error and loading on data set
+
 ## [v4.3.7](https://github.com/agusmgarcia/react-core/tree/v4.3.7)
 
 > April 11, 2025
