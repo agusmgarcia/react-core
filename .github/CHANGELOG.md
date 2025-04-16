@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.1.15](https://github.com/agusmgarcia/react-core/tree/v4.1.15)
+
+> April 16, 2025
+
+- prevent fails when no git repository found
+
 ## [v4.1.14](https://github.com/agusmgarcia/react-core/tree/v4.1.14)
 
 > April 12, 2025
