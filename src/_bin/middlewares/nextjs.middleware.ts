@@ -108,11 +108,15 @@ async function createEnvLocalFile(): Promise<string> {
 
   const source = {
     BASE_PATH: "",
-    NEXT_PUBLIC_APP_VERSION: await git
-      .getTags({ merged: true })
-      .then((tags) => tags.at(-1))
-      .then((tag) => git.getTagInfo(tag || "v0.0.0"))
-      .then((info) => `${info.major}.${info.minor}.${info.patch}`),
+    NEXT_PUBLIC_APP_VERSION: await git.isInsideRepository().then((inside) =>
+      inside
+        ? git
+            .getTags({ merged: true })
+            .then((tags) => tags.at(-1))
+            .then((tag) => git.getTagInfo(tag || "v0.0.0"))
+            .then((info) => `${info.major}.${info.minor}.${info.patch}`)
+        : "0.0.0",
+    ),
   };
 
   return Object.entries(
