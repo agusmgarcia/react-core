@@ -42,17 +42,22 @@ export default async function packageJSONMiddleware(
 async function createPackageJSONFile(
   core: Awaited<ReturnType<typeof getCore>>,
 ): Promise<string> {
-  const [packageJSON, repositoryDetails, version, remoteURL] =
-    await Promise.all([
-      getPackageJSON(),
-      git.getRepositoryDetails(),
-      git
-        .getTags({ merged: true })
-        .then((tags) => tags.at(-1))
-        .then((tag) => git.getTagInfo(tag || "v0.0.0"))
-        .then((info) => `${info.major}.${info.minor}.${info.patch}`),
-      git.getRemoteURL(),
-    ]);
+  const [packageJSON, insideRepository] = await Promise.all([
+    getPackageJSON(),
+    git.isInsideRepository(),
+  ]);
+
+  const [repositoryDetails, version, remoteURL] = insideRepository
+    ? await Promise.all([
+        git.getRepositoryDetails(),
+        git
+          .getTags({ merged: true })
+          .then((tags) => tags.at(-1))
+          .then((tag) => git.getTagInfo(tag || "v0.0.0"))
+          .then((info) => `${info.major}.${info.minor}.${info.patch}`),
+        git.getRemoteURL(),
+      ])
+    : [undefined, "0.0.0", undefined];
 
   const template = {
     author: !!repositoryDetails?.owner || "",

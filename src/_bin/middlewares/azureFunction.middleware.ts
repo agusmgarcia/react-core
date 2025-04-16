@@ -136,11 +136,15 @@ async function createLocalSettingsFile(): Promise<string> {
     files
       .readFile("local.settings.json")
       .then((result) => (!!result ? JSON.parse(result) : {})),
-    git
-      .getTags({ merged: true })
-      .then((tags) => tags.at(-1))
-      .then((tag) => git.getTagInfo(tag || "v0.0.0"))
-      .then((info) => `${info.major}.${info.minor}.${info.patch}`),
+    git.isInsideRepository().then((inside) =>
+      inside
+        ? git
+            .getTags({ merged: true })
+            .then((tags) => tags.at(-1))
+            .then((tag) => git.getTagInfo(tag || "v0.0.0"))
+            .then((info) => `${info.major}.${info.minor}.${info.patch}`)
+        : "0.0.0",
+    ),
   ]);
 
   const source = {
