@@ -7,7 +7,7 @@ import execute from "./execute";
 export async function deleteBranch(branch: string): Promise<void> {
   await execute(`git branch -D ${branch}`, true);
 
-  const remote = await getRemote();
+  const remote = await getRemoteName();
   if (!remote) return;
 
   await execute(`git push --delete ${remote} ${branch} --no-verify`, true);
@@ -20,7 +20,7 @@ export async function getCurrentBranch(): Promise<string | undefined> {
 }
 
 export async function getDefaultBranch(): Promise<string | undefined> {
-  return await getRemote().then((remote) =>
+  return await getRemoteName().then((remote) =>
     !!remote
       ? execute(`git remote show ${remote}`, false).then((branch) =>
           branch
@@ -121,7 +121,7 @@ export async function createCommit(
     { excludeQuotes: true },
   );
 
-  const remote = await getRemote();
+  const remote = await getRemoteName();
   if (!remote) return;
 
   const branch = await getCurrentBranch();
@@ -141,14 +141,14 @@ export async function getInitialCommit(): Promise<string | undefined> {
 const REMOTE_URL_REGEXP =
   /^(.+?):\/\/(?:.+?:)?(?:.+?@)?(.+?)\/(.+?)\/(.+?).git$/;
 
-export async function getRemote(): Promise<string | undefined> {
-  return await execute("git remote", false)
-    .then((remote) => remote.replace(EOL, ""))
-    .catch(() => undefined);
+export async function getRemoteName(): Promise<string | undefined> {
+  return await execute("git remote", false).then(
+    (remote) => remote?.replace(EOL, "") || undefined,
+  );
 }
 
 export async function getRemoteURL(): Promise<string | undefined> {
-  return await getRemote()
+  return await getRemoteName()
     .then((remote) =>
       !!remote ? execute(`git remote get-url ${remote}`, false) : undefined,
     )
@@ -224,7 +224,7 @@ export async function createTag(tag: string): Promise<void> {
   if (!TAG_REGEXP.test(tag)) throw `Tag ${tag} doesn't match the pattern`;
   await execute(`git tag ${tag}`, true);
 
-  const remote = await getRemote();
+  const remote = await getRemoteName();
   if (!remote) return;
 
   await execute(`git push ${remote} ${tag} --no-verify`, true);
@@ -233,7 +233,7 @@ export async function createTag(tag: string): Promise<void> {
 export async function deleteTag(tag: string): Promise<void> {
   await execute(`git tag --delete ${tag}`, true);
 
-  const remote = await getRemote();
+  const remote = await getRemoteName();
   if (!remote) return;
 
   await execute(`git push --delete ${remote} ${tag} --no-verify`, true);

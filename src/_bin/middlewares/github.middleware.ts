@@ -76,13 +76,11 @@ async function createChangelogFile(): Promise<string> {
     return `- ${!!commitInfo.scope ? `**${commitInfo.scope}**: ` : ""}${commitInfo.message}`;
   }
 
-  const remoteURL = await git.getRemoteURL();
-
   let fragments = "";
 
   if (await git.isInsideRepository()) {
+    const remoteURL = await git.getRemoteURL();
     const detailedTags = await git.getDetailedTags({ merged: true });
-
     const detailedCommits = await git.getDetailedCommits();
 
     fragments = await Promise.all(
