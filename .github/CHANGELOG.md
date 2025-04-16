@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.3.9](https://github.com/agusmgarcia/react-core/tree/v4.3.9)
+
+> April 16, 2025
+
+- prevent fails when no git repository found
+
 ## [v4.3.8](https://github.com/agusmgarcia/react-core/tree/v4.3.8)
 
 > April 12, 2025
