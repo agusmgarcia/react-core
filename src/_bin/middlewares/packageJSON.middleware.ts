@@ -1,3 +1,5 @@
+import semver from "semver";
+
 import { type AsyncFunc, merges } from "#src/utils";
 
 import {
@@ -85,10 +87,19 @@ async function createPackageJSONFile(
     },
   };
 
+  const engines = {
+    node:
+      !!packageJSON.engines?.node &&
+      semver.satisfies("22.14.0", packageJSON.engines.node)
+        ? packageJSON.engines.node
+        : "22.14.0",
+  };
+
   const source =
     core === "app"
       ? {
           core,
+          engines,
           main: undefined,
           private: true,
           repository: undefined,
@@ -98,6 +109,7 @@ async function createPackageJSONFile(
       : core === "azure-func"
         ? {
             core,
+            engines,
             main: "dist/{index.js,functions/*.js}",
             private: true,
             repository: undefined,
@@ -106,6 +118,7 @@ async function createPackageJSONFile(
           }
         : {
             core,
+            engines,
             main: "dist/index.js",
             private: false,
             types: "dist/index.d.ts",
