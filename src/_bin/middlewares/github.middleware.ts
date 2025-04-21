@@ -236,8 +236,8 @@ jobs:
         run: npm run build
         shell: bash
         env:
-          BASE_PATH: /\${{ github.event.repository.name }}
           NEXT_PUBLIC_APP_VERSION: \${{ steps.get-version-from-tag.outputs.replaced }}
+          NEXT_PUBLIC_BASE_PATH: /\${{ github.event.repository.name }}
 
       - name: Configure pages
         uses: actions/configure-pages@v5

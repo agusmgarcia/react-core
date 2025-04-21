@@ -83,7 +83,7 @@ const nextConfig = `const { PHASE_PRODUCTION_BUILD } = require("next/constants")
 
 /** @type import('next').NextConfig */
 module.exports = (phase) => ({
-  basePath: process.env.BASE_PATH,
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH,
   devIndicators: false,
   output: phase === PHASE_PRODUCTION_BUILD ? "export" : undefined,
   reactStrictMode: true,
@@ -107,7 +107,6 @@ async function createEnvLocalFile(): Promise<string> {
   );
 
   const source = {
-    BASE_PATH: "",
     NEXT_PUBLIC_APP_VERSION: await git.isInsideRepository().then((inside) =>
       inside
         ? git
@@ -117,6 +116,7 @@ async function createEnvLocalFile(): Promise<string> {
             .then((info) => `${info.major}.${info.minor}.${info.patch}`)
         : "0.0.0",
     ),
+    NEXT_PUBLIC_BASE_PATH: "",
   };
 
   return Object.entries(
