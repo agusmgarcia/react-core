@@ -125,7 +125,8 @@ async function deleteAzureFunctions(
             !insideFunctions.length ||
             (insideFunctions.length === 1 &&
               insideFunctions[0] === "httpTrigger1.ts" &&
-              (await files.readFile("httpTrigger1.ts")) === httpTrigger1),
+              (await files.readFile("src/functions/httpTrigger1.ts")) ===
+                httpTrigger1),
         )))
   )
     await folders.removeFolder("src");
