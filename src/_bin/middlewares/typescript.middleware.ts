@@ -53,7 +53,7 @@ async function createTsconfigFile(
             target: "ES2017",
             tsBuildInfoFile: "node_modules/.typescriptcache",
           },
-          exclude: [".next", "node_modules"],
+          exclude: [".next", "node_modules", "out"],
           include: ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
         }
       : core === "azure-func"
@@ -83,7 +83,7 @@ async function createTsconfigFile(
               target: "es5",
               tsBuildInfoFile: "node_modules/.typescriptcache",
             },
-            exclude: ["node_modules"],
+            exclude: ["dist", "node_modules"],
             include: ["**/*.ts"],
           }
         : {
@@ -112,7 +112,7 @@ async function createTsconfigFile(
               target: "es5",
               tsBuildInfoFile: "node_modules/.typescriptcache",
             },
-            exclude: ["node_modules"],
+            exclude: ["bin", "dist", "node_modules"],
             include: ["**/*.ts", "**/*.tsx"],
           };
 

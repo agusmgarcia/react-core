@@ -24,6 +24,6 @@
     "target": "es5",
     "tsBuildInfoFile": "node_modules/.typescriptcache"
   },
-  "exclude": ["node_modules"],
+  "exclude": ["bin", "dist", "node_modules"],
   "include": ["**/*.ts", "**/*.tsx"]
 }
