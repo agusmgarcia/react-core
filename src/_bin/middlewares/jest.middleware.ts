@@ -15,7 +15,9 @@ export default async function jestMiddleware(
       ? jestConfig_app
       : core === "azure-func"
         ? jestConfig_azure_func
-        : jestConfig_lib,
+        : core === "lib"
+          ? jestConfig_lib
+          : jestConfig_node,
     !!regenerate && !ignore.includes("jest.config.js"),
   );
 
@@ -75,6 +77,25 @@ const config = {
   },
   testEnvironment: "jsdom",
   testRegex: ["src\\\\/.*\\\\.test\\\\.[jt]sx?$"],
+};
+
+module.exports = createJestConfig(config);
+`;
+
+const jestConfig_node = `const nextJest = require("next/jest.js");
+
+const createJestConfig = nextJest({ dir: "./" });
+
+/** @type import("jest").Config */
+const config = {
+  cacheDirectory: "node_modules/.jestcache",
+  clearMocks: true,
+  coverageProvider: "v8",
+  moduleNameMapper: {
+    "^#src/(.*)$": "<rootDir>/src/$1",
+  },
+  testEnvironment: "node",
+  testRegex: ["src\\\\/.*\\\\.test\\\\.[jt]s$"],
 };
 
 module.exports = createJestConfig(config);

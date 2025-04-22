@@ -17,6 +17,13 @@ export default async function build(): Promise<void> {
       () => execute("del dist", true),
       () => execute("webpack --mode=production", true),
     );
+
+  if (core === "node")
+    await run(
+      false,
+      () => execute("del dist", true),
+      () => execute("webpack --mode=production", true),
+    );
 }
 
 build();

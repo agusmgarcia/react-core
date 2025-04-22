@@ -4,7 +4,7 @@ Set of opinionated commands to build, check, deploy, format, pack, run and test 
 
 ## Setup
 
-In your _package.json_ file, make sure you have set `core: "app"` in case it is a NextJS application, `core: "lib"` for library or `core: "azure-func"` for Azure functions.
+In your _package.json_ file, make sure you have set `core: "app"` in case it is a NextJS application, `core: "lib"` for library, `core: "azure-func"` for Azure functions or `core: "node"` for NodeJS applications.
 
 ```jsonc
 // ./package.json
@@ -66,6 +66,7 @@ When running `npm run regenerate` all the pertinent files will be regenerated. H
 - .github/README.md _(just creation phase)_
 - .github/workflows/deploy-app.yml
 - .github/workflows/deploy-azure-func.yml
+- .github/workflows/deploy-node.yml
 - .github/workflows/publish-lib.yml
 - pages/\_app.css _(just creation phase)_
 - pages/\_app.tsx _(just creation phase)_

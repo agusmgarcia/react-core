@@ -13,7 +13,11 @@ export default async function webpackMiddleware(
   else
     await files.upsertFile(
       "webpack.config.js",
-      core === "azure-func" ? webpackConfig_azure_func : webpackConfig_lib,
+      core === "azure-func"
+        ? webpackConfig_azure_func
+        : core === "lib"
+          ? webpackConfig_lib
+          : webpackConfig_node,
       !!regenerate && !ignore.includes("webpack.config.js"),
     );
 
@@ -215,4 +219,53 @@ module.exports = [
     target: "node",
   },
 ];
+`;
+
+const webpackConfig_node = `const path = require("path");
+const getCustomTransformers = require("ts-transform-paths").default;
+
+const packageJSON = require("./package.json");
+
+/** @type (env: { production: boolean | undefined }) => import("webpack").Configuration */
+module.exports = function (env) {
+  return {
+    entry: path.resolve(__dirname, "src", "index.ts"),
+    externals: !!env.production
+      ? undefined
+      : Object.keys(packageJSON.dependencies || {}),
+    mode: !!env.production ? "production" : "development",
+    module: {
+      rules: [
+        {
+          exclude: /node_modules/,
+          test: /\\.ts$/,
+          use: [
+            {
+              loader: "ts-loader",
+              options: { getCustomTransformers },
+            },
+          ],
+        },
+      ],
+    },
+    output: {
+      filename: "index.js",
+      globalObject: "this",
+      library: {
+        name: packageJSON.name,
+        type: "umd",
+      },
+      path: path.resolve(__dirname, "dist"),
+      umdNamedDefine: true,
+    },
+    resolve: {
+      alias: { "#src": path.resolve(__dirname, "src") },
+      extensions: [".js", ".ts"],
+    },
+    target: "node",
+    watchOptions: {
+      ignored: /node_modules/,
+    },
+  };
+};
 `;

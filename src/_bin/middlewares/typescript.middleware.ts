@@ -92,35 +92,65 @@ async function createTsconfigFile(
             exclude: ["dist", "node_modules"],
             include: ["**/*.ts"],
           }
-        : {
-            compilerOptions: {
-              allowJs: true,
-              baseUrl: "./",
-              declaration: true,
-              esModuleInterop: true,
-              forceConsistentCasingInFileNames: true,
-              incremental: true,
-              isolatedModules: true,
-              jsx: "preserve",
-              lib: ["DOM", "DOM.Iterable", "ESNext"],
-              module: "commonjs",
-              moduleResolution: "node",
-              noEmit: false,
-              noImplicitOverride: true,
-              outDir: "./dist",
-              paths: {
-                "#src/*": ["src/*"],
+        : core === "lib"
+          ? {
+              compilerOptions: {
+                allowJs: true,
+                baseUrl: "./",
+                declaration: true,
+                esModuleInterop: true,
+                forceConsistentCasingInFileNames: true,
+                incremental: true,
+                isolatedModules: true,
+                jsx: "preserve",
+                lib: ["DOM", "DOM.Iterable", "ESNext"],
+                module: "commonjs",
+                moduleResolution: "node",
+                noEmit: false,
+                noImplicitOverride: true,
+                outDir: "./dist",
+                paths: {
+                  "#src/*": ["src/*"],
+                },
+                resolveJsonModule: true,
+                rootDir: "./src",
+                skipLibCheck: true,
+                strict: true,
+                target: "es5",
+                tsBuildInfoFile: "node_modules/.typescriptcache",
               },
-              resolveJsonModule: true,
-              rootDir: "./src",
-              skipLibCheck: true,
-              strict: true,
-              target: "es5",
-              tsBuildInfoFile: "node_modules/.typescriptcache",
-            },
-            exclude: ["bin", "dist", "node_modules"],
-            include: ["**/*.ts", "**/*.tsx"],
-          };
+              exclude: ["bin", "dist", "node_modules"],
+              include: ["**/*.ts", "**/*.tsx"],
+            }
+          : {
+              compilerOptions: {
+                allowJs: true,
+                baseUrl: "./",
+                declaration: false,
+                esModuleInterop: true,
+                forceConsistentCasingInFileNames: true,
+                incremental: true,
+                isolatedModules: true,
+                jsx: "preserve",
+                lib: ["DOM", "DOM.Iterable", "ESNext"],
+                module: "commonjs",
+                moduleResolution: "node",
+                noEmit: false,
+                noImplicitOverride: true,
+                outDir: "./dist",
+                paths: {
+                  "#src/*": ["src/*"],
+                },
+                resolveJsonModule: true,
+                rootDir: "./src",
+                skipLibCheck: true,
+                strict: true,
+                target: "es5",
+                tsBuildInfoFile: "node_modules/.typescriptcache",
+              },
+              exclude: ["dist", "node_modules"],
+              include: ["**/*.ts"],
+            };
 
   return JSON.stringify(
     merges.deep(tsconfig, source, {

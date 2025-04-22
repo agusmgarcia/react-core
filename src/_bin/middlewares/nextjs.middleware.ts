@@ -36,10 +36,10 @@ export default async function nextJSMiddleware(
         )
       : files.removeFile("next.config.js"),
     files.removeFile(".env"),
-    core === "app"
+    core === "app" || core === "node"
       ? files.upsertFile(
           ".env.local",
-          await createEnvLocalFile(regenerate),
+          await createEnvLocalFile(core, regenerate),
           !!regenerate && !ignore.includes(".env.local"),
         )
       : files.removeFile(".env.local"),
@@ -92,6 +92,7 @@ module.exports = (phase) => ({
 `;
 
 async function createEnvLocalFile(
+  core: Extract<Awaited<ReturnType<typeof getCore>>, "app" | "node">,
   regenerate: "hard" | "soft" | undefined,
 ): Promise<string> {
   if (!regenerate) return "";
@@ -114,18 +115,25 @@ async function createEnvLocalFile(
         )
       : {};
 
-  const source = {
-    NEXT_PUBLIC_APP_VERSION: await git.isInsideRepository().then((inside) =>
-      inside
-        ? git
-            .getTags({ merged: true })
-            .then((tags) => tags.at(-1))
-            .then((tag) => git.getTagInfo(tag || "v0.0.0"))
-            .then((info) => `${info.major}.${info.minor}.${info.patch}`)
-        : "0.0.0",
-    ),
-    NEXT_PUBLIC_BASE_PATH: "",
-  };
+  const version = await git.isInsideRepository().then((inside) =>
+    inside
+      ? git
+          .getTags({ merged: true })
+          .then((tags) => tags.at(-1))
+          .then((tag) => git.getTagInfo(tag || "v0.0.0"))
+          .then((info) => `${info.major}.${info.minor}.${info.patch}`)
+      : "0.0.0",
+  );
+
+  const source =
+    core === "app"
+      ? {
+          NEXT_PUBLIC_APP_VERSION: version,
+          NEXT_PUBLIC_BASE_PATH: "",
+        }
+      : {
+          APP_VERSION: version,
+        };
 
   return Object.entries(
     merges.deep(envLocal, source, {

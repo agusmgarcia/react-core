@@ -18,6 +18,14 @@ export default async function start(): Promise<void> {
         true,
       ),
     );
+
+  if (core === "node")
+    await run(false, () =>
+      execute(
+        `concurrently -k "webpack --mode=development --watch" "node --env-file-if-exists=.env.local --watch dist/index.js"`,
+        true,
+      ),
+    );
 }
 
 start();

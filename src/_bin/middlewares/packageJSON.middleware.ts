@@ -141,14 +141,24 @@ async function createPackageJSONFile(
             types: undefined,
             version,
           }
-        : {
-            core,
-            engines,
-            main: "dist/index.js",
-            private: false,
-            types: "dist/index.d.ts",
-            version,
-          };
+        : core === "lib"
+          ? {
+              core,
+              engines,
+              main: "dist/index.js",
+              private: false,
+              types: "dist/index.d.ts",
+              version,
+            }
+          : {
+              core,
+              engines,
+              main: "dist/index.js",
+              private: true,
+              repository: undefined,
+              types: undefined,
+              version,
+            };
 
   return JSON.stringify(
     sortProperties(
