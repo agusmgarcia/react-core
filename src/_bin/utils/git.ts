@@ -163,6 +163,12 @@ export async function getRemoteURL(): Promise<string | undefined> {
     });
 }
 
+export async function isReactCore(): Promise<boolean> {
+  return await getRemoteURL()
+    .then((url) => url?.toLowerCase())
+    .then((url) => url === "https://github.com/agusmgarcia/react-core");
+}
+
 // <================================= TAGS =================================> //
 
 const TAG_REGEXP = /^v(\d+)\.(\d+)\.(\d+)(-temp)?$/;

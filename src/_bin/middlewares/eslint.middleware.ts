@@ -4,7 +4,7 @@ import { files, getCore } from "../utils";
 
 export default async function eslintMiddleware(
   next: AsyncFunc,
-  regenerate: boolean,
+  regenerate: "hard" | "soft" | undefined,
   ignore: string[],
 ): Promise<void> {
   const core = await getCore();
@@ -19,7 +19,7 @@ export default async function eslintMiddleware(
         : core === "azure-func"
           ? eslintConfig_azure_func
           : eslintConfig_lib,
-      regenerate && !ignore.includes("eslint.config.js"),
+      !!regenerate && !ignore.includes("eslint.config.js"),
     ),
   ]);
 

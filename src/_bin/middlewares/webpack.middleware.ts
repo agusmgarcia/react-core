@@ -1,10 +1,10 @@
 import { type AsyncFunc } from "#src/utils";
 
-import { files, getCore } from "../utils";
+import { files, folders, getCore } from "../utils";
 
 export default async function webpackMiddleware(
   next: AsyncFunc,
-  regenerate: boolean,
+  regenerate: "hard" | "soft" | undefined,
   ignore: string[],
 ): Promise<void> {
   const core = await getCore();
@@ -14,10 +14,16 @@ export default async function webpackMiddleware(
     await files.upsertFile(
       "webpack.config.js",
       core === "azure-func" ? webpackConfig_azure_func : webpackConfig_lib,
-      regenerate && !ignore.includes("webpack.config.js"),
+      !!regenerate && !ignore.includes("webpack.config.js"),
     );
 
-  await next();
+  try {
+    await next();
+  } finally {
+    await Promise.all([
+      core === "app" ? folders.removeFolder("dist") : Promise.resolve(),
+    ]);
+  }
 }
 
 const webpackConfig_azure_func = `const fs = require("fs");

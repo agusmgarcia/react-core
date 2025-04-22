@@ -4,7 +4,7 @@ import { files } from "../utils";
 
 export default async function prettierMiddleware(
   next: AsyncFunc,
-  regenerate: boolean,
+  regenerate: "hard" | "soft" | undefined,
   ignore: string[],
 ): Promise<void> {
   await Promise.all([
@@ -13,7 +13,7 @@ export default async function prettierMiddleware(
     files.upsertFile(
       "prettier.config.js",
       prettierConfig,
-      regenerate && !ignore.includes("prettier.config.js"),
+      !!regenerate && !ignore.includes("prettier.config.js"),
     ),
   ]);
 

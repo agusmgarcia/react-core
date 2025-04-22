@@ -102,6 +102,14 @@ In case you want to prevent one of the files of being regenerated, use the `--ig
 
 > In this example, it will ignore `eslint.config.js` and `prettier.config.js` files of being regenerated. The generated files vary on the type of the application.
 
+## Force file regeneration
+
+In case you have changed the core of the project, you may want to run the `regenerate` script with the `--force` flag. That makes to override the user changes.
+
+```bash
+npm run regenerate -- --force
+```
+
 ## Select test files
 
 If you want to run some tests for specific files use the `--pattern` argument to the test script.

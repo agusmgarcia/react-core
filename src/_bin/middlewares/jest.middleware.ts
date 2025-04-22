@@ -4,7 +4,7 @@ import { files, getCore } from "../utils";
 
 export default async function jestMiddleware(
   next: AsyncFunc,
-  regenerate: boolean,
+  regenerate: "hard" | "soft" | undefined,
   ignore: string[],
 ): Promise<void> {
   const core = await getCore();
@@ -16,7 +16,7 @@ export default async function jestMiddleware(
       : core === "azure-func"
         ? jestConfig_azure_func
         : jestConfig_lib,
-    regenerate && !ignore.includes("jest.config.js"),
+    !!regenerate && !ignore.includes("jest.config.js"),
   );
 
   await next();

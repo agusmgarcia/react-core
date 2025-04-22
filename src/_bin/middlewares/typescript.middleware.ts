@@ -4,15 +4,15 @@ import { files, getCore } from "../utils";
 
 export default async function typescriptMiddleware(
   next: AsyncFunc,
-  regenerate: boolean,
+  regenerate: "hard" | "soft" | undefined,
   ignore: string[],
 ): Promise<void> {
   const core = await getCore();
 
   await files.upsertFile(
     "tsconfig.json",
-    await createTsconfigFile(core),
-    regenerate && !ignore.includes("tsconfig.json"),
+    await createTsconfigFile(core, regenerate),
+    !!regenerate && !ignore.includes("tsconfig.json"),
   );
 
   await next();
@@ -20,10 +20,16 @@ export default async function typescriptMiddleware(
 
 async function createTsconfigFile(
   core: Awaited<ReturnType<typeof getCore>>,
+  regenerate: "hard" | "soft" | undefined,
 ): Promise<string> {
-  const tsconfig = await files
-    .readFile("tsconfig.json")
-    .then((result) => (!!result ? JSON.parse(result) : {}));
+  if (!regenerate) return "";
+
+  const tsconfig =
+    regenerate === "soft"
+      ? await files
+          .readFile("tsconfig.json")
+          .then((result) => (!!result ? JSON.parse(result) : {}))
+      : {};
 
   const source =
     core === "app"

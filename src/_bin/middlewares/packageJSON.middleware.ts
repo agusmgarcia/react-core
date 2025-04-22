@@ -14,7 +14,7 @@ import {
 
 export default async function packageJSONMiddleware(
   next: AsyncFunc,
-  regenerate: boolean,
+  regenerate: "hard" | "soft" | undefined,
   ignore: string[],
 ): Promise<void> {
   const core = await getCore();
@@ -33,8 +33,8 @@ export default async function packageJSONMiddleware(
 
   await files.upsertFile(
     "package.json",
-    await createPackageJSONFile(core),
-    regenerate && !ignore.includes("package.json"),
+    await createPackageJSONFile(core, regenerate),
+    !!regenerate && !ignore.includes("package.json"),
   );
 
   await execute("npm i", false);
@@ -44,13 +44,16 @@ export default async function packageJSONMiddleware(
 
 async function createPackageJSONFile(
   core: Awaited<ReturnType<typeof getCore>>,
+  regenerate: "hard" | "soft" | undefined,
 ): Promise<string> {
+  if (!regenerate) return "";
+
   const [packageJSON, insideRepository] = await Promise.all([
     getPackageJSON(),
     git.isInsideRepository(),
   ]);
 
-  const [repositoryDetails, version, remoteURL] = insideRepository
+  const [repositoryDetails, version, remoteURL, reactCore] = insideRepository
     ? await Promise.all([
         git.getRepositoryDetails(),
         git
@@ -59,8 +62,9 @@ async function createPackageJSONFile(
           .then((tag) => git.getTagInfo(tag || "v0.0.0"))
           .then((info) => `${info.major}.${info.minor}.${info.patch}`),
         git.getRemoteURL(),
+        git.isReactCore(),
       ])
-    : [undefined, "0.0.0", undefined];
+    : [undefined, "0.0.0", undefined, false];
 
   const template = {
     author: repositoryDetails?.owner || "",
@@ -75,17 +79,37 @@ async function createPackageJSONFile(
             url: `git+${remoteURL}.git`,
           }
         : undefined,
-    scripts: {
-      build: "agusmgarcia-react-core-build",
-      check: "agusmgarcia-react-core-check",
-      deploy: "agusmgarcia-react-core-deploy",
-      format: "agusmgarcia-react-core-format",
-      postpack: "agusmgarcia-react-core-postpack",
-      prepack: "agusmgarcia-react-core-prepack",
-      regenerate: "agusmgarcia-react-core-regenerate",
-      start: "agusmgarcia-react-core-start",
-      test: "agusmgarcia-react-core-test",
-    },
+    scripts: !reactCore
+      ? {
+          build: "agusmgarcia-react-core-build",
+          check: "agusmgarcia-react-core-check",
+          deploy: "agusmgarcia-react-core-deploy",
+          format: "agusmgarcia-react-core-format",
+          postpack: "agusmgarcia-react-core-postpack",
+          prepack: "agusmgarcia-react-core-prepack",
+          regenerate: "agusmgarcia-react-core-regenerate",
+          start: "agusmgarcia-react-core-start",
+          test: "agusmgarcia-react-core-test",
+        }
+      : {
+          build:
+            "node -r ts-node/register -r tsconfig-paths/register src/_bin/build.ts",
+          check:
+            "node -r ts-node/register -r tsconfig-paths/register src/_bin/check.ts",
+          deploy:
+            "node -r ts-node/register -r tsconfig-paths/register src/_bin/deploy.ts",
+          format:
+            "node -r ts-node/register -r tsconfig-paths/register src/_bin/format.ts",
+          postpack:
+            "node -r ts-node/register -r tsconfig-paths/register src/_bin/postpack.ts",
+          prepack:
+            "node -r ts-node/register -r tsconfig-paths/register src/_bin/prepack.ts",
+          regenerate:
+            "node -r ts-node/register -r tsconfig-paths/register src/_bin/regenerate.ts",
+          start:
+            "node -r ts-node/register -r tsconfig-paths/register src/_bin/start.ts",
+          test: "node -r ts-node/register -r tsconfig-paths/register src/_bin/test.ts",
+        },
   };
 
   const engines = {
@@ -129,11 +153,15 @@ async function createPackageJSONFile(
   return JSON.stringify(
     sortProperties(
       merges.deep(
-        merges.deep(template, packageJSON, {
-          arrayConcat: true,
-          arrayRemoveDuplicated: true,
-          sort: true,
-        }),
+        merges.deep(
+          regenerate === "soft" ? template : packageJSON,
+          regenerate === "soft" ? packageJSON : template,
+          {
+            arrayConcat: true,
+            arrayRemoveDuplicated: true,
+            sort: true,
+          },
+        ),
         source,
         {
           arrayConcat: true,

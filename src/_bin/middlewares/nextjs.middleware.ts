@@ -6,7 +6,7 @@ import { files, folders, getCore, git } from "../utils";
 
 export default async function nextJSMiddleware(
   next: AsyncFunc,
-  regenerate: boolean,
+  regenerate: "hard" | "soft" | undefined,
   ignore: string[],
 ): Promise<void> {
   const core = await getCore();
@@ -16,13 +16,13 @@ export default async function nextJSMiddleware(
       Promise.all([
         core === "app"
           ? files.upsertFile("pages/_app.tsx", app, {
-              create: regenerate && !ignore.includes("pages/_app.tsx"),
+              create: !!regenerate && !ignore.includes("pages/_app.tsx"),
               update: false,
             })
           : files.removeFile("pages/_app.tsx"),
         core === "app"
           ? files.upsertFile("pages/_app.css", appCSS, {
-              create: regenerate && !ignore.includes("pages/_app.css"),
+              create: !!regenerate && !ignore.includes("pages/_app.css"),
               update: false,
             })
           : files.removeFile("pages/_app.css"),
@@ -32,15 +32,15 @@ export default async function nextJSMiddleware(
       ? files.upsertFile(
           "next.config.js",
           nextConfig,
-          regenerate && !ignore.includes("next.config.js"),
+          !!regenerate && !ignore.includes("next.config.js"),
         )
       : files.removeFile("next.config.js"),
     files.removeFile(".env"),
     core === "app"
       ? files.upsertFile(
           ".env.local",
-          await createEnvLocalFile(),
-          regenerate && !ignore.includes(".env.local"),
+          await createEnvLocalFile(regenerate),
+          !!regenerate && !ignore.includes(".env.local"),
         )
       : files.removeFile(".env.local"),
   ]);
@@ -50,6 +50,7 @@ export default async function nextJSMiddleware(
   } finally {
     await Promise.all([
       core !== "app" ? files.removeFile("next-env.d.ts") : Promise.resolve(),
+      core !== "app" ? folders.removeFolder("out") : Promise.resolve(),
       core !== "app" ? folders.removeFolder(".next") : Promise.resolve(),
       core !== "app" ? folders.removeFolder("pages") : Promise.resolve(),
     ]);
@@ -90,21 +91,28 @@ module.exports = (phase) => ({
 });
 `;
 
-async function createEnvLocalFile(): Promise<string> {
-  const envLocal = await files.readFile(".env.local").then((result) =>
-    !!result
-      ? result.split(EOL).reduce(
-          (result, line) => {
-            const [key, value] = line.split("=", 2);
-            if (!key) return result;
+async function createEnvLocalFile(
+  regenerate: "hard" | "soft" | undefined,
+): Promise<string> {
+  if (!regenerate) return "";
 
-            result[key] = value || "";
-            return result;
-          },
-          {} as Record<string, string>,
+  const envLocal =
+    regenerate === "soft"
+      ? await files.readFile(".env.local").then((result) =>
+          !!result
+            ? result.split(EOL).reduce(
+                (result, line) => {
+                  const [key, value] = line.split("=", 2);
+                  if (!key) return result;
+
+                  result[key] = value || "";
+                  return result;
+                },
+                {} as Record<string, string>,
+              )
+            : {},
         )
-      : {},
-  );
+      : {};
 
   const source = {
     NEXT_PUBLIC_APP_VERSION: await git.isInsideRepository().then((inside) =>

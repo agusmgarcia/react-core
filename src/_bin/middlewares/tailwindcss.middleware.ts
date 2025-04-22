@@ -4,7 +4,7 @@ import { files, getCore } from "../utils";
 
 export default async function tailwindcssMiddleware(
   next: AsyncFunc,
-  regenerate: boolean,
+  regenerate: "hard" | "soft" | undefined,
   ignore: string[],
 ): Promise<void> {
   const core = await getCore();
@@ -14,7 +14,7 @@ export default async function tailwindcssMiddleware(
       ? files.upsertFile(
           "postcss.config.js",
           postCSSConfig,
-          regenerate && !ignore.includes("postcss.config.js"),
+          !!regenerate && !ignore.includes("postcss.config.js"),
         )
       : files.removeFile("postcss.config.js"),
     core === "app" || core === "lib"
@@ -22,7 +22,7 @@ export default async function tailwindcssMiddleware(
           "tailwind.config.js",
           core === "app" ? tailwindConfig_app : tailwindConfig_lib,
           {
-            create: regenerate && !ignore.includes("tailwind.config.js"),
+            create: !!regenerate && !ignore.includes("tailwind.config.js"),
             update: false,
           },
         )

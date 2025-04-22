@@ -6,17 +6,21 @@ import { files, getCore } from "../utils";
 
 export default async function nodeMiddleware(
   next: AsyncFunc,
-  regenerate: boolean,
+  regenerate: "hard" | "soft" | undefined,
   ignore: string[],
 ): Promise<void> {
   await Promise.all([
-    files.upsertFile(".nvmrc", nvmrc, regenerate && !ignore.includes(".nvmrc")),
+    files.upsertFile(
+      ".nvmrc",
+      nvmrc,
+      !!regenerate && !ignore.includes(".nvmrc"),
+    ),
     getCore().then(async (core) =>
       core === "lib"
         ? files.upsertFile(
             ".npmignore",
-            await createNpmignoreFile(),
-            regenerate && !ignore.includes(".npmignore"),
+            await createNpmignoreFile(regenerate),
+            !!regenerate && !ignore.includes(".npmignore"),
           )
         : files.removeFile(".npmignore"),
     ),
@@ -27,10 +31,17 @@ export default async function nodeMiddleware(
 
 const nvmrc = "22.14";
 
-async function createNpmignoreFile(): Promise<string> {
-  const npmignore = await files
-    .readFile(".npmignore")
-    .then((result) => (!!result ? result.split(EOL) : []));
+async function createNpmignoreFile(
+  regenerate: "hard" | "soft" | undefined,
+): Promise<string> {
+  if (!regenerate) return "";
+
+  const npmignore =
+    regenerate === "soft"
+      ? await files
+          .readFile(".npmignore")
+          .then((result) => (!!result ? result.split(EOL) : []))
+      : [];
 
   const source = [
     "**/.*",

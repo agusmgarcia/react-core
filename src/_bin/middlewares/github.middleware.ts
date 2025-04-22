@@ -6,7 +6,7 @@ import { files, folders, getCore, git } from "../utils";
 
 export default async function githubMiddleware(
   next: AsyncFunc,
-  regenerate: boolean,
+  regenerate: "hard" | "soft" | undefined,
   ignore: string[],
 ): Promise<void> {
   const [core] = await Promise.all([
@@ -17,17 +17,17 @@ export default async function githubMiddleware(
   await Promise.all([
     files.upsertFile(
       ".gitignore",
-      await createGitignoreFile(core),
-      regenerate && !ignore.includes(".gitignore"),
+      await createGitignoreFile(core, regenerate),
+      !!regenerate && !ignore.includes(".gitignore"),
     ),
     files.upsertFile(".github/README.md", readme, {
-      create: regenerate && !ignore.includes(".github/README.md"),
+      create: !!regenerate && !ignore.includes(".github/README.md"),
       update: false,
     }),
     files.upsertFile(
       ".github/CHANGELOG.md",
-      await createChangelogFile(),
-      regenerate && !ignore.includes(".github/CHANGELOG.md"),
+      await createChangelogFile(regenerate),
+      !!regenerate && !ignore.includes(".github/CHANGELOG.md"),
     ),
     folders
       .upsertFolder(".github/workflows")
@@ -47,7 +47,7 @@ export default async function githubMiddleware(
             : core === "azure-func"
               ? deploy_azure_func
               : publish_lib,
-          regenerate && !ignore.includes(fileName),
+          !!regenerate && !ignore.includes(fileName),
         ),
       ),
     files.removeFile(
@@ -74,10 +74,16 @@ export default async function githubMiddleware(
 
 async function createGitignoreFile(
   core: Awaited<ReturnType<typeof getCore>>,
+  regenerate: "hard" | "soft" | undefined,
 ): Promise<string> {
-  const gitignore = await files
-    .readFile(".gitignore")
-    .then((result) => (!!result ? result.split(EOL) : []));
+  if (!regenerate) return "";
+
+  const gitignore =
+    regenerate === "soft"
+      ? await files
+          .readFile(".gitignore")
+          .then((result) => (!!result ? result.split(EOL) : []))
+      : [];
 
   const source =
     core === "app"
@@ -97,7 +103,11 @@ async function createGitignoreFile(
 
 const readme = "";
 
-async function createChangelogFile(): Promise<string> {
+async function createChangelogFile(
+  regenerate: "hard" | "soft" | undefined,
+): Promise<string> {
+  if (!regenerate) return "";
+
   function transformCommit({ commit }: { commit: string }): string {
     const commitInfo = git.getCommitInfo(commit);
     return `- ${!!commitInfo.scope ? `**${commitInfo.scope}**: ` : ""}${commitInfo.message}`;

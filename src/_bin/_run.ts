@@ -12,11 +12,12 @@ export default async function run(
   const mutex: Mutex = ((globalThis as any).__AGUSMGARCIA__RUN__MUTEX__ ||=
     new Mutex());
 
-  await mutex.runExclusive(async () => {
-    const ignore = args.get("ignore");
+  const force = args.has("force");
+  const ignore = args.get("ignore");
 
+  await mutex.runExclusive(async () => {
     const middleware = concat(
-      regenerate,
+      regenerate ? (force ? "hard" : "soft") : undefined,
       ignore,
       ...Object.values(middlewares),
     );
@@ -32,11 +33,11 @@ export default async function run(
 }
 
 function concat(
-  regenerate: boolean,
+  regenerate: "hard" | "soft" | undefined,
   ignore: string[],
   ...middlewares: AsyncFunc<
     void,
-    [next: AsyncFunc, regenerate: boolean, ignore: string[]]
+    [next: AsyncFunc, regenerate: "hard" | "soft" | undefined, ignore: string[]]
   >[]
 ): AsyncFunc<void, [callback: AsyncFunc]> {
   return function (callback) {

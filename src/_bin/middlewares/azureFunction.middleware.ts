@@ -6,7 +6,7 @@ import { files, folders, getCore, git, sortProperties } from "../utils";
 
 export default async function azureFunctionMiddleware(
   next: AsyncFunc,
-  regenerate: boolean,
+  regenerate: "hard" | "soft" | undefined,
   ignore: string[],
 ): Promise<void> {
   const core = await getCore();
@@ -15,30 +15,30 @@ export default async function azureFunctionMiddleware(
     core === "azure-func"
       ? files.upsertFile(
           "host.json",
-          await createHostFile(),
-          regenerate && !ignore.includes("host.json"),
+          await createHostFile(regenerate),
+          !!regenerate && !ignore.includes("host.json"),
         )
       : files.removeFile("host.json"),
     core === "azure-func"
       ? files.upsertFile(
           "local.settings.json",
-          await createLocalSettingsFile(),
-          regenerate && !ignore.includes("local.settings.json"),
+          await createLocalSettingsFile(regenerate),
+          !!regenerate && !ignore.includes("local.settings.json"),
         )
       : files.removeFile("local.settings.json"),
     folders.upsertFolder("src").then(() =>
       core === "azure-func"
         ? files
             .upsertFile("src/index.ts", index, {
-              create: regenerate && !ignore.includes("src/index.ts"),
+              create: !!regenerate && !ignore.includes("src/index.ts"),
               update: false,
             })
             .then(() => folders.upsertFolder("src/functions"))
             .then(() => folders.isEmpty("src/functions"))
             .then((empty) =>
               files.upsertFile("src/functions/httpTrigger1.ts", httpTrigger1, {
-                create: empty && regenerate,
-                update: false,
+                create: empty && !!regenerate,
+                update: regenerate === "hard",
               }),
             )
         : deleteAzureFunctions(core),
@@ -46,8 +46,8 @@ export default async function azureFunctionMiddleware(
     core === "azure-func"
       ? files.upsertFile(
           ".funcignore",
-          await createFuncignoreFile(),
-          regenerate && !ignore.includes(".funcignore"),
+          await createFuncignoreFile(regenerate),
+          !!regenerate && !ignore.includes(".funcignore"),
         )
       : files.removeFile(".funcignore"),
   ]);
@@ -55,10 +55,17 @@ export default async function azureFunctionMiddleware(
   await next();
 }
 
-async function createHostFile(): Promise<string> {
-  const hostJSON = await files
-    .readFile("host.json")
-    .then((result) => (!!result ? JSON.parse(result) : {}));
+async function createHostFile(
+  regenerate: "hard" | "soft" | undefined,
+): Promise<string> {
+  if (!regenerate) return "";
+
+  const hostJSON =
+    regenerate === "soft"
+      ? await files
+          .readFile("host.json")
+          .then((result) => (!!result ? JSON.parse(result) : {}))
+      : {};
 
   const template = {
     extensions: {
@@ -132,11 +139,17 @@ async function deleteAzureFunctions(
     await folders.removeFolder("src");
 }
 
-async function createLocalSettingsFile(): Promise<string> {
+async function createLocalSettingsFile(
+  regenerate: "hard" | "soft" | undefined,
+): Promise<string> {
+  if (!regenerate) return "";
+
   const [localSettings, version] = await Promise.all([
-    files
-      .readFile("local.settings.json")
-      .then((result) => (!!result ? JSON.parse(result) : {})),
+    regenerate === "soft"
+      ? files
+          .readFile("local.settings.json")
+          .then((result) => (!!result ? JSON.parse(result) : {}))
+      : Promise.resolve({}),
     git.isInsideRepository().then((inside) =>
       inside
         ? git
@@ -201,10 +214,17 @@ app.http("httpTrigger1", {
 });
 `;
 
-async function createFuncignoreFile(): Promise<string> {
-  const funcignore = await files
-    .readFile(".funcignore")
-    .then((result) => (!!result ? result.split(EOL) : []));
+async function createFuncignoreFile(
+  regenerate: "hard" | "soft" | undefined,
+): Promise<string> {
+  if (!regenerate) return "";
+
+  const funcignore =
+    regenerate === "soft"
+      ? await files
+          .readFile(".funcignore")
+          .then((result) => (!!result ? result.split(EOL) : []))
+      : [];
 
   const source = [
     "__azurite_db*__.json",
