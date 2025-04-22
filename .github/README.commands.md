@@ -121,13 +121,6 @@ If you want to run some tests for specific files use the `--pattern` argument to
 
 If you want to watch files for changes and rerun tests related to changed files use the `--watch` argument to the test script.
 
-```jsonc
-// ./package.json
-
-{
-  "scripts": {
-    // ...
-    "test": "agusmgarcia-react-core-test --watch",
-  },
-}
+```bash
+npm run test -- --watch
 ```
