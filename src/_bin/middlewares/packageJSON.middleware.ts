@@ -18,12 +18,6 @@ export default async function packageJSONMiddleware(
 ): Promise<void> {
   const core = await getCore();
 
-  await files.upsertFile(
-    "package.json",
-    await createPackageJSONFile(core),
-    regenerate && !ignore.includes("package.json"),
-  );
-
   if (core === "azure-func") {
     if (regenerate && !ignore.includes("package.json")) {
       await execute("npm i @azure/functions@4", false);
@@ -35,6 +29,12 @@ export default async function packageJSONMiddleware(
     // TODO: remove this line when azure-functions-core-tools were lighther
     await execute("npm uninstall azure-functions-core-tools", false);
   }
+
+  await files.upsertFile(
+    "package.json",
+    await createPackageJSONFile(core),
+    regenerate && !ignore.includes("package.json"),
+  );
 
   await execute("npm i", false);
 
