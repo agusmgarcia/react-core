@@ -1,3 +1,4 @@
+import path from "path";
 import semver from "semver";
 
 import { type AsyncFunc, merges } from "#src/utils";
@@ -66,7 +67,7 @@ async function createPackageJSONFile(
     description: "",
     name: !!repositoryDetails
       ? `@${repositoryDetails.owner}/${repositoryDetails.name}`
-      : "",
+      : path.basename(process.cwd()),
     repository:
       !!remoteURL && core === "lib"
         ? {
