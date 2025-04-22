@@ -183,7 +183,6 @@ const js = require("@eslint/js");
 const typescriptEslint = require("@typescript-eslint/eslint-plugin");
 const tsParser = require("@typescript-eslint/parser");
 const { defineConfig, globalIgnores } = require("eslint/config");
-const react = require("eslint-plugin-react");
 const simpleImportSort = require("eslint-plugin-simple-import-sort");
 const sort = require("eslint-plugin-sort");
 const unusedImports = require("eslint-plugin-unused-imports");
@@ -213,7 +212,6 @@ module.exports = defineConfig([
 
     plugins: {
       "@typescript-eslint": typescriptEslint,
-      react,
       "simple-import-sort": simpleImportSort,
       sort,
       "unused-imports": unusedImports,
@@ -234,14 +232,6 @@ module.exports = defineConfig([
       "import/first": "error",
       "import/newline-after-import": "error",
       "import/no-duplicates": "error",
-      "react/jsx-boolean-value": ["error", "always"],
-
-      "react/jsx-sort-props": [
-        "error",
-        {
-          reservedFirst: true,
-        },
-      ],
 
       "simple-import-sort/exports": "off",
       "simple-import-sort/imports": "error",
