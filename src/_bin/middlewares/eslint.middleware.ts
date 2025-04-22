@@ -194,7 +194,7 @@ const compat = new FlatCompat({
 });
 
 module.exports = defineConfig([
-  globalIgnores(["**/bin", "**/dist", "**/node_modules", "**/*.tgz"]),
+  globalIgnores(["**/dist", "**/node_modules"]),
   {
     extends: compat.extends(
       "next/core-web-vitals",
