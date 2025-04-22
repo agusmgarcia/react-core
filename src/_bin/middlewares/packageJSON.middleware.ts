@@ -62,7 +62,7 @@ async function createPackageJSONFile(
     : [undefined, "0.0.0", undefined];
 
   const template = {
-    author: !!repositoryDetails?.owner || "",
+    author: repositoryDetails?.owner || "",
     description: "",
     name: !!repositoryDetails
       ? `@${repositoryDetails.owner}/${repositoryDetails.name}`
