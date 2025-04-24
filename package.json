@@ -19,15 +19,15 @@
     "agusmgarcia-react-core-test": "bin/test.js"
   },
   "scripts": {
-    "build": "ts-node -r tsconfig-paths/register src/_bin/build.ts",
-    "check": "ts-node -r tsconfig-paths/register src/_bin/check.ts",
-    "deploy": "ts-node -r tsconfig-paths/register src/_bin/deploy.ts",
-    "format": "ts-node -r tsconfig-paths/register src/_bin/format.ts",
-    "postpack": "ts-node -r tsconfig-paths/register src/_bin/postpack.ts",
-    "prepack": "ts-node -r tsconfig-paths/register src/_bin/prepack.ts",
-    "regenerate": "ts-node -r tsconfig-paths/register src/_bin/regenerate.ts",
-    "start": "ts-node -r tsconfig-paths/register src/_bin/start.ts",
-    "test": "ts-node -r tsconfig-paths/register src/_bin/test.ts"
+    "build": "node -r ts-node/register -r tsconfig-paths/register src/_bin/build.ts",
+    "check": "node -r ts-node/register -r tsconfig-paths/register src/_bin/check.ts",
+    "deploy": "node -r ts-node/register -r tsconfig-paths/register src/_bin/deploy.ts",
+    "format": "node -r ts-node/register -r tsconfig-paths/register src/_bin/format.ts",
+    "postpack": "node -r ts-node/register -r tsconfig-paths/register src/_bin/postpack.ts",
+    "prepack": "node -r ts-node/register -r tsconfig-paths/register src/_bin/prepack.ts",
+    "regenerate": "node -r ts-node/register -r tsconfig-paths/register src/_bin/regenerate.ts",
+    "start": "node -r ts-node/register -r tsconfig-paths/register src/_bin/start.ts",
+    "test": "node -r ts-node/register -r tsconfig-paths/register src/_bin/test.ts"
   },
   "peerDependencies": {
     "@testing-library/react": "^16.0.0",
