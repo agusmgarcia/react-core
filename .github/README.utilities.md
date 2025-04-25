@@ -283,6 +283,16 @@ cache
   .then((result) => console.log(result));
 ```
 
+## Throw error
+
+```typescript
+import { throwError } from "@agusmgarcia/react-core";
+
+const result = input.startsWith("a")
+  ? true
+  : throwError("Input should start with 'a'");
+```
+
 ## Tuple
 
 ```typescript

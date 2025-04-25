@@ -23,6 +23,7 @@ export { type default as OnlyId } from "./OnlyId.types";
 export { default as replaceString } from "./replaceString";
 export * as sorts from "./sorts";
 export { default as StorageCache } from "./StorageCache";
+export { default as throwError } from "./throwError";
 export { type default as Tuple } from "./Tuple.types";
 export { type default as TupleToUnion } from "./TupleToUnion.types";
 export { type default as UnionToIntersection } from "./UnionToIntersection.types";
