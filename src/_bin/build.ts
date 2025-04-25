@@ -18,6 +18,13 @@ export default async function build(): Promise<void> {
       () => execute("webpack --mode=production", true),
     );
 
+  if (core === "lib")
+    await run(
+      false,
+      () => execute("del bin dist *.tgz", true),
+      () => execute("webpack --mode=production", true),
+    );
+
   if (core === "node")
     await run(
       false,
