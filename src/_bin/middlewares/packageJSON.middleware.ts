@@ -13,6 +13,7 @@ import {
 } from "../utils";
 
 export default async function packageJSONMiddleware(
+  _: string,
   next: AsyncFunc,
   regenerate: "hard" | "soft" | undefined,
   ignore: string[],

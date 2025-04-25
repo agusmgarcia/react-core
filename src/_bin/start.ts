@@ -7,12 +7,12 @@ export default async function start(): Promise<void> {
   const port = args.get("port").find((_, i) => !i);
 
   if (core === "app")
-    await run(false, () =>
+    await run("start", false, () =>
       execute(`next dev${!!port ? ` --port ${port}` : ""}`, true),
     );
 
   if (core === "azure-func")
-    await run(false, () =>
+    await run("start", false, () =>
       execute(
         `concurrently -k "webpack --mode=development --watch" "func start --port=${port || 3000}"`,
         true,
@@ -20,7 +20,7 @@ export default async function start(): Promise<void> {
     );
 
   if (core === "node")
-    await run(false, () =>
+    await run("start", false, () =>
       execute(
         `concurrently -k "webpack --mode=development --watch" "node --env-file-if-exists=.env.local --watch dist/index.js"`,
         true,

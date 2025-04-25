@@ -5,7 +5,7 @@ export default async function test(): Promise<void> {
   const watch = args.has("watch");
   const pattern = args.get("pattern");
 
-  await run(false, () =>
+  await run("test", false, () =>
     execute(
       `jest --passWithNoTests${watch ? " --watch" : ""}${pattern.length ? ` ${pattern.join(" ")}` : ""}`,
       true,

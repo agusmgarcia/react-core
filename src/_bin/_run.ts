@@ -6,6 +6,16 @@ import * as middlewares from "./middlewares";
 import { args } from "./utils";
 
 export default async function run(
+  command:
+    | "build"
+    | "check"
+    | "deploy"
+    | "format"
+    | "postpack"
+    | "prepack"
+    | "regenerate"
+    | "start"
+    | "test",
   regenerate: boolean,
   ...commands: AsyncFunc[]
 ): Promise<void> {
@@ -17,6 +27,7 @@ export default async function run(
 
   await mutex.runExclusive(async () => {
     const middleware = concat(
+      command,
       regenerate ? (force ? "hard" : "soft") : undefined,
       ignore,
       ...Object.values(middlewares),
@@ -33,11 +44,17 @@ export default async function run(
 }
 
 function concat(
+  command: string,
   regenerate: "hard" | "soft" | undefined,
   ignore: string[],
   ...middlewares: AsyncFunc<
     void,
-    [next: AsyncFunc, regenerate: "hard" | "soft" | undefined, ignore: string[]]
+    [
+      _: string,
+      next: AsyncFunc,
+      regenerate: "hard" | "soft" | undefined,
+      ignore: string[],
+    ]
   >[]
 ): AsyncFunc<void, [callback: AsyncFunc]> {
   return function (callback) {
@@ -45,7 +62,7 @@ function concat(
 
     for (let i = middlewares.length - 1; i >= 0; i--) {
       const middleware = middlewares[i];
-      result = middleware.bind(undefined, result, regenerate, ignore);
+      result = middleware.bind(undefined, command, result, regenerate, ignore);
     }
 
     return result();

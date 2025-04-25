@@ -3,6 +3,7 @@ import { type AsyncFunc } from "#src/utils";
 import { files, folders, getCore } from "../utils";
 
 export default async function webpackMiddleware(
+  _: string,
   next: AsyncFunc,
   regenerate: "hard" | "soft" | undefined,
   ignore: string[],

@@ -3,6 +3,7 @@ import { execute } from "./utils";
 
 export default async function format(): Promise<void> {
   await run(
+    "format",
     false,
     () =>
       execute(

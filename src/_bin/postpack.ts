@@ -3,7 +3,9 @@ import { execute, getCore } from "./utils";
 
 export default async function postpack(): Promise<void> {
   if ((await getCore()) !== "lib") return;
-  await run(false, () => execute(`del bin dist README.md CHANGELOG.md`, true));
+  await run("postpack", false, () =>
+    execute(`del bin dist README.md CHANGELOG.md`, true),
+  );
 }
 
 postpack();

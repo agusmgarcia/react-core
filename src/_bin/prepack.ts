@@ -5,6 +5,7 @@ export default async function prepack(): Promise<void> {
   if ((await getCore()) !== "lib") return;
 
   await run(
+    "prepack",
     false,
     () => execute("del bin dist *.tgz README.md CHANGELOG.md", true),
     () => execute("webpack --mode=production", true),

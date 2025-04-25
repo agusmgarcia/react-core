@@ -5,6 +5,7 @@ import { type AsyncFunc, merges } from "#src/utils";
 import { files, folders, getCore, git, sortProperties } from "../utils";
 
 export default async function azureFunctionMiddleware(
+  _: string,
   next: AsyncFunc,
   regenerate: "hard" | "soft" | undefined,
   ignore: string[],

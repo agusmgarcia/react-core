@@ -5,6 +5,7 @@ import { type AsyncFunc, merges } from "#src/utils";
 import { files, folders, getCore, git } from "../utils";
 
 export default async function githubMiddleware(
+  _: string,
   next: AsyncFunc,
   regenerate: "hard" | "soft" | undefined,
   ignore: string[],

@@ -5,6 +5,7 @@ import { type AsyncFunc, merges } from "#src/utils";
 import { files, folders, getCore, git } from "../utils";
 
 export default async function nextJSMiddleware(
+  command: string,
   next: AsyncFunc,
   regenerate: "hard" | "soft" | undefined,
   ignore: string[],
@@ -12,22 +13,24 @@ export default async function nextJSMiddleware(
   const core = await getCore();
 
   await Promise.all([
-    folders.upsertFolder("pages").then(() =>
-      Promise.all([
-        core === "app"
-          ? files.upsertFile("pages/_app.tsx", app, {
-              create: !!regenerate && !ignore.includes("pages/_app.tsx"),
-              update: false,
-            })
-          : files.removeFile("pages/_app.tsx"),
-        core === "app"
-          ? files.upsertFile("pages/_app.css", appCSS, {
-              create: !!regenerate && !ignore.includes("pages/_app.css"),
-              update: false,
-            })
-          : files.removeFile("pages/_app.css"),
-      ]),
-    ),
+    core === "app" || command !== "start"
+      ? folders.upsertFolder("pages").then(() =>
+          Promise.all([
+            core === "app"
+              ? files.upsertFile("pages/_app.tsx", app, {
+                  create: !!regenerate && !ignore.includes("pages/_app.tsx"),
+                  update: false,
+                })
+              : files.removeFile("pages/_app.tsx"),
+            core === "app"
+              ? files.upsertFile("pages/_app.css", appCSS, {
+                  create: !!regenerate && !ignore.includes("pages/_app.css"),
+                  update: false,
+                })
+              : files.removeFile("pages/_app.css"),
+          ]),
+        )
+      : folders.removeFolder("pages"),
     core === "app"
       ? files.upsertFile(
           "next.config.js",

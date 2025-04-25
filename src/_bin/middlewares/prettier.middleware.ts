@@ -3,6 +3,7 @@ import { type AsyncFunc } from "#src/utils";
 import { files } from "../utils";
 
 export default async function prettierMiddleware(
+  _: string,
   next: AsyncFunc,
   regenerate: "hard" | "soft" | undefined,
   ignore: string[],

@@ -3,6 +3,7 @@ import { execute } from "./utils";
 
 export default async function check(): Promise<void> {
   await run(
+    "check",
     false,
     () =>
       execute(
