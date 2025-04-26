@@ -92,19 +92,9 @@ async function createHostFile(
 
   return JSON.stringify(
     sortProperties(
-      merges.deep(
-        merges.deep(template, hostJSON, {
-          arrayConcat: true,
-          arrayRemoveDuplicated: true,
-          sort: true,
-        }),
-        source,
-        {
-          arrayConcat: true,
-          arrayRemoveDuplicated: true,
-          sort: true,
-        },
-      ),
+      merges.deep(merges.deep(template, hostJSON, { sort: true }), source, {
+        sort: true,
+      }),
       ["version"],
     ),
     undefined,
@@ -173,11 +163,7 @@ async function createLocalSettingsFile(
   };
 
   return JSON.stringify(
-    merges.deep(localSettings, source, {
-      arrayConcat: true,
-      arrayRemoveDuplicated: true,
-      sort: true,
-    }),
+    merges.deep(localSettings, source, { sort: true }),
     undefined,
     2,
   );
@@ -242,11 +228,5 @@ async function createFuncignoreFile(
     "webpack.config.js",
   ];
 
-  return merges
-    .deep(funcignore, source, {
-      arrayConcat: true,
-      arrayRemoveDuplicated: true,
-      sort: true,
-    })
-    .join(EOL);
+  return merges.deep(funcignore, source, { sort: true }).join(EOL);
 }

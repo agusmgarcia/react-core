@@ -1,153 +1,159 @@
+import * as equals from "./equals";
 import * as filters from "./filters";
+import type Func from "./Func.types";
+import * as sorts from "./sorts";
 
-export function strict(target: unknown, source: unknown): any {
-  return merge(target, source, 0, false, false, false);
+export function strict(base: unknown, next: unknown): any {
+  return merge(base, next, 0, defaultSort, equals.deep);
 }
 
 export function shallow(
-  target: unknown,
-  source: unknown,
+  base: unknown,
+  next: unknown,
   options:
     | number
     | {
-        arrayConcat?: boolean;
-        arrayRemoveDuplicated?: boolean;
+        array?: { comparator?: ArrayComparatorFn };
         level?: number;
-        sort?: boolean;
+        sort?: SortFn | boolean;
       } = 1,
 ): any {
   return merge(
-    target,
-    source,
+    base,
+    next,
     typeof options === "number"
       ? options
       : typeof options.level === "number"
         ? options.level
         : 1,
-    typeof options === "number" ? false : !!options.sort,
-    typeof options === "number" ? false : !!options.arrayConcat,
-    typeof options === "number" ? false : !!options.arrayRemoveDuplicated,
+    typeof options === "number"
+      ? defaultUnSort
+      : typeof options.sort === "undefined"
+        ? defaultUnSort
+        : typeof options.sort === "boolean"
+          ? options.sort
+            ? defaultSort
+            : defaultUnSort
+          : options.sort,
+    typeof options === "number"
+      ? equals.deep
+      : options.array?.comparator || equals.deep,
   );
 }
 
 export function deep(
-  target: unknown,
-  source: unknown,
+  base: unknown,
+  next: unknown,
   options?: {
-    arrayConcat?: boolean;
-    arrayRemoveDuplicated?: boolean;
-    sort?: boolean;
+    array?: { comparator?: ArrayComparatorFn };
+    sort?: SortFn | boolean;
   },
 ): any {
   return merge(
-    target,
-    source,
+    base,
+    next,
     undefined,
-    !!options?.sort,
-    !!options?.arrayConcat,
-    !!options?.arrayRemoveDuplicated,
+    typeof options?.sort === "undefined"
+      ? defaultUnSort
+      : typeof options.sort === "boolean"
+        ? options.sort
+          ? defaultSort
+          : defaultUnSort
+        : options.sort,
+    options?.array?.comparator || equals.deep,
   );
 }
 
 function merge(
-  target: any,
-  source: any,
+  base: any,
+  next: any,
   level: number | undefined,
-  sort: boolean,
-  arrayConcat: boolean,
-  arrayRemoveDuplicated: boolean,
+  sort: SortFn,
+  arrayComparator: ArrayComparatorFn,
 ): any {
-  if (!!level && level < 0) return source;
-  if (target === source) return source;
-  if (typeof level === "number" && !level) return source;
+  if (!!level && level < 0) return next;
+  if (typeof level === "number" && !level) return next;
+  if (base === next) return next;
 
-  if (Array.isArray(source)) {
-    if (!Array.isArray(target)) target = [];
+  const followingLevel = !!level ? level - 1 : undefined;
 
-    let result: any[];
+  if (Array.isArray(next)) {
+    if (!Array.isArray(base)) base = [];
 
-    if (arrayConcat) result = [...target, ...source];
-    else {
-      const length = Math.max(target.length, source.length);
-      result = new Array(length);
+    return [...base, ...next]
+      .sort(sort)
+      .filter(filters.distinct(arrayComparator))
+      .map((baseValue) => {
+        const index = next.findIndex((nextValue) =>
+          arrayComparator(baseValue, nextValue),
+        );
 
-      for (let i = 0; i < length; i++)
-        result[i] =
-          i < source.length && i < target.length
-            ? merge(
-                target[i],
-                source[i],
-                !!level ? level - 1 : undefined,
-                sort,
-                arrayConcat,
-                arrayRemoveDuplicated,
-              )
-            : i < source.length
+        return index !== -1
+          ? merge(baseValue, next[index], followingLevel, sort, arrayComparator)
+          : merge(undefined, baseValue, followingLevel, sort, arrayComparator);
+      });
+  }
+
+  if (typeof next === "object" && !!next) {
+    if (Array.isArray(base) || typeof base !== "object" || !base) base = {};
+
+    return [...Object.keys(base), ...Object.keys(next)]
+      .sort(sort)
+      .filter(filters.distinct)
+      .reduce(
+        (result, key) => {
+          result[key] =
+            key in next
               ? merge(
-                  undefined,
-                  source[i],
-                  !!level ? level - 1 : undefined,
+                  base[key],
+                  next[key],
+                  followingLevel,
                   sort,
-                  arrayConcat,
-                  arrayRemoveDuplicated,
+                  arrayComparator,
                 )
               : merge(
                   undefined,
-                  target[i],
-                  !!level ? level - 1 : undefined,
+                  base[key],
+                  followingLevel,
                   sort,
-                  arrayConcat,
-                  arrayRemoveDuplicated,
+                  arrayComparator,
                 );
-    }
 
-    return result
-      .sort(!sort ? () => 0 : undefined)
-      .filter(!arrayRemoveDuplicated ? () => true : filters.distinct("deep"));
+          return result;
+        },
+        {} as Record<string, any>,
+      );
   }
 
-  if (typeof source === "object" && !!source) {
-    if (Array.isArray(target) || typeof target !== "object" || !target)
-      target = {};
-
-    const keys = [...Object.keys(target), ...Object.keys(source)]
-      .sort(!sort ? () => 0 : undefined)
-      .filter(filters.distinct);
-
-    const result: Record<string, any> = {};
-
-    for (const key of keys) {
-      result[key] =
-        key in source && key in target
-          ? merge(
-              target[key as keyof typeof target],
-              source[key as keyof typeof source],
-              !!level ? level - 1 : undefined,
-              sort,
-              arrayConcat,
-              arrayRemoveDuplicated,
-            )
-          : key in source
-            ? merge(
-                undefined,
-                source[key as keyof typeof source],
-                !!level ? level - 1 : undefined,
-                sort,
-                arrayConcat,
-                arrayRemoveDuplicated,
-              )
-            : merge(
-                undefined,
-                target[key as keyof typeof target],
-                !!level ? level - 1 : undefined,
-                sort,
-                arrayConcat,
-                arrayRemoveDuplicated,
-              );
-    }
-
-    return result;
-  }
-
-  return source;
+  return next;
 }
+
+type SortFn = Func<number, [element1: any, element2: any]>;
+
+function defaultUnSort(): number {
+  return 0;
+}
+
+function defaultSort(element1: any, element2: any): number {
+  if (typeof element1 !== typeof element2) return 0;
+
+  switch (typeof element1) {
+    case "number":
+      return sorts.byNumberAsc(element1, element2 as number);
+
+    case "boolean":
+      return sorts.byBooleanAsc(element1, element2 as boolean);
+
+    case "bigint":
+    case "function":
+    case "object":
+    case "symbol":
+    case "undefined":
+      return 0;
+
+    case "string":
+      return sorts.byStringAsc(element1, element2 as string);
+  }
+}
+
+type ArrayComparatorFn = Func<boolean, [element1: any, element2: any]>;

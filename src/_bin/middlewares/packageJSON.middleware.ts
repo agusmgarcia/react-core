@@ -167,18 +167,10 @@ async function createPackageJSONFile(
         merges.deep(
           regenerate === "soft" ? template : packageJSON,
           regenerate === "soft" ? packageJSON : template,
-          {
-            arrayConcat: true,
-            arrayRemoveDuplicated: true,
-            sort: true,
-          },
+          { sort: true },
         ),
         source,
-        {
-          arrayConcat: true,
-          arrayRemoveDuplicated: true,
-          sort: true,
-        },
+        { sort: true },
       ),
       [
         "name",

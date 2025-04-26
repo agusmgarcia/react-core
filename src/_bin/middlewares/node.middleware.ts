@@ -58,11 +58,5 @@ async function createNpmignoreFile(
     "webpack.config.js",
   ];
 
-  return merges
-    .deep(npmignore, source, {
-      arrayConcat: true,
-      arrayRemoveDuplicated: true,
-      sort: true,
-    })
-    .join(EOL);
+  return merges.deep(npmignore, source, { sort: true }).join(EOL);
 }

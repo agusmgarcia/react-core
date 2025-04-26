@@ -138,13 +138,7 @@ async function createEnvLocalFile(
           APP_VERSION: version,
         };
 
-  return Object.entries(
-    merges.deep(envLocal, source, {
-      arrayConcat: true,
-      arrayRemoveDuplicated: true,
-      sort: true,
-    }),
-  ).reduce(
+  return Object.entries(merges.deep(envLocal, source, { sort: true })).reduce(
     (result, [key, value], index) =>
       `${result}${!!index ? EOL : ""}${key}=${value}`,
     "",

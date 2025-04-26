@@ -108,13 +108,7 @@ async function createGitignoreFile(
           ? ["bin", "dist", "node_modules", "*.tgz"]
           : [".env.local", "dist", "node_modules"];
 
-  return merges
-    .deep(gitignore, source, {
-      arrayConcat: true,
-      arrayRemoveDuplicated: true,
-      sort: true,
-    })
-    .join(EOL);
+  return merges.deep(gitignore, source, { sort: true }).join(EOL);
 }
 
 const readme = "";

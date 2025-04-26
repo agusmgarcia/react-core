@@ -154,11 +154,7 @@ async function createTsconfigFile(
             };
 
   return JSON.stringify(
-    merges.deep(tsconfig, source, {
-      arrayConcat: true,
-      arrayRemoveDuplicated: true,
-      sort: true,
-    }),
+    merges.deep(tsconfig, source, { sort: true }),
     undefined,
     2,
   );
