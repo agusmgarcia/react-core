@@ -8,19 +8,20 @@ export function distinct<TElement>(
 ): boolean;
 
 export function distinct<TElement>(
-  compare:
-    | "deep"
-    | "shallow"
-    | "strict"
-    | Func<boolean, [element1: TElement, element2: TElement]>,
+  compare: Func<boolean, [element1: TElement, element2: TElement]>,
+): Func<boolean, [element: TElement, index: number, array: TElement[]]>;
+
+// TODO: delete this method.
+/**
+ * @deprecated This method is going to be removed in the next major version.
+ */
+export function distinct<TElement>(
+  compare: "deep" | "shallow" | "strict",
 ): Func<boolean, [element: TElement, index: number, array: TElement[]]>;
 
 export function distinct<TElement>(
   elementOrCompare:
     | TElement
-    | "deep"
-    | "shallow"
-    | "strict"
     | Func<boolean, [element1: TElement, element2: TElement]>,
   index?: number,
   array?: TElement[],

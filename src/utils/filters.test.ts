@@ -1,3 +1,4 @@
+import * as equals from "./equals";
 import * as filters from "./filters";
 
 describe("filters", () => {
@@ -8,7 +9,7 @@ describe("filters", () => {
 
   it("remos duplicated elements from array using a custom comparator", () => {
     const array = [{ name: "John" }, { name: "Doe" }, { name: "John" }];
-    expect(array.filter(filters.distinct("deep"))).toStrictEqual([
+    expect(array.filter(filters.distinct(equals.deep))).toStrictEqual([
       { name: "John" },
       { name: "Doe" },
     ]);
