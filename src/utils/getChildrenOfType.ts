@@ -72,8 +72,13 @@ function getChildrenOfTypeRecursive<
 
   if (!("type" in children)) return;
 
-  if (typeof type === "function" && children.type === type)
-    result.push(children);
+  if (children.type === type) result.push(children);
 
-  getChildrenOfTypeRecursive(type, (children.props as any).children, result);
+  getChildrenOfTypeRecursive(
+    type,
+    typeof children.type === "function"
+      ? (children.type as Function)(children.props).props.children
+      : (children.props as any).children,
+    result,
+  );
 }
