@@ -1,9 +1,43 @@
 import { useEffect, useState } from "react";
 
-type Dimensions = { height: number; width: number };
-
-const initialDimensions: Dimensions = { height: 0, width: 0 };
-
+/**
+ * A custom React hook that observes and retrieves the dimensions (height and width)
+ * of a referenced DOM element using the ResizeObserver API.
+ *
+ * @template TElement - The type of the DOM element being observed.
+ *
+ * @param elementRef - A React ref object pointing to the DOM element whose dimensions
+ * need to be observed. The ref should be created using `React.useRef`.
+ *
+ * @param initialValue - An optional initial value for the dimensions. Defaults to
+ * `{ height: 0, width: 0 }`.
+ *
+ * @param options - An optional parameter specifying the `box` option for the
+ * ResizeObserver. This determines which box model to observe (e.g., `content-box`,
+ * `border-box`).
+ *
+ * @returns An object containing the current dimensions of the observed element:
+ * - `height`: The height of the element.
+ * - `width`: The width of the element.
+ *
+ * @example
+ * ```tsx
+ * import React, { useRef } from "react";
+ * import useDimensions from "./useDimensions";
+ *
+ * const MyComponent = () => {
+ *   const ref = useRef<HTMLDivElement>(null);
+ *   const dimensions = useDimensions(ref);
+ *
+ *   return (
+ *     <div ref={ref}>
+ *       <p>Height: {dimensions.height}px</p>
+ *       <p>Width: {dimensions.width}px</p>
+ *     </div>
+ *   );
+ * };
+ * ```
+ */
 export default function useDimensions<TElement extends Element>(
   elementRef: React.RefObject<TElement | null>,
   initialValue = initialDimensions,
@@ -43,3 +77,7 @@ export default function useDimensions<TElement extends Element>(
 
   return dimensions;
 }
+
+type Dimensions = { height: number; width: number };
+
+const initialDimensions: Dimensions = { height: 0, width: 0 };

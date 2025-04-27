@@ -19,6 +19,29 @@ import {
   type Subscribe,
 } from "./createServerSlice.types";
 
+/**
+ * Creates a server slice for managing state and asynchronous data fetching.
+ *
+ * @template TSlice - The type of the slice being created.
+ * @template TOtherSlices - The type of other slices in the global state.
+ *
+ * @param {...Input<TSlice, TOtherSlices>} input - The input parameters for creating the server slice.
+ *   - `name`: The name of the slice.
+ *   - `fetcher`: A function to fetch data for the slice.
+ *   - `selector`: An optional selector function to extract relevant state.
+ *   - `factory`: An optional factory function to create extra methods for the slice.
+ *
+ * @returns {Output<TSlice, TOtherSlices>} A function that initializes the slice with initial data.
+ *
+ * @description
+ * This function creates a server slice that integrates with a global state management system.
+ * It provides methods for reloading and loading more data, as well as handling asynchronous
+ * operations with proper state updates for `loading`, `error`, and `data`.
+ *
+ * The slice is built on top of a global slice and extends its functionality with server-specific
+ * methods. It supports merging new data with existing data when loading more and allows for
+ * custom extra methods to be defined via the `factory` parameter.
+ */
 export default function createServerSlice<
   TSlice extends SliceOf<any, any, any, any>,
   TOtherSlices = {},

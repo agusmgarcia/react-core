@@ -1,12 +1,30 @@
 import * as equals from "./equals";
 import type Func from "./Func.types";
 
+/**
+ * Filters elements by checking if the element's index matches its first occurrence in the array.
+ *
+ * @template TElement - The type of elements in the array.
+ *
+ * @param element - The element to check for distinctness.
+ * @param index - The index of the element in the array.
+ * @param array - The array being filtered.
+ * @returns `true` if the element is distinct, otherwise `false`.
+ */
 export function distinct<TElement>(
   element: TElement,
   index: number,
   array: TElement[],
 ): boolean;
 
+/**
+ * Creates a function to filter elements by checking if the element's index matches its first occurrence in the array.
+ *
+ * @template TElement - The type of elements in the array.
+ *
+ * @param compare - A comparison function.
+ * @returns A function that determines if an element is distinct based on the specified comparison method.
+ */
 export function distinct<TElement>(
   compare: Func<boolean, [element1: TElement, element2: TElement]>,
 ): Func<boolean, [element: TElement, index: number, array: TElement[]]>;
@@ -45,6 +63,15 @@ export function distinct<TElement>(
     ) === index;
 }
 
+/**
+ * Creates a function to paginate an array by filtering elements based on the specified page index and size.
+ *
+ * @template TElement - The type of elements in the array.
+ *
+ * @param pageIndex - The 1-based index of the page to retrieve.
+ * @param pageSize - The number of elements per page.
+ * @returns A function that determines if an element belongs to the specified page.
+ */
 export function paginate<TElement>(
   pageIndex: number,
   pageSize: number,

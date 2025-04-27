@@ -1,11 +1,36 @@
+/**
+ * Performs a strict equality check between two values.
+ * This function compares the values deeply with a recursion level of 0.
+ *
+ * @param a - The first value to compare.
+ * @param b - The second value to compare.
+ * @returns `true` if the values are strictly equal, otherwise `false`.
+ */
 export function strict(a: unknown, b: unknown): boolean {
   return equal(a, b, 0);
 }
 
+/**
+ * Performs a shallow equality check between two values.
+ * This function compares the values with a recursion level of 1 by default.
+ *
+ * @param a - The first value to compare.
+ * @param b - The second value to compare.
+ * @param level - The recursion depth for comparison. Defaults to 1.
+ * @returns `true` if the values are shallowly equal, otherwise `false`.
+ */
 export function shallow(a: unknown, b: unknown, level = 1): boolean {
   return equal(a, b, level);
 }
 
+/**
+ * Performs a deep equality check between two values.
+ * This function compares the values deeply without any recursion depth limit.
+ *
+ * @param a - The first value to compare.
+ * @param b - The second value to compare.
+ * @returns `true` if the values are deeply equal, otherwise `false`.
+ */
 export function deep(a: unknown, b: unknown): boolean {
   return equal(a, b, undefined);
 }

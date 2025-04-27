@@ -12,6 +12,34 @@ import {
   type Subscribe,
 } from "./createGlobalSlice.types";
 
+/**
+ * Creates a global slice for store management.
+ *
+ * This function is used to define a slice of state and its associated actions
+ * for a store. It supports server-side rendering (SSR) and provides
+ * utilities for subscribing to state changes and managing context.
+ *
+ * @template TSlice - The type of the slice being created.
+ * @template TOtherSlices - The type of other slices in the store.
+ *
+ * @param {...Input<TSlice, TOtherSlices>} input - The input parameters for creating the slice.
+ *   - `name`: The name of the slice.
+ *   - `sliceFactory`: A factory function that defines the slice's state and actions.
+ *
+ * @returns {Output<TSlice, TOtherSlices, ExtractStateOf<TSlice>>} A function that initializes the slice
+ *   with the given initial state and integrates it into the store.
+ *
+ * @example
+ * ```typescript
+ * const useStore = createGlobalSlice(
+ *   "exampleSlice",
+ *   (subscribe) => ({
+ *     count: 0,
+ *     increment: () => set((state) => ({ count: state.count + 1 })),
+ *   })
+ * );
+ * ```
+ */
 export default function createGlobalSlice<
   TSlice extends SliceOf<any, any>,
   TOtherSlices = {},

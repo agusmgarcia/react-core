@@ -1,3 +1,34 @@
+/**
+ * Replaces placeholders in a string with corresponding values from a replacements object.
+ *
+ * Placeholders in the string should be in the format `${key}`. Optionally, conditional placeholders
+ * can be used in the format `${key?valueIfTrue:valueIfFalse}`. The conditional placeholders
+ * evaluate based on whether the value of `key` in the replacements object is `1`.
+ *
+ * @param message - The string containing placeholders to be replaced. If undefined, the function
+ *                  will return undefined.
+ * @param replacements - An object containing key-value pairs where the key corresponds to the
+ *                       placeholder name and the value is the replacement. The value can be of
+ *                       type string, number, boolean, or undefined.
+ * @returns The string with placeholders replaced by their corresponding values from the
+ *          replacements object. If the input message is undefined, the function returns undefined.
+ *
+ * @example
+ * ```typescript
+ * const message = "Hello, ${name}! You have ${count} new messages.";
+ * const replacements = { name: "Alice", count: 5 };
+ * const result = replaceString(message, replacements);
+ * console.log(result); // "Hello, Alice! You have 5 new messages."
+ * ```
+ *
+ * @example
+ * ```typescript
+ * const message = "Your subscription is ${status?active:inactive}.";
+ * const replacements = { status: 1 };
+ * const result = replaceString(message, replacements);
+ * console.log(result); // "Your subscription is active."
+ * ```
+ */
 const searchValue = /\$\{(.+?)\}/g;
 const multipleValues = /^(.+?)\?(.+?)\:(.+?)$/;
 

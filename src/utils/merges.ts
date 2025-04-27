@@ -3,10 +3,30 @@ import * as filters from "./filters";
 import type Func from "./Func.types";
 import * as sorts from "./sorts";
 
+/**
+ * Merges two objects or arrays strictly, ensuring deep equality checks.
+ *
+ * @param base - The base object or array to merge into.
+ * @param next - The next object or array to merge from.
+ * @returns The merged result.
+ */
 export function strict(base: unknown, next: unknown): any {
   return merge(base, next, 0, defaultSort, equals.deep);
 }
 
+/**
+ * Merges two objects or arrays shallowly, with configurable options.
+ *
+ * @param base - The base object or array to merge into.
+ * @param next - The next object or array to merge from.
+ * @param options - The merge options, which can be:
+ *   - A number representing the depth level for merging.
+ *   - An object with optional properties:
+ *     - `array.comparator`: A custom comparator function for arrays.
+ *     - `level`: The depth level for merging.
+ *     - `sort`: A custom sorting function.
+ * @returns The merged result.
+ */
 export function shallow(
   base: unknown,
   next: unknown,
@@ -41,6 +61,16 @@ export function shallow(
   );
 }
 
+/**
+ * Merges two objects or arrays deeply, with configurable options.
+ *
+ * @param base - The base object or array to merge into.
+ * @param next - The next object or array to merge from.
+ * @param options - Optional merge options:
+ *   - `array.comparator`: A custom comparator function for arrays.
+ *   - `sort`: A custom sorting function.
+ * @returns The merged result.
+ */
 export function deep(
   base: unknown,
   next: unknown,
