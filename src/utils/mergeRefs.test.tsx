@@ -1,35 +1,40 @@
-import { render } from "@testing-library/react";
-import { useEffect, useRef } from "react";
+import "@testing-library/jest-dom";
 
-import type Func from "./Func.types";
+import { render } from "@testing-library/react";
+
 import mergeRefs from "./mergeRefs";
 
 describe("mergeRefs", () => {
-  it("merges two refs and executes a callback sending back the id", () => {
-    const Component = ({
-      id,
-      onRefs,
-    }: {
-      id: string;
-      onRefs: Func<void, [ref1: HTMLElement, ref2: HTMLElement]>;
-    }) => {
-      const ref1 = useRef<HTMLDivElement>(null);
-      const ref2 = useRef<HTMLDivElement>(null);
+  it("should merge multiple refs correctly", () => {
+    const ref1 = { current: null };
+    const ref2 = { current: null };
 
-      useEffect(() => {
-        if (!ref1.current || !ref2.current) return;
-        onRefs(ref1.current, ref2.current);
-      }, [onRefs]);
+    const TestComponent = () => <div ref={mergeRefs(ref1, ref2)}>Test</div>;
 
-      return <div ref={mergeRefs(ref1, ref2)} id={id} />;
-    };
+    const { getByText } = render(<TestComponent />);
+    const element = getByText("Test");
 
-    const onRefs = jest.fn((e1: HTMLElement, e2: HTMLElement) => [
-      e1.id,
-      e2.id,
-    ]);
+    expect(ref1.current).toBe(element);
+    expect(ref2.current).toBe(element);
+  });
 
-    render(<Component id="myId" onRefs={onRefs} />);
-    expect(onRefs).toHaveNthReturnedWith(1, ["myId", "myId"]);
+  it("should handle null refs gracefully", () => {
+    const ref1 = { current: null };
+
+    const TestComponent = () => <div ref={mergeRefs(ref1, null)}>Test</div>;
+
+    const { getByText } = render(<TestComponent />);
+    const element = getByText("Test");
+
+    expect(ref1.current).toBe(element);
+  });
+
+  it("should not throw if no refs are provided", () => {
+    const TestComponent = () => <div ref={mergeRefs()}>Test</div>;
+
+    const { getByText } = render(<TestComponent />);
+    const element = getByText("Test");
+
+    expect(element).toBeInTheDocument();
   });
 });

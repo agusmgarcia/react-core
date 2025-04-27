@@ -69,6 +69,7 @@
     "zustand": "^5.0.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.0.0",
     "@types/semver": "^7.0.0",
     "ts-node": "^10.0.0",
     "tsconfig-paths": "^4.0.0"
