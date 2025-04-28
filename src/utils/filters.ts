@@ -50,16 +50,18 @@ export function distinct<TElement>(
     return array.indexOf(elementOrCompare as TElement) === index;
 
   return (element1, index, array) =>
-    array.findIndex((element2) =>
-      elementOrCompare === "deep"
-        ? equals.deep(element1, element2)
-        : elementOrCompare === "shallow"
-          ? equals.shallow(element1, element2)
-          : elementOrCompare === "strict"
-            ? equals.strict(element1, element2)
-            : elementOrCompare instanceof Function
-              ? elementOrCompare(element1, element2)
-              : false,
+    array.findIndex(
+      (element2) =>
+        element1 === element2 ||
+        (elementOrCompare === "deep"
+          ? equals.deep(element1, element2)
+          : elementOrCompare === "shallow"
+            ? equals.shallow(element1, element2)
+            : elementOrCompare === "strict"
+              ? equals.strict(element1, element2)
+              : elementOrCompare instanceof Function
+                ? elementOrCompare(element1, element2)
+                : false),
     ) === index;
 }
 
