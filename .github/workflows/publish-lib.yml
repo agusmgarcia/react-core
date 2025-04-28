@@ -1,20 +1,16 @@
 name: Publish lib
 permissions: write-all
-
 on:
   push:
     tags:
       - v[0-9]+.[0-9]+.[0-9]+
-
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref_name }}
   cancel-in-progress: true
-
+  group: ${{ github.workflow }}-${{ github.ref_name }}
 jobs:
   publish-lib:
     name: Publish lib
     runs-on: ubuntu-latest
-
     steps:
       - name: Get version from tag
         id: get-version-from-tag
@@ -23,43 +19,35 @@ jobs:
           pattern: ^v(\d+)\.(\d+)\.(\d+)$
           replace-with: $1.$2.$3
           string: ${{ github.ref_name }}
-
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Extract version from package
         id: extract-version-from-package
         uses: sergeysova/jq-action@v2
         with:
           cmd: jq .version package.json -r
-
       - name: Verify versions match
         if: ${{ steps.get-version-from-tag.outputs.replaced != steps.extract-version-from-package.outputs.value }}
         run: |
           echo "::error::Version in the package.json and tag don't match"
           exit 1
         shell: bash
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           cache: npm
           node-version: 22.14
-
       - name: Install dependencies
         run: npm ci --ignore-scripts
         shell: bash
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Check
         run: npm run check
         shell: bash
-
       - name: Test
         run: npm test
         shell: bash
-
       - name: Publish
         run: npm publish
         shell: bash
