@@ -3,6 +3,7 @@ export { type default as AsyncFunc } from "./AsyncFunc.types";
 export { default as blockUntil } from "./blockUntil";
 export { default as Cache } from "./Cache";
 export { default as capitalize } from "./capitalize";
+export * as children from "./children";
 export * as dates from "./dates";
 export { default as delay } from "./delay";
 export { default as emptyFunction } from "./emptyFunction";

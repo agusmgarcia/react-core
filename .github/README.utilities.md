@@ -52,6 +52,24 @@ import { capitalize } from "@agusmgarcia/react-core";
 capitalize("foo"); // => "Foo"
 ```
 
+## Children
+
+```tsx
+import { children } from "@agusmgarcia/react-core";
+
+const MyComponent = () => (
+  <div>
+    <input />
+  </div>
+);
+
+const inputChildren = children.getOfType(input, MyComponent); // => React.ReactElement<InputProps, input>[]
+
+const children = children.mapOfType(input, MyComponent, (child) => (
+  <p>input replaced</p>
+)); // => <div><p>input replaced</p></div>
+```
+
 ## Dates
 
 ```typescript
@@ -136,22 +154,6 @@ import { type Func } from "@agusmgarcia/react-core";
 type Func1 = Func; // => () => void
 type Func2 = Func<number>; // => () => number
 type Func3 = Func<number, [arg0: string]>; // => (arg0: string) => number
-```
-
-## Get children of type
-
-```typescript
-import { getChildrenOfType } from "@agusmgarcia/react-core";
-
-import { Input } from "#src/components";
-
-type HookProps = {
-  children?: React.ReactNode;
-};
-
-function useHook(props: HookProps) {
-  const inputChildren = getChildrenOfType(Input, props.children); // => React.ReactElement<InputProps, Input>[]
-}
 ```
 
 ## Is child of
