@@ -1,7 +1,17 @@
 export default function sortProperties<TElement extends Record<string, any>>(
   input: TElement,
+  preferred?: (keyof TElement)[],
+): TElement;
+
+export default function sortProperties<TElement extends Record<string, any>>(
+  input: TElement[],
+  preferred?: (keyof TElement)[],
+): TElement[];
+
+export default function sortProperties<TElement extends Record<string, any>>(
+  input: TElement | TElement[],
   preferred: (keyof TElement)[] = [],
-): TElement {
+): TElement | TElement[] {
   const sortKeys = (key1: string, key2: string): number => {
     const indexOfKey1 = preferred.indexOf(key1 as keyof TElement);
     const indexOfKey2 = preferred.indexOf(key2 as keyof TElement);
@@ -15,10 +25,22 @@ export default function sortProperties<TElement extends Record<string, any>>(
     return indexOfKey1 - indexOfKey2;
   };
 
-  return Object.keys(input)
-    .sort(sortKeys)
-    .reduce((result, key) => {
-      (result as any)[key] = input[key];
-      return result;
-    }, {} as TElement);
+  let array = true;
+
+  if (!Array.isArray(input)) {
+    array = false;
+    input = [input];
+  }
+
+  const result = input.map((i) =>
+    Object.keys(i)
+      .sort(sortKeys)
+      .reduce((result, key) => {
+        (result as any)[key] = i[key];
+        return result;
+      }, {} as TElement),
+  );
+
+  if (array) return result;
+  return result[0];
 }
