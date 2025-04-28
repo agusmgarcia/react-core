@@ -88,7 +88,6 @@ async function createPackageJSONFile(
           format: "agusmgarcia-react-core-format",
           postpack: "agusmgarcia-react-core-postpack",
           prepack: "agusmgarcia-react-core-prepack",
-          regenerate: "agusmgarcia-react-core-regenerate",
           start: "agusmgarcia-react-core-start",
           test: "agusmgarcia-react-core-test",
         }
@@ -105,8 +104,6 @@ async function createPackageJSONFile(
             "node -r ts-node/register -r tsconfig-paths/register src/_bin/postpack.ts",
           prepack:
             "node -r ts-node/register -r tsconfig-paths/register src/_bin/prepack.ts",
-          regenerate:
-            "node -r ts-node/register -r tsconfig-paths/register src/_bin/regenerate.ts",
           start:
             "node -r ts-node/register -r tsconfig-paths/register src/_bin/start.ts",
           test: "node -r ts-node/register -r tsconfig-paths/register src/_bin/test.ts",
