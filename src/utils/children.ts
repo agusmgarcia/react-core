@@ -314,3 +314,97 @@ function assignKeyIfNeeded(
   if (!!children.key) return children;
   return React.cloneElement(children, { key: `${key}` });
 }
+
+/**
+ * Determines if the given React node is of a specific React component type.
+ *
+ * @template TType - The type of the React component to check against. This is a React component type
+ *                   (a function that returns a React element).
+ * @param type - The React component type to check against.
+ * @param children - The React node to check. This can be a single React node,
+ *                   an array of nodes, or any other valid ReactNode.
+ * @returns A boolean indicating whether the given React node is of the specified type.
+ */
+export function isOfType<TType extends Func<React.ReactElement, [props: any]>>(
+  type: TType,
+  children: React.ReactNode,
+): children is React.ReactElement<Parameters<TType>[0], TType>;
+
+/**
+ * Determines if the given React node is of type "boolean".
+ *
+ * @template TType - The type of the React node to check against. This is a "boolean" type.
+ * @param type - The type to check against. This is a "boolean" type.
+ * @param children - The React node to check. This can be a single React node,
+ *                   an array of nodes, or any other valid ReactNode.
+ * @returns A boolean indicating whether the given React node is of type "boolean".
+ */
+export function isOfType<TType extends "boolean">(
+  type: TType,
+  children: React.ReactNode,
+): children is boolean;
+
+/**
+ * Determines if the given React node is of type "null".
+ *
+ * @template TType - The type of the React node to check against. This is a "null" type.
+ * @param type - The type to check against. This is a "null" type.
+ * @param children - The React node to check. This can be a single React node,
+ *                   an array of nodes, or any other valid ReactNode.
+ * @returns A boolean indicating whether the given React node is of type "null".
+ */
+export function isOfType<TType extends "null">(
+  type: TType,
+  children: React.ReactNode,
+): children is null;
+
+/**
+ * Determines if the given React node is of type "number".
+ *
+ * @template TType - The type of the React node to check against. This is a "number" type.
+ * @param type - The type to check against. This is a "number" type.
+ * @param children - The React node to check. This can be a single React node,
+ *                   an array of nodes, or any other valid ReactNode.
+ * @returns A boolean indicating whether the given React node is of type "number".
+ */
+export function isOfType<TType extends "number">(
+  type: TType,
+  children: React.ReactNode,
+): children is number;
+
+/**
+ * Determines if the given React node is of type "string".
+ *
+ * @template TType - The type of the React node to check against. This is a "string" type.
+ * @param type - The type to check against. This is a "string" type.
+ * @param children - The React node to check. This can be a single React node,
+ *                   an array of nodes, or any other valid ReactNode.
+ * @returns A boolean indicating whether the given React node is of type "string".
+ */
+export function isOfType<TType extends "string">(
+  type: TType,
+  children: React.ReactNode,
+): children is string;
+
+/**
+ * Determines if the given React node is of type "undefined".
+ *
+ * @template TType - The type of the React node to check against. This is an "undefined" type.
+ * @param type - The type to check against. This is an "undefined" type.
+ * @param children - The React node to check. This can be a single React node,
+ *                   an array of nodes, or any other valid ReactNode.
+ * @returns A boolean indicating whether the given React node is of type "undefined".
+ */
+export function isOfType<TType extends "undefined">(
+  type: TType,
+  children: React.ReactNode,
+): children is undefined;
+
+export function isOfType(type: any, children: React.ReactNode): boolean {
+  if (typeof children !== "object") return typeof children === type;
+  if (!children) return type === "null";
+  if (Array.isArray(children)) return false;
+  if (!("type" in children)) return false;
+  if (children.type !== type) return false;
+  return true;
+}

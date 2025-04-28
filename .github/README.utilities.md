@@ -68,6 +68,8 @@ const inputChildren = children.getOfType(input, MyComponent); // => React.ReactE
 const children = children.mapOfType(input, MyComponent, (child) => (
   <p>input replaced</p>
 )); // => <div><p>input replaced</p></div>
+
+const isMyComponent = children.isOfType(MyComponent, <MyComponent />); // => true;
 ```
 
 ## Dates

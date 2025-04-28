@@ -195,4 +195,80 @@ describe("children", () => {
       ).toBe("Hello John");
     });
   });
+
+  describe("isOfType", () => {
+    it("should return true for a child of type string", () => {
+      const child = "hello";
+      const result = childrenModule.isOfType("string", child);
+      expect(result).toBe(true);
+    });
+
+    it("should return false for a child not of type string", () => {
+      const child = 123;
+      const result = childrenModule.isOfType("string", child);
+      expect(result).toBe(false);
+    });
+
+    it("should return true for a child of type number", () => {
+      const child = 123;
+      const result = childrenModule.isOfType("number", child);
+      expect(result).toBe(true);
+    });
+
+    it("should return false for a child not of type number", () => {
+      const child = "hello";
+      const result = childrenModule.isOfType("number", child);
+      expect(result).toBe(false);
+    });
+
+    it("should return true for a child of type boolean", () => {
+      const child = true;
+      const result = childrenModule.isOfType("boolean", child);
+      expect(result).toBe(true);
+    });
+
+    it("should return false for a child not of type boolean", () => {
+      const child = "hello";
+      const result = childrenModule.isOfType("boolean", child);
+      expect(result).toBe(false);
+    });
+
+    it("should return true for a child of type null", () => {
+      const child = null;
+      const result = childrenModule.isOfType("null", child);
+      expect(result).toBe(true);
+    });
+
+    it("should return false for a child not of type null", () => {
+      const child = undefined;
+      const result = childrenModule.isOfType("null", child);
+      expect(result).toBe(false);
+    });
+
+    it("should return true for a child of type undefined", () => {
+      const child = undefined;
+      const result = childrenModule.isOfType("undefined", child);
+      expect(result).toBe(true);
+    });
+
+    it("should return false for a child not of type undefined", () => {
+      const child = null;
+      const result = childrenModule.isOfType("undefined", child);
+      expect(result).toBe(false);
+    });
+
+    it("should return true for a child of a specific React component type", () => {
+      const MyComponent = () => <div />;
+      const child = <MyComponent />;
+      const result = childrenModule.isOfType(MyComponent, child);
+      expect(result).toBe(true);
+    });
+
+    it("should return false for a child not of a specific React component type", () => {
+      const MyComponent = () => <div />;
+      const child = <div />;
+      const result = childrenModule.isOfType(MyComponent, child);
+      expect(result).toBe(false);
+    });
+  });
 });
