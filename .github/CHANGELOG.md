@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.4.0](https://github.com/agusmgarcia/react-core/tree/v4.4.0)
+
+> April 29, 2025
+
+- **package.json**: stop regenerating regenerate script
+- **filters**: make distinct to include strict comparison
+- **\_app.tsx**: consider base path when locating favicon
+- **github.middleware**: add ability to merge workflows
+- **sortProperties**: add support for arrays
+- use latest dependencies versions
+- **children**: add isOfType function
+- **children**: add mapOfType function
+- add documentation
+- improve testing cases
+- **getChildrenOfType**: include components without children
+- **filters**: deprecate options
+- **merges**: change the options shape
+- **throwError**: add utility
+- remove pages on start
+- **build**: add command for libraries
+- add node support
+- **regenerate**: add force argument
+- **httpTrigger1.ts**: adjust path of the initial function
+- **.gitignore**: stop ignoring .next for non apps
+- **tsconfig.json**: adjust excludes
+- **eslint.config.js**: adjust ignore list for libs
+- **eslint.config.js**: avoid ignoring bin for azure-functions
+- **eslint.config.js**: remove react from azure functions
+- **next.config.js**: adjust base path env name
+- **package.json**: adjust name template
+- **package.json**: adjust author template
+- **package.json**: install before regenerating file
+- **package.json**: add engines support
+- **package.json**: use node instead of ts-node
+- **README.commands**: adjust documentation
+
 ## [v4.3.9](https://github.com/agusmgarcia/react-core/tree/v4.3.9)
 
 > April 16, 2025
