@@ -54,11 +54,11 @@ export default function createGlobalSlice<
     const subscribe: Subscribe<TSlice, TOtherSlices> = (listener, selector) => {
       const unsubscribe = store.subscribe((state, prevState) => {
         const selection = !!selector
-          ? selector(state as OmitFuncs<TOtherSlices>)
+          ? selector(state as OmitFuncs<TSlice & TOtherSlices>)
           : ({} as ReturnType<NonNullable<typeof selector>>);
 
         const prevSelection = !!selector
-          ? selector(prevState as OmitFuncs<TOtherSlices>)
+          ? selector(prevState as OmitFuncs<TSlice & TOtherSlices>)
           : ({} as ReturnType<NonNullable<typeof selector>>);
 
         if (equals.shallow(selection, prevSelection, 2)) return;

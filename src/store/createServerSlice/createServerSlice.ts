@@ -117,7 +117,10 @@ export default function createServerSlice<
     const result = createGlobalSlice<TSlice, TOtherSlices>(
       name,
       (subscribe) => {
-        subscribe((ctx) => reload(undefined, ctx), selector);
+        subscribe(
+          (ctx) => reload(undefined, ctx),
+          selector as Parameters<Subscribe<TSlice, TOtherSlices>>[1],
+        );
 
         const serverSubscribe: Subscribe<TSlice, TOtherSlices> = (
           listener,

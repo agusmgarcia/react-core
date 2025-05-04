@@ -106,7 +106,7 @@ export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
  */
 export type Subscribe<TSlice extends SliceOf<any, any>, TOtherSlices> = (
   listener: Func<void, [context: Context<TSlice, TOtherSlices>]>,
-  selector?: Func<any, [state: OmitFuncs<TOtherSlices>]>,
+  selector?: Func<any, [state: OmitFuncs<TSlice & TOtherSlices>]>,
 ) => Func;
 
 /**
