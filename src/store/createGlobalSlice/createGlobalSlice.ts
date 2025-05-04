@@ -31,11 +31,11 @@ import {
  *
  * @example
  * ```typescript
- * const useStore = createGlobalSlice(
+ * const createExampleSlice = createGlobalSlice(
  *   "exampleSlice",
- *   (subscribe) => ({
+ *   () => ({
  *     count: 0,
- *     increment: () => set((state) => ({ count: state.count + 1 })),
+ *     increment: (context) => context.set((state) => ({ count: state.count + 1 })),
  *   })
  * );
  * ```

@@ -41,6 +41,16 @@ import {
  * The slice is built on top of a global slice and extends its functionality with server-specific
  * methods. It supports merging new data with existing data when loading more and allows for
  * custom extra methods to be defined via the `factory` parameter.
+ *
+ * @example
+ * ```typescript
+ * const createExampleSlice = createServerSlice({
+ *   "exampleSlice",
+ *   async ({ query }, signal) =>
+ *     fetch(`/api/users?query=${query}`, { signal }).then((res) => res.json()),
+ *   (state) => ({ query: state.searchQuery }),
+ * });
+ * ```
  */
 export default function createServerSlice<
   TSlice extends SliceOf<any, any, any, any>,
