@@ -30,16 +30,17 @@
  * // }
  * ```
  */
-type OmitFuncs<TData> = TData extends object
-  ? TData extends Array<any>
-    ? TData
-    : TData extends Function
+type OmitFuncs<TData> =
+  TData extends Record<string, any>
+    ? TData extends Array<any>
       ? TData
-      : {
-          [TProperty in keyof TData as TData[TProperty] extends Function
-            ? never
-            : TProperty]: OmitFuncs<TData[TProperty]>;
-        }
-  : TData;
+      : TData extends Function
+        ? TData
+        : {
+            [TProperty in keyof TData as TData[TProperty] extends Function
+              ? never
+              : TProperty]: OmitFuncs<TData[TProperty]>;
+          }
+    : TData;
 
 export default OmitFuncs;

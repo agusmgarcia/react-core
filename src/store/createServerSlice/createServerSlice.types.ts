@@ -19,7 +19,7 @@ import { type CreateGlobalSliceTypes } from "../createGlobalSlice";
 export type SliceOf<
   TName extends string,
   TData,
-  TSelected extends object = {},
+  TSelected extends Record<string, any> = {},
   TExtraMethods extends Record<string, Func<any, [...any[]]>> = {},
 > = CreateGlobalSliceTypes.SliceOf<
   TName,
@@ -110,6 +110,60 @@ export type Subscribe<TSlice extends SliceOf<any, any>, TOtherSlices> = (
 ) => Func;
 
 /**
+ * Represents an asynchronous function responsible for fetching data for a specific slice.
+ *
+ * @template TSlice - The slice type for which the data is being fetched.
+ *
+ * @param args - The selected properties used as arguments for the fetch operation.
+ * @param signal - An AbortSignal to handle cancellation of the fetch operation.
+ * @param prevData - The previously fetched data, which can be used for incremental updates or comparisons.
+ *
+ * @returns A promise that resolves to the fetched data of the slice.
+ */
+export type Fetcher<TSlice extends SliceOf<any, any, any, any>> = AsyncFunc<
+  ExtractDataOf<TSlice>,
+  [
+    args: ExtractSelectedOf<TSlice>,
+    signal: AbortSignal,
+    prevData: ExtractDataOf<TSlice>,
+  ]
+>;
+
+/**
+ * A function type for selecting specific properties from the state of other slices.
+ *
+ * @template TSlice - The slice type for which the selection is being made.
+ * @template TOtherSlices - Additional slices that may be included in the state.
+ *
+ * @param state - The state of other slices, excluding functions.
+ * @returns The selected properties of the slice.
+ */
+export type Selector<
+  TSlice extends SliceOf<any, any, any, any>,
+  TOtherSlices,
+> = Func<ExtractSelectedOf<TSlice>, [state: OmitFuncs<TOtherSlices>]>;
+
+/**
+ * A function type for creating additional methods for a slice, with access to the slice's context.
+ *
+ * @template TSlice - The slice type for which the factory is being created.
+ * @template TOtherSlices - Additional slices that may be included in the context.
+ *
+ * @param subscribe - A function to subscribe to changes in the slice's context.
+ * @returns An object containing the extra methods for the slice, with the slice's context added as an argument.
+ */
+export type Factory<
+  TSlice extends SliceOf<any, any, any, any>,
+  TOtherSlices,
+> = Func<
+  AddArgumentToObject<
+    ExtractExtraMethodsOf<TSlice>,
+    Context<TSlice, TOtherSlices>
+  >,
+  [subscribe: Subscribe<TSlice, TOtherSlices>]
+>;
+
+/**
  * Represents the input parameters required to create a slice.
  *
  * @template TSlice - The slice type being created.
@@ -120,25 +174,34 @@ export type Subscribe<TSlice extends SliceOf<any, any>, TOtherSlices> = (
  * @param selector - An optional function to select properties from other slices.
  * @param factory - An optional function to create extra methods for the slice.
  */
-export type Input<TSlice extends SliceOf<any, any, any, any>, TOtherSlices> = [
-  name: ExtractNameOf<TSlice>,
-  fetcher: AsyncFunc<
-    ExtractDataOf<TSlice>,
-    [
-      args: ExtractSelectedOf<TSlice>,
-      signal: AbortSignal,
-      prevData: ExtractDataOf<TSlice>,
-    ]
-  >,
-  selector?: Func<ExtractSelectedOf<TSlice>, [state: OmitFuncs<TOtherSlices>]>,
-  factory?: Func<
-    AddArgumentToObject<
-      ExtractExtraMethodsOf<TSlice>,
-      Context<TSlice, TOtherSlices>
-    >,
-    [subscribe: Subscribe<TSlice, TOtherSlices>]
-  >,
-];
+export type Input<TSlice extends SliceOf<any, any, any, any>, TOtherSlices> =
+  ExtractExtraMethodsOf<TSlice> extends Record<string, never>
+    ? ExtractSelectedOf<TSlice> extends Record<string, never>
+      ? [
+          name: ExtractNameOf<TSlice>,
+          fetcher: Fetcher<TSlice>,
+          selector?: undefined,
+          factory?: undefined,
+        ]
+      : [
+          name: ExtractNameOf<TSlice>,
+          fetcher: Fetcher<TSlice>,
+          selector: Selector<TSlice, TOtherSlices>,
+          factory?: undefined,
+        ]
+    : ExtractSelectedOf<TSlice> extends Record<string, never>
+      ? [
+          name: ExtractNameOf<TSlice>,
+          fetcher: Fetcher<TSlice>,
+          selector: undefined,
+          factory: Factory<TSlice, TOtherSlices>,
+        ]
+      : [
+          name: ExtractNameOf<TSlice>,
+          fetcher: Fetcher<TSlice>,
+          selector: Selector<TSlice, TOtherSlices>,
+          factory: Factory<TSlice, TOtherSlices>,
+        ];
 
 /**
  * Represents the output of a slice, including its state and additional properties.
