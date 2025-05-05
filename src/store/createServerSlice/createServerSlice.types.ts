@@ -25,6 +25,7 @@ export type SliceOf<
   TName,
   Merge<
     {
+      __internal__: Func<TData>;
       data: TData | undefined;
       error: unknown;
       loading: boolean;
@@ -49,7 +50,7 @@ export type ExtractNameOf<TSlice extends SliceOf<any, any, any, any>> =
  * @template TSlice - The slice type to extract the data from.
  */
 export type ExtractDataOf<TSlice extends SliceOf<any, any, any, any>> =
-  CreateGlobalSliceTypes.ExtractStateOf<TSlice>["data"];
+  TSlice extends SliceOf<any, infer TData, any, any> ? TData : never;
 
 /**
  * Extracts the selected properties type of a given slice.
@@ -86,7 +87,10 @@ export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
    *
    * @param state - A function or value to update the state.
    */
-  set: Func<void, [state: React.SetStateAction<ExtractDataOf<TSlice>>]>;
+  set: Func<
+    void,
+    [state: React.SetStateAction<ExtractDataOf<TSlice> | undefined>]
+  >;
 
   /**
    * An abort signal to manage the lifecycle of subscriptions.
@@ -125,7 +129,7 @@ export type Fetcher<TSlice extends SliceOf<any, any, any, any>> = AsyncFunc<
   [
     args: ExtractSelectedOf<TSlice>,
     signal: AbortSignal,
-    prevData: ExtractDataOf<TSlice>,
+    prevData: ExtractDataOf<TSlice> | undefined,
   ]
 >;
 
@@ -212,4 +216,8 @@ export type Input<TSlice extends SliceOf<any, any, any, any>, TOtherSlices> =
 export type Output<
   TSlice extends SliceOf<any, any, any, any>,
   TOtherSlices,
-> = CreateGlobalSliceTypes.Output<TSlice, TOtherSlices, ExtractDataOf<TSlice>>;
+> = CreateGlobalSliceTypes.Output<
+  TSlice,
+  TOtherSlices,
+  ExtractDataOf<TSlice> | undefined
+>;

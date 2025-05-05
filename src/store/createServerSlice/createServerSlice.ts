@@ -67,7 +67,10 @@ export default function createServerSlice<
       context: CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>,
       mergeData: Func<
         ExtractDataOf<TSlice>,
-        [newData: ExtractDataOf<TSlice>, prevData: ExtractDataOf<TSlice>]
+        [
+          newData: ExtractDataOf<TSlice>,
+          prevData: ExtractDataOf<TSlice> | undefined,
+        ]
       >,
     ): Promise<void> {
       context.set((prevState) => ({ ...prevState, loading: true }));
@@ -114,6 +117,10 @@ export default function createServerSlice<
       return reloadHelper(args, context, (newData) => newData);
     }
 
+    function __internal__(): ExtractDataOf<TSlice> {
+      throw new Error("This method is for internal purposes");
+    }
+
     const result = createGlobalSlice<TSlice, TOtherSlices>(
       name,
       (subscribe) => {
@@ -149,6 +156,7 @@ export default function createServerSlice<
 
         return {
           ...extraMethods,
+          __internal__,
           data: undefined,
           error: undefined,
           loading: true,

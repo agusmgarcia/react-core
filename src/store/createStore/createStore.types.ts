@@ -1,6 +1,7 @@
 import {
   type Func,
   type OmitFuncs,
+  type OmitProperty,
   type TupleToUnion,
   type UnionToIntersection,
 } from "#src/utils";
@@ -72,6 +73,9 @@ export type Output<
     ]
   >;
   useSelector: <TSelectedData>(
-    selector: Func<TSelectedData, [state: StateOf<TSliceFactories>]>,
+    selector: Func<
+      TSelectedData,
+      [state: OmitProperty<StateOf<TSliceFactories>, "__internal__">]
+    >,
   ) => TSelectedData;
 };

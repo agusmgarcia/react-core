@@ -20,6 +20,7 @@ export { type default as Merge } from "./Merge.types";
 export { default as mergeRefs } from "./mergeRefs";
 export * as merges from "./merges";
 export { type default as OmitFuncs } from "./OmitFuncs.types";
+export { type default as OmitProperty } from "./OmitProperty.types";
 export { type default as OnlyId } from "./OnlyId.types";
 export { default as replaceString } from "./replaceString";
 export * as sorts from "./sorts";
