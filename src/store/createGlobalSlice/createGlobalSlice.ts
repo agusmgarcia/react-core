@@ -47,7 +47,7 @@ export default function createGlobalSlice<
   ...input: Input<TSlice, TOtherSlices>
 ): Output<TSlice, TOtherSlices, ExtractStateOf<TSlice>> {
   return (initialState) => (set, get, store) => {
-    let controller = new AbortController();
+    const controllerProvider = new AbortControllerProvider();
 
     const name = input[0];
 
@@ -64,7 +64,12 @@ export default function createGlobalSlice<
         if (equals.shallow(selection, prevSelection, 2)) return;
 
         listener(
-          buildContext<TSlice, TOtherSlices>(name, controller, get, set),
+          buildContext<TSlice, TOtherSlices>(
+            name,
+            controllerProvider,
+            get,
+            set,
+          ),
         );
       });
 
@@ -72,7 +77,12 @@ export default function createGlobalSlice<
         setTimeout(
           () =>
             listener(
-              buildContext<TSlice, TOtherSlices>(name, controller, get, set),
+              buildContext<TSlice, TOtherSlices>(
+                name,
+                controllerProvider,
+                get,
+                set,
+              ),
             ),
           0,
         );
@@ -98,7 +108,7 @@ export default function createGlobalSlice<
           result[name][key] = (...args: any[]) => {
             const ctx = buildContext<TSlice, TOtherSlices>(
               name,
-              controller,
+              controllerProvider,
               get,
               set,
             );
@@ -129,13 +139,12 @@ export default function createGlobalSlice<
 
 function buildContext<TSlice extends SliceOf<any, any>, TOtherSlices>(
   name: ExtractNameOf<TSlice>,
-  controller: AbortController,
+  controllerProvider: AbortControllerProvider,
   get: Parameters<StateCreator<TSlice & TOtherSlices, [], [], TSlice>>[1],
   set: Parameters<StateCreator<TSlice & TOtherSlices, [], [], TSlice>>[0],
 ): Context<TSlice, TOtherSlices> {
-  controller.abort();
-  controller = new AbortController();
-  const signal = controller.signal;
+  controllerProvider.abort();
+  const signal = controllerProvider.signal;
 
   return {
     get: () => {
@@ -151,4 +160,21 @@ function buildContext<TSlice extends SliceOf<any, any>, TOtherSlices>(
     },
     signal,
   };
+}
+
+class AbortControllerProvider {
+  private controller: AbortController;
+
+  constructor() {
+    this.controller = new AbortController();
+  }
+
+  get signal(): AbortSignal {
+    return this.controller.signal;
+  }
+
+  abort(reason?: any): void {
+    this.controller.abort(reason);
+    this.controller = new AbortController();
+  }
 }
