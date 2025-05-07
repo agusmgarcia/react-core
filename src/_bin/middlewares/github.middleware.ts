@@ -96,12 +96,12 @@ async function createGitignoreFile(
 
   const source =
     core === "app"
-      ? [".env.local", ".next", "node_modules", "out"]
+      ? [".env*.local", ".next", "node_modules", "out"]
       : core === "azure-func"
         ? ["dist", "local.settings.json", "node_modules"]
         : core === "lib"
           ? ["bin", "dist", "node_modules", "*.tgz"]
-          : [".env.local", "dist", "node_modules"];
+          : [".env*.local", "dist", "node_modules"];
 
   return merges.deep(gitignore, source, { sort: true }).join(EOL);
 }

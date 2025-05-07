@@ -1,5 +1,5 @@
 import run from "./_run";
-import { args, execute, getCore } from "./utils";
+import { args, execute, getCore, getEnvFiles } from "./utils";
 
 export default async function start(): Promise<void> {
   const core = await getCore();
@@ -24,7 +24,12 @@ export default async function start(): Promise<void> {
         ),
     );
 
-  if (core === "node")
+  if (core === "node") {
+    const envFiles = getEnvFiles("development")
+      .map((path) => `--env-file=${path}`)
+      .reverse()
+      .join(" ");
+
     await run(
       "start",
       false,
@@ -32,10 +37,11 @@ export default async function start(): Promise<void> {
       () => execute("webpack --mode=development", true),
       () =>
         execute(
-          `concurrently -k "node --env-file-if-exists=.env.local --watch dist/index.js" "webpack --mode=development --watch"`,
+          `concurrently -k "node${!!envFiles ? ` ${envFiles}` : ""} --watch dist/index.js" "webpack --mode=development --watch"`,
           true,
         ),
     );
+  }
 }
 
 start();

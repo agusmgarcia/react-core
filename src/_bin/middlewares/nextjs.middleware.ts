@@ -38,7 +38,7 @@ export default async function nextJSMiddleware(
           !!regenerate && !ignore.includes("next.config.js"),
         )
       : files.removeFile("next.config.js"),
-    files.removeFile(".env"),
+    await deleteEnvFiles(core),
     core === "app" || core === "node"
       ? files.upsertFile(
           ".env.local",
@@ -98,6 +98,28 @@ module.exports = (phase) => ({
   reactStrictMode: true,
 });
 `;
+
+async function deleteEnvFiles(
+  core: Awaited<ReturnType<typeof getCore>>,
+): Promise<void> {
+  const filesFromFolder = await folders.readFolder(".");
+
+  await Promise.all(
+    filesFromFolder
+      .filter((file) => {
+        switch (core) {
+          case "app":
+          case "node":
+            return false;
+
+          case "azure-func":
+          case "lib":
+            return file === ".env" || file.startsWith(".env.");
+        }
+      })
+      .map(files.removeFile),
+  );
+}
 
 async function createEnvLocalFile(
   core: Extract<Awaited<ReturnType<typeof getCore>>, "app" | "node">,
