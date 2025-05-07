@@ -46,7 +46,7 @@ const compat = new FlatCompat({
 });
 
 module.exports = defineConfig([
-  globalIgnores(["**/.env.local", "**/.next", "**/node_modules", "**/out"]),
+  globalIgnores(["**/.next", "**/node_modules", "**/out"]),
   {
     extends: compat.extends(
       "next/core-web-vitals",
