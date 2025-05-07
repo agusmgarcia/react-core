@@ -1,5 +1,3 @@
-import type Func from "./Func.types";
-
 /**
  * A utility type that recursively adds an additional argument to all function types
  * within an object type. If a property of the object is itself an object, the type
@@ -33,16 +31,22 @@ import type Func from "./Func.types";
  * // }
  * ```
  */
-type AddArgumentToObject<TObject, TParameter> =
-  TObject extends Record<string, any>
-    ? {
-        [TProperty in keyof TObject]: TObject[TProperty] extends Func<
-          infer TResult,
-          infer TArgs
-        >
-          ? Func<TResult, [...args: TArgs, parameter: TParameter]>
-          : AddArgumentToObject<TObject[TProperty], TParameter>;
-      }
-    : TObject;
+type AddArgumentToObject<TObject, TParameter> = TObject extends (
+  ...args: any
+) => any
+  ? (...args: [...Parameters<TObject>, TParameter]) => ReturnType<TObject>
+  : TObject extends Array<infer TArrayElement>
+    ? Array<AddArgumentToObject<TArrayElement, TParameter>>
+    : TObject extends Record<string, any>
+      ? {
+          [TProperty in keyof TObject]: TObject[TProperty] extends (
+            ...args: any
+          ) => any
+            ? (
+                ...args: [...Parameters<TObject[TProperty]>, TParameter]
+              ) => ReturnType<TObject[TProperty]>
+            : AddArgumentToObject<TObject[TProperty], TParameter>;
+        }
+      : TObject;
 
 export default AddArgumentToObject;
