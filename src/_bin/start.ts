@@ -12,19 +12,29 @@ export default async function start(): Promise<void> {
     );
 
   if (core === "azure-func")
-    await run("start", false, () =>
-      execute(
-        `concurrently -k "webpack --mode=development --watch" "func start --port=${port || 3000}"`,
-        true,
-      ),
+    await run(
+      "start",
+      false,
+      () => execute("del dist", true),
+      () => execute("webpack --mode=development", true),
+      () =>
+        execute(
+          `concurrently -k "func start --port=${port || 3000}" "webpack --mode=development --watch"`,
+          true,
+        ),
     );
 
   if (core === "node")
-    await run("start", false, () =>
-      execute(
-        `concurrently -k "webpack --mode=development --watch" "node --env-file-if-exists=.env.local --watch dist/index.js"`,
-        true,
-      ),
+    await run(
+      "start",
+      false,
+      () => execute("del dist", true),
+      () => execute("webpack --mode=development", true),
+      () =>
+        execute(
+          `concurrently -k "node --env-file-if-exists=.env.local --watch dist/index.js" "webpack --mode=development --watch"`,
+          true,
+        ),
     );
 }
 
