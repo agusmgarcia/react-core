@@ -50,6 +50,14 @@ By default `npm start` creates a server from <http://localhost:3000>. In case yo
 }
 ```
 
+## Run for production
+
+By default `npm start` runs in development mode for NodeJS apps. In case you want to run it for prod, run the following command:
+
+```bash
+npm start -- --production
+```
+
 ## Interactive mode
 
 When running `npm run deploy`, the process start merging commits into the differents tags. That's made to propagate changes across upper versions automatically. In case you want to go step by step use the `--interactive` flag.
