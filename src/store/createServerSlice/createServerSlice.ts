@@ -89,7 +89,7 @@ export default function createServerSlice<
         if (context.signal.aborted) return;
         context.set((prevState) => ({
           ...prevState,
-          data: mergeData(data, prevState.data),
+          data: mergeData(data, (prevState as any).data),
           error: undefined,
           loading: false,
         }));
