@@ -1,7 +1,7 @@
 {
   "name": "@agusmgarcia/react-core",
   "core": "lib",
-  "version": "4.4.1",
+  "version": "4.4.2",
   "private": false,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

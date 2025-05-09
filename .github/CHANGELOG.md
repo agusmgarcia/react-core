@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.4.2](https://github.com/agusmgarcia/react-core/tree/v4.4.2)
+
+> May 9, 2025
+
+- **Cache**: prevent caching error if signal is aborted
+- **store**: clear timeout if listener is executed first
+- **store**: provide a reason to the signal
+- **store**: adjust some instructions order
+
 ## [v4.4.1](https://github.com/agusmgarcia/react-core/tree/v4.4.1)
 
 > May 9, 2025
