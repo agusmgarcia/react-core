@@ -32,6 +32,7 @@ export default class Cache {
    *
    * @param key - The unique key identifying the cached item.
    * @param factory - A function that produces the value to be cached. It can return either a value or a Promise resolving to a value.
+   * @param signal - An AbortSignal to cancel the operation if needed.
    * @param expiresAt - Optional. Specifies the expiration time for the cached item. It can be:
    *   - A number representing the absolute expiration timestamp.
    *   - A function that takes the result as input and returns the expiration timestamp.
@@ -43,7 +44,8 @@ export default class Cache {
    */
   getOrCreate<TResult>(
     key: string,
-    factory: Func<TResult | Promise<TResult>>,
+    factory: Func<TResult | Promise<TResult>, [signal: AbortSignal]>,
+    signal: AbortSignal,
     expiresAt?: number | Func<number, [result: TResult]>,
   ): Promise<TResult> {
     if (!this.mutexes[key]) this.mutexes[key] = new Mutex();
@@ -51,7 +53,7 @@ export default class Cache {
     return this.mutexes[key].runExclusive(async () => {
       if (!this.items[key] || Date.now() >= this.items[key].expiresAt) {
         try {
-          const result = await factory();
+          const result = await factory(signal);
 
           expiresAt = !expiresAt
             ? Date.now() + this.maxCacheTime
@@ -61,6 +63,7 @@ export default class Cache {
 
           this.items[key] = { expiresAt, result };
         } catch (error) {
+          signal.throwIfAborted();
           expiresAt = Date.now() + 1_000;
           this.items[key] = { error, expiresAt };
         }

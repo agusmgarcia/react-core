@@ -50,6 +50,7 @@ export default class StorageCache extends Cache {
    * @template TResult - The type of the result to be cached.
    * @param key - The unique identifier for the cached value.
    * @param factory - A function that generates the value to be cached. It can return either a value or a Promise.
+   * @param signal - An AbortSignal to cancel the operation if needed.
    * @param expiresAt - Optional. Specifies the expiration time for the cached value. It can be:
    *   - A number representing the timestamp in milliseconds when the value expires.
    *   - A function that takes the result as input and returns the expiration timestamp.
@@ -60,7 +61,8 @@ export default class StorageCache extends Cache {
    */
   override getOrCreate<TResult>(
     key: string,
-    factory: Func<TResult | Promise<TResult>>,
+    factory: Func<TResult | Promise<TResult>, [signal: AbortSignal]>,
+    signal: AbortSignal,
     expiresAt?: number | Func<number, [result: TResult]>,
   ): Promise<TResult> {
     const newExpiresAt = (result: TResult) =>
@@ -72,9 +74,9 @@ export default class StorageCache extends Cache {
 
     return super.getOrCreate(
       key,
-      async () => {
+      async (signal) => {
         try {
-          const result = await factory();
+          const result = await factory(signal);
 
           saveItemIntoStore(this.storage, this.storageName, key, {
             expiresAt: newExpiresAt(result),
@@ -83,6 +85,8 @@ export default class StorageCache extends Cache {
 
           return result;
         } catch (error) {
+          signal.throwIfAborted();
+
           saveItemIntoStore(this.storage, this.storageName, key, {
             error,
             expiresAt: Date.now() + 1000,
@@ -91,6 +95,7 @@ export default class StorageCache extends Cache {
           throw error;
         }
       },
+      signal,
       newExpiresAt,
     );
   }
