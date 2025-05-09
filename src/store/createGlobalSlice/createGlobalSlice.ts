@@ -143,7 +143,7 @@ function buildContext<TSlice extends SliceOf<any, any>, TOtherSlices>(
   get: Parameters<StateCreator<TSlice & TOtherSlices, [], [], TSlice>>[1],
   set: Parameters<StateCreator<TSlice & TOtherSlices, [], [], TSlice>>[0],
 ): Context<TSlice, TOtherSlices> {
-  controllerProvider.abort();
+  controllerProvider.abort("Context aborted!");
   const signal = controllerProvider.signal;
 
   return {
@@ -173,7 +173,7 @@ class AbortControllerProvider {
     return this.controller.signal;
   }
 
-  abort(reason?: any): void {
+  abort(reason: string): void {
     this.controller.abort(reason);
     this.controller = new AbortController();
   }
