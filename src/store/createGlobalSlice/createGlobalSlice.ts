@@ -52,6 +52,8 @@ export default function createGlobalSlice<
     const name = input[0];
 
     const subscribe: Subscribe<TSlice, TOtherSlices> = (listener, selector) => {
+      let handler: NodeJS.Timeout;
+
       const unsubscribe = store.subscribe((state, prevState) => {
         const selection = !!selector
           ? selector(state as OmitFuncs<TSlice & TOtherSlices>)
@@ -63,6 +65,7 @@ export default function createGlobalSlice<
 
         if (equals.shallow(selection, prevSelection, 2)) return;
 
+        clearTimeout(handler);
         listener(
           buildContext<TSlice, TOtherSlices>(
             name,
@@ -74,7 +77,7 @@ export default function createGlobalSlice<
       });
 
       if (!isSSR()) {
-        setTimeout(
+        handler = setTimeout(
           () =>
             listener(
               buildContext<TSlice, TOtherSlices>(
