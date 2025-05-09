@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.4.1](https://github.com/agusmgarcia/react-core/tree/v4.4.1)
+
+> May 9, 2025
+
+- **Merge**: adjust type implementation
+- **AddArgumentToObject**: adjust type implementation
+- **OmitFuncs**: adjust type implementation
+- **start**: add production flag for nodejs apps
+- make node apps to mimic web apps env vars behavior
+- **.eslint.config.js**: adjust ignore list for app
+- **start**: build before starting
+- **createServerSlice**: avoid fetcher to response with undefined
+- **store**: adjust AbortController usage
+- **createServerSlice**: force selector when TSelected is not an empty object
+- **store**: let subscribe to receive current state
+- **store**: adjust doc
+
 ## [v4.4.0](https://github.com/agusmgarcia/react-core/tree/v4.4.0)
 
 > April 29, 2025
