@@ -73,9 +73,9 @@ export default function createServerSlice<
         ]
       >,
     ): Promise<void> {
-      context.set((prevState) => ({ ...prevState, loading: true }));
-
       try {
+        context.set((prevState) => ({ ...prevState, loading: true }));
+
         const selected = !!selector
           ? selector(context.get() as OmitFuncs<TOtherSlices>)
           : ({} as ExtractSelectedOf<TSlice>);
@@ -86,7 +86,6 @@ export default function createServerSlice<
           context.get()[name].data,
         );
 
-        if (context.signal.aborted) return;
         context.set((prevState) => ({
           ...prevState,
           data: mergeData(data, (prevState as any).data),
