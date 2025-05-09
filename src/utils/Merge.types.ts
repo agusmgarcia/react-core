@@ -8,15 +8,24 @@
  * @template TObjectA - The first object type to merge.
  * @template TObjectB - The second object type to merge.
  */
-type Merge<TObjectA, TObjectB> = {
-  [K in keyof TObjectA | keyof TObjectB]: K extends keyof TObjectA &
-    keyof TObjectB
-    ? TObjectA[K] | TObjectB[K]
-    : K extends keyof TObjectB
-      ? TObjectB[K]
-      : K extends keyof TObjectA
-        ? TObjectA[K]
-        : never;
-};
+type Merge<
+  TObjectA extends object,
+  TObjectB extends object,
+  I = Diff<TObjectA, TObjectB> &
+    Intersection<TObjectB, TObjectA> &
+    Diff<TObjectB, TObjectA>,
+> = Pick<I, keyof I>;
+
+type Diff<T extends object, U extends object> = Pick<
+  T,
+  SetDifference<keyof T, keyof U>
+>;
+
+type SetDifference<A, B> = A extends B ? never : A;
+
+type Intersection<T extends object, U extends object> = Pick<
+  T,
+  Extract<keyof T, keyof U> & Extract<keyof U, keyof T>
+>;
 
 export default Merge;
