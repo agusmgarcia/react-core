@@ -80,7 +80,7 @@ export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
   /**
    * A function to get the current state of the slice and other slices, excluding functions.
    */
-  get: Func<OmitFuncs<TSlice & TOtherSlices>>;
+  get: Func<OmitFuncs<TSlice> & TOtherSlices>;
 
   /**
    * A function to set the state of the slice.

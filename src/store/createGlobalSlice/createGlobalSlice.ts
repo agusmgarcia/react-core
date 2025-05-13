@@ -48,7 +48,6 @@ export default function createGlobalSlice<
 ): Output<TSlice, TOtherSlices, ExtractStateOf<TSlice>> {
   return (initialState) => (set, get, store) => {
     const controllerProvider = new AbortControllerProvider();
-
     const name = input[0];
 
     const subscribe: Subscribe<TSlice, TOtherSlices> = (listener, selector) => {
@@ -95,7 +94,6 @@ export default function createGlobalSlice<
     };
 
     const factory = input[1](subscribe);
-
     if (typeof factory !== "object" || !factory)
       return {
         [name]:
@@ -152,7 +150,7 @@ function buildContext<TSlice extends SliceOf<any, any>, TOtherSlices>(
   return {
     get: () => {
       signal.throwIfAborted();
-      return get() as OmitFuncs<TSlice & TOtherSlices>;
+      return get() as OmitFuncs<TSlice> & TOtherSlices;
     },
     set: (state) => {
       signal.throwIfAborted();
