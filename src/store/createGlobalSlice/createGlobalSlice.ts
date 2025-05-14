@@ -107,7 +107,7 @@ export default function createGlobalSlice<
 
         if (element instanceof Function) {
           result[name][key] = (...args: any[]) => {
-            const ctx = buildContext<TSlice, TOtherSlices>(
+            const context = buildContext<TSlice, TOtherSlices>(
               name,
               controllerProvider,
               get,
@@ -115,15 +115,15 @@ export default function createGlobalSlice<
             );
 
             try {
-              const result = element(...args, ctx);
+              const result = element(...args, context);
               if (!(result instanceof Promise)) return result;
 
               return result.catch((error) => {
-                if (ctx.signal.aborted) return;
+                if (context.signal.aborted) return;
                 throw error;
               });
             } catch (error) {
-              if (ctx.signal.aborted) return;
+              if (context.signal.aborted) return;
               throw error;
             }
           };

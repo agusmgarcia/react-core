@@ -124,14 +124,14 @@ export default function createServerSlice<
       name,
       (subscribe) => {
         subscribe(
-          (ctx) => reload(undefined, ctx),
+          (context) => reload(undefined, context),
           selector as Parameters<Subscribe<TSlice, TOtherSlices>>[1],
         );
 
         const serverSubscribe: Subscribe<TSlice, TOtherSlices> = (
           listener,
           selector,
-        ) => subscribe((ctx) => listener(buildContext(ctx)), selector);
+        ) => subscribe((context) => listener(buildContext(context)), selector);
 
         const serverExtraMethods =
           factory?.(serverSubscribe) ||

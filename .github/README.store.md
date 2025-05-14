@@ -28,10 +28,10 @@ export type FormSearchSlice = CreateGlobalSliceTypes.SliceOf<
 
 export default createGlobalSlice<FormSearchSlice>("formSearch", () => ({
   asc: false,
-  clear: (ctx) => ctx.set({ asc: false, name: "" }),
+  clear: (context) => context.set({ asc: false, name: "" }),
   name: "",
-  setAsc: (asc, ctx) => ctx.set((prev) => ({ ...prev, asc })),
-  setName: (name, ctx) => ctx.set((prev) => ({ ...prev, name })),
+  setAsc: (asc, context) => context.set((prev) => ({ ...prev, asc })),
+  setName: (name, context) => context.set((prev) => ({ ...prev, name })),
 }));
 ```
 
