@@ -1,6 +1,12 @@
 import { type StateCreator } from "zustand";
 
-import { equals, isSSR, merges, type OmitFuncs } from "#src/utils";
+import {
+  equals,
+  isSSR,
+  merges,
+  type OmitFuncs,
+  type OmitProperty,
+} from "#src/utils";
 
 import {
   type Context,
@@ -150,7 +156,11 @@ function buildContext<TSlice extends SliceOf<any, any>, TOtherSlices>(
   return {
     get: () => {
       signal.throwIfAborted();
-      return get() as OmitFuncs<TSlice, "shallow"> & TOtherSlices;
+      return get() as OmitProperty<
+        OmitFuncs<TSlice, "shallow"> & TOtherSlices,
+        "__internal__",
+        "shallow"
+      >;
     },
     set: (state) => {
       signal.throwIfAborted();

@@ -4,6 +4,7 @@ import {
   type Func,
   type Merge,
   type OmitFuncs,
+  type OmitProperty,
 } from "#src/utils";
 
 import { type CreateGlobalSliceTypes } from "../createGlobalSlice";
@@ -80,7 +81,13 @@ export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
   /**
    * A function to get the current state of the slice and other slices, excluding functions.
    */
-  get: Func<OmitFuncs<TSlice, "shallow"> & TOtherSlices>;
+  get: Func<
+    OmitProperty<
+      OmitFuncs<TSlice, "shallow"> & TOtherSlices,
+      "__internal__",
+      "shallow"
+    >
+  >;
 
   /**
    * A function to set the state of the slice.
