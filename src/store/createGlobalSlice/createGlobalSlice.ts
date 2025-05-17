@@ -1,6 +1,7 @@
 import { type StateCreator } from "zustand";
 
 import {
+  catchError,
   equals,
   isSSR,
   merges,
@@ -120,24 +121,14 @@ export default function createGlobalSlice<
               set,
             );
 
-            try {
-              const result = middleware(
-                () => element(...args, context),
-                context,
-                name,
-                key,
-              );
-
-              if (!(result instanceof Promise)) return result;
-
-              return result.catch((error) => {
+            return catchError(
+              () =>
+                middleware(() => element(...args, context), context, name, key),
+              (error) => {
                 if (context.signal.aborted) return;
                 throw error;
-              });
-            } catch (error) {
-              if (context.signal.aborted) return;
-              throw error;
-            }
+              },
+            );
           };
         }
 
