@@ -238,7 +238,7 @@ import { type Func, type OmitFuncs } from "@agusmgarcia/react-core";
 
 type Person = { id: string; name: string; setName: Func<void, [name: string]> };
 
-type OmitFuncsPerson = OmitFuncs<Person>; // => { id: string, name: undefined }
+type OmitFuncsPerson = OmitFuncs<Person>; // => { id: string; name: string }
 ```
 
 ## Only id

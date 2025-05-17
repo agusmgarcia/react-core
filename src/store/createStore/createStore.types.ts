@@ -68,7 +68,7 @@ export type Output<
     [
       props: {
         children?: React.ReactNode;
-        initialState?: Partial<OmitFuncs<StateOf<TSliceFactories>>>;
+        initialState?: Partial<OmitFuncs<StateOf<TSliceFactories>, "shallow">>;
       },
     ]
   >;

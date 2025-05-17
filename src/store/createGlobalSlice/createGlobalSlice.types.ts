@@ -41,7 +41,7 @@ export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
   /**
    * A function to get the current state of the slice and other slices, excluding functions.
    */
-  get: Func<OmitFuncs<TSlice> & TOtherSlices>;
+  get: Func<OmitFuncs<TSlice, "shallow"> & TOtherSlices>;
 
   /**
    * A function to set the state of the slice.
@@ -50,7 +50,7 @@ export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
    */
   set: Func<
     void,
-    [state: React.SetStateAction<OmitFuncs<ExtractStateOf<TSlice>>>]
+    [state: React.SetStateAction<OmitFuncs<ExtractStateOf<TSlice>, "shallow">>]
   >;
 
   /**
@@ -72,7 +72,7 @@ export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
  */
 export type Subscribe<TSlice extends SliceOf<any, any>, TOtherSlices> = (
   listener: Func<void, [context: Context<TSlice, TOtherSlices>]>,
-  selector?: Func<any, [state: OmitFuncs<TSlice & TOtherSlices>]>,
+  selector?: Func<any, [state: OmitFuncs<TSlice & TOtherSlices, "shallow">]>,
 ) => Func;
 
 /**
@@ -111,7 +111,9 @@ export type Output<
   StateCreator<TSlice & TOtherSlices, [], [], TSlice>,
   [
     initialState:
-      | Partial<Record<ExtractNameOf<TSlice>, OmitFuncs<TInitialState>>>
+      | Partial<
+          Record<ExtractNameOf<TSlice>, OmitFuncs<TInitialState, "strict">>
+        >
       | undefined,
   ]
 >;

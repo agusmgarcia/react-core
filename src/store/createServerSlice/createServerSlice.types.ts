@@ -80,7 +80,7 @@ export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
   /**
    * A function to get the current state of the slice and other slices, excluding functions.
    */
-  get: Func<OmitFuncs<TSlice> & TOtherSlices>;
+  get: Func<OmitFuncs<TSlice, "shallow"> & TOtherSlices>;
 
   /**
    * A function to set the state of the slice.
@@ -110,7 +110,7 @@ export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
  */
 export type Subscribe<TSlice extends SliceOf<any, any>, TOtherSlices> = (
   listener: Func<void, [context: Context<TSlice, TOtherSlices>]>,
-  selector?: Func<any, [state: OmitFuncs<TSlice & TOtherSlices>]>,
+  selector?: Func<any, [state: OmitFuncs<TSlice & TOtherSlices, "shallow">]>,
 ) => Func;
 
 /**
@@ -145,7 +145,10 @@ export type Fetcher<TSlice extends SliceOf<any, any, any, any>> = AsyncFunc<
 export type Selector<
   TSlice extends SliceOf<any, any, any, any>,
   TOtherSlices,
-> = Func<ExtractSelectedOf<TSlice>, [state: OmitFuncs<TOtherSlices>]>;
+> = Func<
+  ExtractSelectedOf<TSlice>,
+  [state: OmitFuncs<TOtherSlices, "shallow">]
+>;
 
 /**
  * A function type for creating additional methods for a slice, with access to the slice's context.

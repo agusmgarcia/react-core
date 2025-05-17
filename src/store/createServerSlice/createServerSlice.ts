@@ -77,7 +77,7 @@ export default function createServerSlice<
         context.set((prevState) => ({ ...prevState, loading: true }));
 
         const selected = !!selector
-          ? selector(context.get() as OmitFuncs<TOtherSlices>)
+          ? selector(context.get() as OmitFuncs<TOtherSlices, "shallow">)
           : ({} as ExtractSelectedOf<TSlice>);
 
         const data = await fetcher(
@@ -176,7 +176,7 @@ export default function createServerSlice<
       },
     } as Record<
       ExtractNameOf<TSlice>,
-      OmitFuncs<CreateGlobalSliceTypes.ExtractStateOf<TSlice>>
+      OmitFuncs<CreateGlobalSliceTypes.ExtractStateOf<TSlice>, "strict">
     >);
   };
 }
