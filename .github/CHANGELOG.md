@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.4.3](https://github.com/agusmgarcia/react-core/tree/v4.4.3)
+
+> May 17, 2025
+
+- **store**: add SubscribeContext
+- **catchError**: add module
+- **store**: add support for middlewares
+- **store**: ignore **internal** everywhere
+- **OmitProperty**: add TRecursive parameter
+- **AddArgumentToObject**: add TRecursive parameter
+- **OmitFuncs**: add TRecursive parameter
+- **store**: rename ctx by context
+- **store**: forward functions for other states
+
 ## [v4.4.2](https://github.com/agusmgarcia/react-core/tree/v4.4.2)
 
 > May 9, 2025
