@@ -52,7 +52,7 @@ export default function createGlobalSlice<
 >(
   ...input: Input<TSlice, TOtherSlices>
 ): Output<TSlice, TOtherSlices, ExtractStateOf<TSlice>> {
-  return (initialState) => (set, get, store) => {
+  return (initialState, middleware) => (set, get, store) => {
     const controllerProvider = new AbortControllerProvider();
     const name = input[0];
 
@@ -121,7 +121,13 @@ export default function createGlobalSlice<
             );
 
             try {
-              const result = element(...args, context);
+              const result = middleware(
+                () => element(...args, context),
+                context,
+                name,
+                key,
+              );
+
               if (!(result instanceof Promise)) return result;
 
               return result.catch((error) => {

@@ -9,6 +9,22 @@ import {
 import { type CreateGlobalSliceTypes } from "../createGlobalSlice";
 
 /**
+ * Defines a middleware type for the global store, parameterized by an array of slice factory outputs.
+ *
+ * @template TSliceFactories - An array of slice factory outputs, each conforming to the `CreateGlobalSliceTypes.Output` type.
+ *
+ * @remarks
+ * This type is used to specify middleware functions that operate on the global store state,
+ * where the state shape is determined by the intersection of all slices produced by the provided factories.
+ */
+export type Middleware<
+  TSliceFactories extends CreateGlobalSliceTypes.Output<any, any, any>[],
+> = CreateGlobalSliceTypes.Middleware<
+  CreateGlobalSliceTypes.SliceOf<string, {}>,
+  SlicesOf<TSliceFactories>
+>;
+
+/**
  * Represents the input type for the `createStore` function.
  *
  * @template TSliceFactories - An array of slice factory outputs, each conforming to the `CreateGlobalSliceTypes.Output` type.

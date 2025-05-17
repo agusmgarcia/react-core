@@ -104,6 +104,45 @@ export type Input<TSlice extends SliceOf<any, any>, TOtherSlices> = [
 ];
 
 /**
+ * Defines the initial state for a slice, which can be a partial record of the slice's name
+ * mapped to its initial state (with functions omitted), or undefined.
+ *
+ * @template TSlice - The slice type for which the initial state is defined.
+ * @template TInitialState - The type representing the initial state structure.
+ *
+ * @remarks
+ * - The initial state can be a partial object, allowing only some properties to be specified.
+ * - All function properties (except those named "strict") are omitted from the initial state.
+ * - If no initial state is provided, `undefined` can be used.
+ */
+type InitialState<TSlice extends SliceOf<any, any>, TInitialState> =
+  | Partial<Record<ExtractNameOf<TSlice>, OmitFuncs<TInitialState, "strict">>>
+  | undefined;
+
+/**
+ * Represents a middleware function that can intercept or modify the behavior of slice functions.
+ *
+ * @template TSlice - The slice type being created.
+ * @template TOtherSlices - The other slices that may be combined with the current slice.
+ *
+ * @param callback - The original function to be executed, which can be called, replaced, or wrapped by the middleware.
+ * @param context - The context object associated with the slice, providing access to state and utilities.
+ * @param slice - The name of the slice being operated on.
+ * @param property - The name of the function being called within the slice.
+ *
+ * @returns The result of the callback or any value as determined by the middleware logic.
+ */
+export type Middleware<TSlice extends SliceOf<any, any>, TOtherSlices> = Func<
+  any,
+  [
+    callback: Func<any>,
+    context: Context<TSlice, TOtherSlices>,
+    slice: keyof TOtherSlices,
+    property: string,
+  ]
+>;
+
+/**
  * Represents the output of a slice creation function, which is a state creator function.
  *
  * @template TSlice - The slice type being created.
@@ -121,10 +160,7 @@ export type Output<
 > = Func<
   StateCreator<TSlice & TOtherSlices, [], [], TSlice>,
   [
-    initialState:
-      | Partial<
-          Record<ExtractNameOf<TSlice>, OmitFuncs<TInitialState, "strict">>
-        >
-      | undefined,
+    initialState: InitialState<TSlice, TInitialState>,
+    middleware: Middleware<TSlice, TOtherSlices>,
   ]
 >;

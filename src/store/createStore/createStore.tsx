@@ -2,8 +2,15 @@ import { createContext, useContext, useRef } from "react";
 import { create, type StoreApi, type UseBoundStore } from "zustand";
 import { devtools } from "zustand/middleware";
 
+import { type Func } from "#src/utils";
+
 import { type CreateGlobalSliceTypes } from "../createGlobalSlice";
-import { type Input, type Output, type SlicesOf } from "./createStore.types";
+import {
+  type Input,
+  type Middleware,
+  type Output,
+  type SlicesOf,
+} from "./createStore.types";
 
 const StoreContext = createContext<Store<any[]> | undefined>(undefined);
 StoreContext.displayName = "StoreContext";
@@ -47,39 +54,73 @@ StoreContext.displayName = "StoreContext";
  */
 export default function createStore<
   TSliceFactories extends CreateGlobalSliceTypes.Output<any, any, any>[],
->(...input: Input<TSliceFactories>): Output<TSliceFactories> {
-  return {
-    StoreProvider: (props) => {
-      const storeRef = useRef<Store<TSliceFactories>>(null);
+>(
+  ...input: Input<TSliceFactories>
+): Output<TSliceFactories> &
+  Func<
+    Output<TSliceFactories>,
+    [...middlewares: Middleware<TSliceFactories>[]]
+  > {
+  const result: Func<
+    Output<TSliceFactories>,
+    [...middlewares: Middleware<TSliceFactories>[]]
+  > = (...middlewares) => {
+    const middleware: Middleware<TSliceFactories> = function (
+      callback,
+      context,
+      slice,
+      property,
+    ) {
+      let result = callback;
 
-      if (!storeRef.current)
-        storeRef.current = create<SlicesOf<TSliceFactories>>()(
-          devtools(
-            (...a) =>
-              input.reduce(
-                (result, factory) => ({
-                  ...result,
-                  ...factory(props.initialState)(...a),
-                }),
-                {},
-              ),
-            { enabled: true },
-          ),
+      for (let i = middlewares.length - 1; i >= 0; i--) {
+        const middleware = middlewares[i];
+        result = middleware.bind(undefined, result, context, slice, property);
+      }
+
+      return result();
+    };
+
+    return {
+      StoreProvider: (props) => {
+        const storeRef = useRef<Store<TSliceFactories>>(null);
+
+        if (!storeRef.current)
+          storeRef.current = create<SlicesOf<TSliceFactories>>()(
+            devtools(
+              (...a) =>
+                input.reduce(
+                  (result, factory) => ({
+                    ...result,
+                    ...factory(props.initialState, middleware)(...a),
+                  }),
+                  {},
+                ),
+              { enabled: true },
+            ),
+          );
+
+        return (
+          <StoreContext.Provider value={storeRef.current}>
+            {props.children}
+          </StoreContext.Provider>
         );
+      },
+      useSelector: (selector) => {
+        const store = useContext(StoreContext);
+        if (!store) throw "";
 
-      return (
-        <StoreContext.Provider value={storeRef.current}>
-          {props.children}
-        </StoreContext.Provider>
-      );
-    },
-    useSelector: (selector) => {
-      const store = useContext(StoreContext);
-      if (!store) throw "";
-
-      return store(selector as any);
-    },
+        return store(selector as any);
+      },
+    };
   };
+
+  const resultProperties = result((callback) => callback());
+  Object.keys(resultProperties).forEach((key) => {
+    (result as any)[key] = (resultProperties as any)[key];
+  });
+
+  return result as any;
 }
 
 type Store<

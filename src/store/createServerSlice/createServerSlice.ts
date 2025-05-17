@@ -1,5 +1,6 @@
 import {
   type AddArgumentToObject,
+  catchError,
   type Func,
   type OmitFuncs,
 } from "#src/utils";
@@ -56,7 +57,7 @@ export default function createServerSlice<
   TSlice extends SliceOf<any, any, any, any>,
   TOtherSlices = {},
 >(...input: Input<TSlice, TOtherSlices>): Output<TSlice, TOtherSlices> {
-  return (initialData) => {
+  return (initialData, middleware) => {
     const name = input[0];
     const fetcher = input[1];
     const selector = input[2];
@@ -93,8 +94,12 @@ export default function createServerSlice<
           loading: false,
         }));
       } catch (error) {
-        if (context.signal.aborted) return;
-        context.set((prevState) => ({ ...prevState, error, loading: false }));
+        context.set((prevState) => ({
+          ...prevState,
+          error: undefined,
+          loading: false,
+        }));
+        throw error;
       }
     }
 
@@ -171,16 +176,26 @@ export default function createServerSlice<
       },
     );
 
-    return result({
-      [name]: {
-        data: initialData?.[name],
-        error: undefined,
-        loading: true,
-      },
-    } as Record<
-      ExtractNameOf<TSlice>,
-      OmitFuncs<CreateGlobalSliceTypes.ExtractStateOf<TSlice>, "strict">
-    >);
+    return result(
+      {
+        [name]: {
+          data: initialData?.[name],
+          error: undefined,
+          loading: true,
+        },
+      } as Record<
+        ExtractNameOf<TSlice>,
+        OmitFuncs<CreateGlobalSliceTypes.ExtractStateOf<TSlice>, "strict">
+      >,
+      (callback, context, slice, property) =>
+        catchError(
+          () => middleware(callback, context, slice, property),
+          (error) => {
+            if (property !== "reload" && property !== "loadMore") throw error;
+            context.set((prevState) => ({ ...prevState, error }));
+          },
+        ),
+    );
   };
 }
 
