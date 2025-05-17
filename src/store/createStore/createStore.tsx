@@ -3,7 +3,7 @@ import { create, type StoreApi, type UseBoundStore } from "zustand";
 import { devtools } from "zustand/middleware";
 
 import { type CreateGlobalSliceTypes } from "../createGlobalSlice";
-import { type Input, type Output, type StateOf } from "./createStore.types";
+import { type Input, type Output, type SlicesOf } from "./createStore.types";
 
 const StoreContext = createContext<Store<any[]> | undefined>(undefined);
 StoreContext.displayName = "StoreContext";
@@ -53,7 +53,7 @@ export default function createStore<
       const storeRef = useRef<Store<TSliceFactories>>(null);
 
       if (!storeRef.current)
-        storeRef.current = create<StateOf<TSliceFactories>>()(
+        storeRef.current = create<SlicesOf<TSliceFactories>>()(
           devtools(
             (...a) =>
               input.reduce(
@@ -84,4 +84,4 @@ export default function createStore<
 
 type Store<
   TSliceFactories extends CreateGlobalSliceTypes.Output<any, any, any>[],
-> = UseBoundStore<StoreApi<StateOf<TSliceFactories>>>;
+> = UseBoundStore<StoreApi<SlicesOf<TSliceFactories>>>;

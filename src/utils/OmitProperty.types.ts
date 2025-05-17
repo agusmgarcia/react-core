@@ -1,48 +1,38 @@
 /**
- * A utility type that recursively omits a specified property from a given data structure.
+ * Creates a new type by omitting properties with the specified name from the given type `TData`.
  *
- * This type works with objects, arrays, and nested structures, removing the specified property
- * from all levels of the hierarchy.
+ * @template TData - The source type from which to omit properties.
+ * @template TPropertyName - The name of the property to omit (as a string literal type).
+ * @template TRecursive - Determines how deeply to omit the property:
+ *   - `"deep"` (default): Recursively omits the property from all nested objects and arrays.
+ *   - `"shallow"`: Omits the property only from the top-level object and from elements of top-level arrays.
+ *   - `"strict"`: Omits the property only from the top-level object, without recursion.
  *
- * @template TData - The type of the data structure to process.
- * @template TPropertyName - The name of the property to omit. Must be a string.
- *
- * @remarks
- * - If `TData` is an array, the type applies the omission to each element of the array.
- * - If `TData` is an object, the type removes the specified property and recursively applies
- *   the omission to all nested properties.
- * - If `TData` is neither an object nor an array, it is returned as-is.
- *
- * @example
- * ```typescript
- * type Example = {
- *   id: number;
- *   name: string;
- *   nested: {
- *     id: number;
- *     value: string;
- *   };
- * };
- *
- * type Result = OmitProperty<Example, 'id'>;
- * // Result:
- * // {
- * //   name: string;
- * //   nested: {
- * //     value: string;
- * //   };
- * // }
- * ```
+ * - Functions are returned as-is.
+ * - Arrays are handled according to the recursion mode.
+ * - For objects, the property with the specified name is omitted according to the recursion mode.
  */
-type OmitProperty<TData, TPropertyName extends string> = TData extends Function
+type OmitProperty<
+  TData,
+  TPropertyName extends string,
+  TRecursive extends "deep" | "shallow" | "strict" = "deep",
+> = TData extends Function
   ? TData
   : TData extends Array<infer TArrayElement>
-    ? Array<OmitProperty<TArrayElement, TPropertyName>>
+    ? TRecursive extends "deep"
+      ? Array<OmitProperty<TArrayElement, TPropertyName, TRecursive>>
+      : TRecursive extends "shallow"
+        ? Array<OmitProperty<TArrayElement, TPropertyName, "strict">>
+        : TData
     : TData extends Record<string, any>
       ? {
           [TProperty in keyof TData as TProperty extends TPropertyName
             ? never
-            : TProperty]: OmitProperty<TData[TProperty], TPropertyName>;
+            : TProperty]: TRecursive extends "deep"
+            ? OmitProperty<TData[TProperty], TPropertyName, TRecursive>
+            : TRecursive extends "shallow"
+              ? OmitProperty<TData[TProperty], TPropertyName, "strict">
+              : TData[TProperty];
         }
       : TData;
 

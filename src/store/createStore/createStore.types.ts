@@ -18,15 +18,18 @@ export type Input<
 > = TSliceFactories;
 
 /**
- * Extracts the state type from a given slice factory.
+ * Extracts the slice type from a given slice factory type.
  *
- * @template TSliceFactory - A single slice factory output conforming to the `CreateGlobalSliceTypes.Output` type.
+ * This utility type takes a type parameter `TSliceFactory` that extends
+ * `CreateGlobalSliceTypes.Output` and infers the first generic argument
+ * (`TSlice`) from it. If `TSliceFactory` matches the expected structure,
+ * it returns the inferred slice type; otherwise, it returns `never`.
  *
- * @remarks
- * If the provided slice factory matches the `CreateGlobalSliceTypes.Output` type,
- * the state type (`TSlice`) is extracted. Otherwise, it resolves to `never`.
+ * @typeParam TSliceFactory - A type extending `CreateGlobalSliceTypes.Output`
+ *                            from which to extract the slice type.
+ * @returns The extracted slice type or `never` if the type does not match.
  */
-type ExtractState<
+type ExtractSlice<
   TSliceFactory extends CreateGlobalSliceTypes.Output<any, any, any>,
 > =
   TSliceFactory extends CreateGlobalSliceTypes.Output<infer TSlice, any, any>
@@ -34,17 +37,18 @@ type ExtractState<
     : never;
 
 /**
- * Computes the combined state type from an array of slice factories.
+ * Given an array of slice factory types, computes the intersection of all extracted slice types.
  *
- * @template TSliceFactories - An array of slice factory outputs, each conforming to the `CreateGlobalSliceTypes.Output` type.
+ * @template TSliceFactories - An array of types extending `CreateGlobalSliceTypes.Output`.
+ * @returns The intersection type of all slices produced by the provided factories.
  *
  * @remarks
- * This type uses utility types to transform the array of slice factories into a union of their state types,
- * and then into an intersection of those state types.
+ * This utility type is useful for combining multiple slice types into a single state shape,
+ * typically in the context of a global store or state management system.
  */
-export type StateOf<
+export type SlicesOf<
   TSliceFactories extends CreateGlobalSliceTypes.Output<any, any, any>[],
-> = UnionToIntersection<ExtractState<TupleToUnion<TSliceFactories>>>;
+> = UnionToIntersection<ExtractSlice<TupleToUnion<TSliceFactories>>>;
 
 /**
  * Represents the output type of the `createStore` function.
@@ -68,14 +72,20 @@ export type Output<
     [
       props: {
         children?: React.ReactNode;
-        initialState?: Partial<OmitFuncs<StateOf<TSliceFactories>, "shallow">>;
+        initialState?: Partial<OmitFuncs<SlicesOf<TSliceFactories>, "shallow">>;
       },
     ]
   >;
   useSelector: <TSelectedData>(
     selector: Func<
       TSelectedData,
-      [state: OmitProperty<StateOf<TSliceFactories>, "__internal__">]
+      [
+        state: OmitProperty<
+          SlicesOf<TSliceFactories>,
+          "__internal__",
+          "shallow"
+        >,
+      ]
     >,
   ) => TSelectedData;
 };
