@@ -18,6 +18,7 @@ import {
   type Output,
   type SliceOf,
   type Subscribe,
+  type SubscribeContext,
 } from "./createServerSlice.types";
 
 /**
@@ -129,14 +130,26 @@ export default function createServerSlice<
       name,
       (subscribe) => {
         subscribe(
-          (context) => reload(undefined, context),
+          (context) => context.get()[name].reload(undefined),
           selector as Parameters<Subscribe<TSlice, TOtherSlices>>[1],
         );
 
         const serverSubscribe: Subscribe<TSlice, TOtherSlices> = (
           listener,
           selector,
-        ) => subscribe((context) => listener(buildContext(context)), selector);
+        ) =>
+          subscribe(
+            (context) =>
+              listener(
+                buildContext(
+                  context as CreateGlobalSliceTypes.Context<
+                    TSlice,
+                    TOtherSlices
+                  >,
+                ) as SubscribeContext<TSlice>,
+              ),
+            selector,
+          );
 
         const serverExtraMethods =
           factory?.(serverSubscribe) ||

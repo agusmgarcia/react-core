@@ -17,6 +17,7 @@ import {
   type Output,
   type SliceOf,
   type Subscribe,
+  type SubscribeContext,
 } from "./createGlobalSlice.types";
 
 /**
@@ -78,7 +79,7 @@ export default function createGlobalSlice<
             controllerProvider,
             get,
             set,
-          ),
+          ) as SubscribeContext<TSlice>,
         );
       });
 
@@ -91,7 +92,7 @@ export default function createGlobalSlice<
                 controllerProvider,
                 get,
                 set,
-              ),
+              ) as SubscribeContext<TSlice>,
             ),
           0,
         );

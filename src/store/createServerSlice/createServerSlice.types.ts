@@ -72,6 +72,26 @@ export type ExtractExtraMethodsOf<TSlice extends SliceOf<any, any, any, any>> =
     : never;
 
 /**
+ * Represents the context provided to subscription callbacks for a slice.
+ *
+ * @template TSlice - The type of the main slice.
+ *
+ * @property get - Retrieves the current state of the main slice.
+ * @property signal - An AbortSignal used to manage the lifecycle and cancellation of subscriptions.
+ */
+export type SubscribeContext<TSlice extends SliceOf<any, any>> = {
+  /**
+   * A function to get the current state of the slice and other slices.
+   */
+  get: Func<OmitProperty<TSlice, "__internal__", "shallow">>;
+
+  /**
+   * An abort signal to manage the lifecycle of subscriptions.
+   */
+  signal: AbortSignal;
+};
+
+/**
  * Represents the context for a slice, providing access to state, a setter function, and an abort signal.
  *
  * @template TSlice - The slice type for which the context is created.
@@ -116,7 +136,7 @@ export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
  * @returns A function to unsubscribe from the context.
  */
 export type Subscribe<TSlice extends SliceOf<any, any>, TOtherSlices> = (
-  listener: Func<void, [context: Context<TSlice, TOtherSlices>]>,
+  listener: Func<void, [context: SubscribeContext<TSlice>]>,
   selector?: Func<any, [state: OmitFuncs<TSlice & TOtherSlices, "shallow">]>,
 ) => Func;
 
