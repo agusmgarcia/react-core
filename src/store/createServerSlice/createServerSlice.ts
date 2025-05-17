@@ -137,7 +137,8 @@ export default function createServerSlice<
           factory?.(serverSubscribe) ||
           ({} as AddArgumentToObject<
             ExtractExtraMethodsOf<TSlice>,
-            Context<TSlice, TOtherSlices>
+            Context<TSlice, TOtherSlices>,
+            "strict"
           >);
 
         const extraMethods = Object.keys(serverExtraMethods).reduce(
@@ -149,7 +150,8 @@ export default function createServerSlice<
           },
           {} as AddArgumentToObject<
             ExtractExtraMethodsOf<TSlice>,
-            CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>
+            CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>,
+            "strict"
           >,
         );
 
@@ -163,7 +165,8 @@ export default function createServerSlice<
           reload,
         } as AddArgumentToObject<
           CreateGlobalSliceTypes.ExtractStateOf<TSlice>,
-          CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>
+          CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>,
+          "strict"
         >;
       },
     );

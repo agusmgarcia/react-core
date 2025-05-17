@@ -165,7 +165,8 @@ export type Factory<
 > = Func<
   AddArgumentToObject<
     ExtractExtraMethodsOf<TSlice>,
-    Context<TSlice, TOtherSlices>
+    Context<TSlice, TOtherSlices>,
+    "strict"
   >,
   [subscribe: Subscribe<TSlice, TOtherSlices>]
 >;

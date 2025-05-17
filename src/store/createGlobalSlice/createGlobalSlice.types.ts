@@ -87,7 +87,11 @@ export type Subscribe<TSlice extends SliceOf<any, any>, TOtherSlices> = (
 export type Input<TSlice extends SliceOf<any, any>, TOtherSlices> = [
   name: ExtractNameOf<TSlice>,
   sliceFactory: Func<
-    AddArgumentToObject<ExtractStateOf<TSlice>, Context<TSlice, TOtherSlices>>,
+    AddArgumentToObject<
+      ExtractStateOf<TSlice>,
+      Context<TSlice, TOtherSlices>,
+      "strict"
+    >,
     [subscribe: Subscribe<TSlice, TOtherSlices>]
   >,
 ];
