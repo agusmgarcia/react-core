@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.4.4](https://github.com/agusmgarcia/react-core/tree/v4.4.4)
+
+> May 18, 2025
+
+- **store**: adjust SubscribeContext typings
+- **createGlobalSlice**: adjust setState type
+
 ## [v4.4.3](https://github.com/agusmgarcia/react-core/tree/v4.4.3)
 
 > May 17, 2025
