@@ -77,7 +77,7 @@ export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
    */
   set: Func<
     void,
-    [state: React.SetStateAction<OmitFuncs<ExtractStateOf<TSlice>, "shallow">>]
+    [state: React.SetStateAction<OmitFuncs<ExtractStateOf<TSlice>, "strict">>]
   >;
 
   /**
