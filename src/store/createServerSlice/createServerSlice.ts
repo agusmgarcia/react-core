@@ -146,7 +146,7 @@ export default function createServerSlice<
                     TSlice,
                     TOtherSlices
                   >,
-                ) as SubscribeContext<TSlice>,
+                ) as SubscribeContext<TSlice, TOtherSlices>,
               ),
             selector,
           );

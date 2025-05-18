@@ -39,11 +39,14 @@ export type ExtractStateOf<TSlice extends SliceOf<any, any>> =
  * @property get - Retrieves the current state of the main slice.
  * @property signal - An AbortSignal used to manage the lifecycle and cancellation of subscriptions.
  */
-export type SubscribeContext<TSlice extends SliceOf<any, any>> = {
+export type SubscribeContext<
+  TSlice extends SliceOf<any, any>,
+  TOtherSlices = {},
+> = {
   /**
    * A function to get the current state of the slice and other slices.
    */
-  get: Func<OmitProperty<TSlice, "__internal__", "shallow">>;
+  get: Func<OmitProperty<TSlice & TOtherSlices, "__internal__", "shallow">>;
 
   /**
    * An abort signal to manage the lifecycle of subscriptions.
@@ -98,7 +101,7 @@ export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
  * @returns A function to unsubscribe the listener.
  */
 export type Subscribe<TSlice extends SliceOf<any, any>, TOtherSlices> = (
-  listener: Func<void, [context: SubscribeContext<TSlice>]>,
+  listener: Func<void, [context: SubscribeContext<TSlice, TOtherSlices>]>,
   selector?: Func<any, [state: OmitFuncs<TSlice & TOtherSlices, "shallow">]>,
 ) => Func;
 

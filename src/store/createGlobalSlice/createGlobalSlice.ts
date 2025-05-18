@@ -79,7 +79,7 @@ export default function createGlobalSlice<
             controllerProvider,
             get,
             set,
-          ) as SubscribeContext<TSlice>,
+          ) as SubscribeContext<TSlice, TOtherSlices>,
         );
       });
 
@@ -92,7 +92,7 @@ export default function createGlobalSlice<
                 controllerProvider,
                 get,
                 set,
-              ) as SubscribeContext<TSlice>,
+              ) as SubscribeContext<TSlice, TOtherSlices>,
             ),
           0,
         );
