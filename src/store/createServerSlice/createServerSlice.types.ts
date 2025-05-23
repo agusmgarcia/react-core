@@ -113,6 +113,16 @@ export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
   >;
 
   /**
+   * Asynchronously reloads the slice data, optionally accepting partial selected arguments.
+   */
+  loadMore: AsyncFunc<void, [args?: Partial<ExtractSelectedOf<TSlice>>]>;
+
+  /**
+   * Asynchronously loads more data into the slice, optionally accepting partial selected arguments.
+   */
+  reload: AsyncFunc<void, [args?: Partial<ExtractSelectedOf<TSlice>>]>;
+
+  /**
    * A function to set the state of the slice.
    *
    * @param state - A function or value to update the state.

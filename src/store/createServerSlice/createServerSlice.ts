@@ -1,5 +1,6 @@
 import {
   type AddArgumentToObject,
+  type AsyncFunc,
   catchError,
   type Func,
   type OmitFuncs,
@@ -142,6 +143,8 @@ export default function createServerSlice<
             (context) =>
               listener(
                 buildContext(
+                  loadMore,
+                  reload,
                   context as CreateGlobalSliceTypes.Context<
                     TSlice,
                     TOtherSlices
@@ -163,7 +166,10 @@ export default function createServerSlice<
           (result, key) => {
             const element = serverExtraMethods[key];
             result[key] = (...args: any[]) =>
-              element(...args.slice(0, -1), buildContext(args.at(-1)));
+              element(
+                ...args.slice(0, -1),
+                buildContext(loadMore, reload, args.at(-1)),
+              );
             return result;
           },
           {} as AddArgumentToObject<
@@ -213,10 +219,26 @@ export default function createServerSlice<
 }
 
 function buildContext<TSlice extends SliceOf<any, any>, TOtherSlices>(
+  loadMore: AsyncFunc<
+    void,
+    [
+      args: Partial<ExtractSelectedOf<TSlice>> | undefined,
+      context: CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>,
+    ]
+  >,
+  reload: AsyncFunc<
+    void,
+    [
+      args: Partial<ExtractSelectedOf<TSlice>> | undefined,
+      context: CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>,
+    ]
+  >,
   context: CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>,
 ): Context<TSlice, TOtherSlices> {
   return {
     get: context.get,
+    loadMore: (...args) => loadMore(...args, context),
+    reload: (...args) => reload(...args, context),
     set: (state) =>
       context.set((prev) => ({
         ...prev,
