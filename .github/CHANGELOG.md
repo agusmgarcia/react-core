@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.4.5](https://github.com/agusmgarcia/react-core/tree/v4.4.5)
+
+> May 24, 2025
+
+- **createServerSlice**: add reload and loadMore in context
+
 ## [v4.4.4](https://github.com/agusmgarcia/react-core/tree/v4.4.4)
 
 > May 18, 2025
