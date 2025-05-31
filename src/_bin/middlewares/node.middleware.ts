@@ -23,7 +23,10 @@ export default async function nodeMiddleware(
             await createNpmignoreFile(regenerate),
             !!regenerate && !ignore.includes(".npmignore"),
           )
-        : files.removeFile(".npmignore"),
+        : files.removeFile(
+            ".npmignore",
+            !!regenerate && !ignore.includes(".npmignore"),
+          ),
     ),
   ]);
 

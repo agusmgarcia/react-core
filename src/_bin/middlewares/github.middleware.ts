@@ -52,29 +52,36 @@ export default async function githubMiddleware(
       ),
     files.removeFile(
       ".github/workflows/continuous-integration-and-deployment.yml",
+      false,
     ),
     core === "app"
       ? Promise.all([
-          files.removeFile(".github/workflows/deploy-azure-func.yml"),
-          files.removeFile(".github/workflows/publish-lib.yml"),
-          files.removeFile(".github/workflows/deploy-node.yml"),
+          files.removeFile(".github/workflows/deploy-azure-func.yml", false),
+          files.removeFile(".github/workflows/publish-lib.yml", false),
+          files.removeFile(".github/workflows/deploy-node.yml", false),
         ])
       : core === "azure-func"
         ? Promise.all([
-            files.removeFile(".github/workflows/deploy-app.yml"),
-            files.removeFile(".github/workflows/publish-lib.yml"),
-            files.removeFile(".github/workflows/deploy-node.yml"),
+            files.removeFile(".github/workflows/deploy-app.yml", false),
+            files.removeFile(".github/workflows/publish-lib.yml", false),
+            files.removeFile(".github/workflows/deploy-node.yml", false),
           ])
         : core === "lib"
           ? Promise.all([
-              files.removeFile(".github/workflows/deploy-app.yml"),
-              files.removeFile(".github/workflows/deploy-azure-func.yml"),
-              files.removeFile(".github/workflows/deploy-node.yml"),
+              files.removeFile(".github/workflows/deploy-app.yml", false),
+              files.removeFile(
+                ".github/workflows/deploy-azure-func.yml",
+                false,
+              ),
+              files.removeFile(".github/workflows/deploy-node.yml", false),
             ])
           : Promise.all([
-              files.removeFile(".github/workflows/deploy-app.yml"),
-              files.removeFile(".github/workflows/deploy-azure-func.yml"),
-              files.removeFile(".github/workflows/publish-lib.yml"),
+              files.removeFile(".github/workflows/deploy-app.yml", false),
+              files.removeFile(
+                ".github/workflows/deploy-azure-func.yml",
+                false,
+              ),
+              files.removeFile(".github/workflows/publish-lib.yml", false),
             ]),
   ]);
 

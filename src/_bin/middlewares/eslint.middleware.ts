@@ -11,8 +11,8 @@ export default async function eslintMiddleware(
   const core = await getCore();
 
   await Promise.all([
-    files.removeFile(".eslintrc"),
-    files.removeFile(".eslintignore"),
+    files.removeFile(".eslintrc", false),
+    files.removeFile(".eslintignore", false),
     files.upsertFile(
       "eslint.config.js",
       core === "app"

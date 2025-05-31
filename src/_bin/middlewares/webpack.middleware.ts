@@ -10,7 +10,11 @@ export default async function webpackMiddleware(
 ): Promise<void> {
   const core = await getCore();
 
-  if (core === "app") await files.removeFile("webpack.config.js");
+  if (core === "app")
+    await files.removeFile(
+      "webpack.config.js",
+      !!regenerate && !ignore.includes("webpack.config.js"),
+    );
   else
     await files.upsertFile(
       "webpack.config.js",

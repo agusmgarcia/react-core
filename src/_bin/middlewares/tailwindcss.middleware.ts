@@ -17,7 +17,10 @@ export default async function tailwindcssMiddleware(
           postCSSConfig,
           !!regenerate && !ignore.includes("postcss.config.js"),
         )
-      : files.removeFile("postcss.config.js"),
+      : files.removeFile(
+          "postcss.config.js",
+          !!regenerate && !ignore.includes("postcss.config.js"),
+        ),
     core === "app" || core === "lib"
       ? files.upsertFile(
           "tailwind.config.js",
@@ -27,7 +30,10 @@ export default async function tailwindcssMiddleware(
             update: false,
           },
         )
-      : files.removeFile("tailwind.config.js"),
+      : files.removeFile(
+          "tailwind.config.js",
+          !!regenerate && !ignore.includes("tailwind.config.js"),
+        ),
   ]);
 
   await next();
