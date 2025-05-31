@@ -21,13 +21,19 @@ export default async function nextJSMiddleware(
                   create: !!regenerate && !ignore.includes("pages/_app.tsx"),
                   update: false,
                 })
-              : files.removeFile("pages/_app.tsx"),
+              : files.removeFile(
+                  "pages/_app.tsx",
+                  !!regenerate && !ignore.includes("pages/_app.tsx"),
+                ),
             core === "app"
               ? files.upsertFile("pages/_app.css", appCSS, {
                   create: !!regenerate && !ignore.includes("pages/_app.css"),
                   update: false,
                 })
-              : files.removeFile("pages/_app.css"),
+              : files.removeFile(
+                  "pages/_app.css",
+                  !!regenerate && !ignore.includes("pages/_app.css"),
+                ),
           ]),
         )
       : folders.removeFolder("pages"),
@@ -37,7 +43,10 @@ export default async function nextJSMiddleware(
           nextConfig,
           !!regenerate && !ignore.includes("next.config.js"),
         )
-      : files.removeFile("next.config.js"),
+      : files.removeFile(
+          "next.config.js",
+          !!regenerate && !ignore.includes("next.config.js"),
+        ),
     await deleteEnvFiles(core),
     core === "app" || core === "node"
       ? files.upsertFile(
@@ -45,14 +54,19 @@ export default async function nextJSMiddleware(
           await createEnvLocalFile(core, regenerate),
           !!regenerate && !ignore.includes(".env.local"),
         )
-      : files.removeFile(".env.local"),
+      : files.removeFile(
+          ".env.local",
+          !!regenerate && !ignore.includes(".env.local"),
+        ),
   ]);
 
   try {
     await next();
   } finally {
     await Promise.all([
-      core !== "app" ? files.removeFile("next-env.d.ts") : Promise.resolve(),
+      core !== "app"
+        ? files.removeFile("next-env.d.ts", true)
+        : Promise.resolve(),
       core !== "app" ? folders.removeFolder("out") : Promise.resolve(),
       core !== "app" ? folders.removeFolder(".next") : Promise.resolve(),
       core !== "app" ? folders.removeFolder("pages") : Promise.resolve(),
@@ -117,7 +131,7 @@ async function deleteEnvFiles(
             return file === ".env" || file.startsWith(".env.");
         }
       })
-      .map(files.removeFile),
+      .map((file) => files.removeFile(file, true)),
   );
 }
 

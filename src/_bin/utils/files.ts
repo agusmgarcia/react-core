@@ -19,7 +19,9 @@ export function readRequiredFile(path: string): Promise<string> {
   );
 }
 
-export function removeFile(path: string): Promise<void> {
+export function removeFile(path: string, remove: boolean): Promise<void> {
+  if (!remove) return Promise.resolve();
+
   return new Promise((resolve, reject) =>
     fs.rm(path, { force: true, recursive: true }, (error) =>
       !error ? resolve() : reject(error),

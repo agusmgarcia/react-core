@@ -20,25 +20,25 @@ export default async function packageJSONMiddleware(
 ): Promise<void> {
   const core = await getCore();
 
-  if (core === "azure-func") {
-    if (regenerate && !ignore.includes("package.json")) {
+  if (!!regenerate && !ignore.includes("package.json")) {
+    if (core === "azure-func") {
       await npm.install("@azure/functions@4");
       // TODO: remove this line when azure-functions-core-tools were lighther
       await npm.install("azure-functions-core-tools@4", { dev: true });
+    } else {
+      await npm.uninstall("@azure/functions");
+      // TODO: remove this line when azure-functions-core-tools were lighther
+      await npm.uninstall("azure-functions-core-tools");
     }
-  } else {
-    await npm.uninstall("@azure/functions");
-    // TODO: remove this line when azure-functions-core-tools were lighther
-    await npm.uninstall("azure-functions-core-tools");
+
+    await files.upsertFile(
+      "package.json",
+      await createPackageJSONFile(core, regenerate),
+      true,
+    );
+
+    await npm.install();
   }
-
-  await files.upsertFile(
-    "package.json",
-    await createPackageJSONFile(core, regenerate),
-    !!regenerate && !ignore.includes("package.json"),
-  );
-
-  await npm.install();
 
   await next();
 }

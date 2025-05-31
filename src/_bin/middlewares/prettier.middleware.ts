@@ -9,8 +9,8 @@ export default async function prettierMiddleware(
   ignore: string[],
 ): Promise<void> {
   await Promise.all([
-    files.removeFile(".prettierrc"),
-    files.removeFile(".prettierignore"),
+    files.removeFile(".prettierrc", true),
+    files.removeFile(".prettierignore", true),
     files.upsertFile(
       "prettier.config.js",
       prettierConfig,

@@ -19,14 +19,20 @@ export default async function azureFunctionMiddleware(
           await createHostFile(regenerate),
           !!regenerate && !ignore.includes("host.json"),
         )
-      : files.removeFile("host.json"),
+      : files.removeFile(
+          "host.json",
+          !!regenerate && !ignore.includes("host.json"),
+        ),
     core === "azure-func"
       ? files.upsertFile(
           "local.settings.json",
           await createLocalSettingsFile(regenerate),
           !!regenerate && !ignore.includes("local.settings.json"),
         )
-      : files.removeFile("local.settings.json"),
+      : files.removeFile(
+          "local.settings.json",
+          !!regenerate && !ignore.includes("local.settings.json"),
+        ),
     folders.upsertFolder("src").then(() =>
       core === "azure-func"
         ? files
@@ -50,7 +56,10 @@ export default async function azureFunctionMiddleware(
           await createFuncignoreFile(regenerate),
           !!regenerate && !ignore.includes(".funcignore"),
         )
-      : files.removeFile(".funcignore"),
+      : files.removeFile(
+          ".funcignore",
+          !!regenerate && !ignore.includes(".funcignore"),
+        ),
   ]);
 
   await next();
@@ -108,7 +117,7 @@ async function deleteAzureFunctions(
   const indexFile = await files.readFile("src/index.ts");
 
   if (core === "app" || index === indexFile)
-    await files.removeFile("src/index.ts");
+    await files.removeFile("src/index.ts", true);
 
   const insideSrc = await folders.readFolder("src");
 
