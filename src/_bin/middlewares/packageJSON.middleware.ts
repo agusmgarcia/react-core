@@ -153,7 +153,7 @@ async function createPackageJSONFile(
           : {
               core,
               engines,
-              main: "dist/index.js",
+              main: undefined,
               private: true,
               repository: undefined,
               types: undefined,
