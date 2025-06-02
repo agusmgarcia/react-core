@@ -169,3 +169,24 @@ If you want to watch files for changes and rerun tests related to changed files 
 ```bash
 npm run test -- --watch
 ```
+
+## Prepack
+
+This is a script that is called automatically when publishing the library. Works in the following context:
+
+- lib
+
+### Omit bundles
+
+By default, the library outputs an `index.js` file for web applications and a `node.js` file for NodeJS applications. That causes the package's size bigger. To reduce the size, you can compile the library for only one of the environments by using the `--omit` flag.
+
+```jsonc
+{
+  // ... other properties
+  "scripts": {
+    "prepack": "agusmgarcia-react-core-prepack --omit=node",
+  },
+}
+```
+
+> The two possible values are `web` and `node`.

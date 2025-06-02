@@ -87,7 +87,7 @@ async function createPackageJSONFile(
           deploy: "agusmgarcia-react-core-deploy",
           format: "agusmgarcia-react-core-format",
           postpack: "agusmgarcia-react-core-postpack",
-          prepack: "agusmgarcia-react-core-prepack",
+          prepack: "agusmgarcia-react-core-prepack --omit=node", // TODO: this "omit" flag is going to be removed in the next major version.
           start: "agusmgarcia-react-core-start",
           test: "agusmgarcia-react-core-test",
         }
@@ -103,7 +103,7 @@ async function createPackageJSONFile(
           postpack:
             "node -r ts-node/register -r tsconfig-paths/register src/_bin/postpack.ts",
           prepack:
-            "node -r ts-node/register -r tsconfig-paths/register src/_bin/prepack.ts",
+            "node -r ts-node/register -r tsconfig-paths/register src/_bin/prepack.ts --omit=node", // TODO: this "omit" flag is going to be removed in the next major version.
           start:
             "node -r ts-node/register -r tsconfig-paths/register src/_bin/start.ts",
           test: "node -r ts-node/register -r tsconfig-paths/register src/_bin/test.ts",
@@ -145,6 +145,7 @@ async function createPackageJSONFile(
               engines,
               exports: {
                 default: "./dist/index.js",
+                node: "./dist/node.js",
                 types: "./dist/index.d.ts",
               },
               main: undefined,
@@ -182,6 +183,7 @@ async function createPackageJSONFile(
         "types",
         "exports",
         "exports.types",
+        "exports.node",
         "exports.default",
         "author",
         "description",

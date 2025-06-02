@@ -90,6 +90,57 @@ module.exports = [
     },
   },
   {
+    entry: path.resolve(__dirname, "src", "index.ts"),
+    externals: [
+      ...Object.keys(packageJSON.peerDependencies || {}),
+      "react/jsx-runtime",
+    ],
+    module: {
+      rules: [
+        {
+          test: /\.css$/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            "style-loader",
+            "css-loader",
+            "postcss-loader",
+          ],
+        },
+        {
+          exclude: /node_modules/,
+          test: /\.tsx?$/,
+          use: [
+            {
+              loader: "ts-loader",
+              options: {
+                compilerOptions: {
+                  declaration: false,
+                  jsx: "react-jsx",
+                },
+                getCustomTransformers,
+              },
+            },
+          ],
+        },
+      ],
+    },
+    output: {
+      filename: "node.js",
+      globalObject: "this",
+      library: {
+        name: packageJSON.name,
+        type: "umd",
+      },
+      path: path.resolve(__dirname, "dist"),
+      umdNamedDefine: true,
+    },
+    resolve: {
+      alias: { "#src": path.resolve(__dirname, "src") },
+      extensions: [".js", ".jsx", ".ts", ".tsx"],
+    },
+    target: "node",
+  },
+  {
     entry: fs.existsSync(path.resolve(__dirname, "src", "_bin"))
       ? fs
           .readdirSync(path.resolve(__dirname, "src", "_bin"))

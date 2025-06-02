@@ -5,6 +5,7 @@
   "private": false,
   "exports": {
     "types": "./dist/index.d.ts",
+    "node": "./dist/node.js",
     "default": "./dist/index.js"
   },
   "author": "Agus Garcia",
@@ -26,7 +27,7 @@
     "deploy": "node -r ts-node/register -r tsconfig-paths/register src/_bin/deploy.ts",
     "format": "node -r ts-node/register -r tsconfig-paths/register src/_bin/format.ts",
     "postpack": "node -r ts-node/register -r tsconfig-paths/register src/_bin/postpack.ts",
-    "prepack": "node -r ts-node/register -r tsconfig-paths/register src/_bin/prepack.ts",
+    "prepack": "node -r ts-node/register -r tsconfig-paths/register src/_bin/prepack.ts --omit=node",
     "regenerate": "node -r ts-node/register -r tsconfig-paths/register src/_bin/regenerate.ts",
     "start": "node -r ts-node/register -r tsconfig-paths/register src/_bin/start.ts",
     "test": "node -r ts-node/register -r tsconfig-paths/register src/_bin/test.ts"
