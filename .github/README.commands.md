@@ -169,3 +169,22 @@ If you want to watch files for changes and rerun tests related to changed files 
 ```bash
 npm run test -- --watch
 ```
+
+## Prepack
+
+This is a script that is called automatically when publishing the library. Works in the following context:
+
+- lib
+
+### Include node bundle
+
+By default, the library outputs an `index.js` file. In case your library uses the NodeJS environment, you can create a separated bundle using the `--include-node` flag.
+
+```jsonc
+{
+  // ... other properties
+  "scripts": {
+    "prepack": "agusmgarcia-react-core-prepack --include-node",
+  },
+}
+```

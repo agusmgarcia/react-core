@@ -10,6 +10,7 @@ type PackageJSON = {
   engines?: Record<string, string>;
   exports?: {
     default: string;
+    node?: string;
     types: string;
   };
   main?: string;
