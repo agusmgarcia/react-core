@@ -68,11 +68,13 @@ async function createPackageJSONFile(
     : [undefined, "0.0.0", undefined, false];
 
   const template = {
-    author: repositoryDetails?.owner || "",
-    description: "",
-    name: !!repositoryDetails
-      ? `@${repositoryDetails.owner}/${repositoryDetails.name}`
-      : path.basename(process.cwd()),
+    author: packageJSON.author || repositoryDetails?.owner || "",
+    description: packageJSON.description || "",
+    name:
+      packageJSON.name ||
+      (!!repositoryDetails
+        ? `@${repositoryDetails.owner}/${repositoryDetails.name}`
+        : path.basename(process.cwd())),
     repository:
       !!remoteURL && core === "lib"
         ? {
