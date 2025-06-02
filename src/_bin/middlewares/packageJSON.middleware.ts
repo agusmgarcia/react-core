@@ -4,11 +4,11 @@ import semver from "semver";
 import { type AsyncFunc, merges } from "#src/utils";
 
 import {
-  execute,
   files,
   getCore,
   getPackageJSON,
   git,
+  npm,
   sortProperties,
 } from "../utils";
 
@@ -22,14 +22,14 @@ export default async function packageJSONMiddleware(
 
   if (core === "azure-func") {
     if (regenerate && !ignore.includes("package.json")) {
-      await execute("npm i @azure/functions@4", false);
+      await npm.install("@azure/functions@4");
       // TODO: remove this line when azure-functions-core-tools were lighther
-      await execute("npm i azure-functions-core-tools@4 --save-dev", false);
+      await npm.install("azure-functions-core-tools@4", { dev: true });
     }
   } else {
-    await execute("npm uninstall @azure/functions", false);
+    await npm.uninstall("@azure/functions");
     // TODO: remove this line when azure-functions-core-tools were lighther
-    await execute("npm uninstall azure-functions-core-tools", false);
+    await npm.uninstall("azure-functions-core-tools");
   }
 
   await files.upsertFile(
@@ -38,7 +38,7 @@ export default async function packageJSONMiddleware(
     !!regenerate && !ignore.includes("package.json"),
   );
 
-  await execute("npm i", false);
+  await npm.install();
 
   await next();
 }

@@ -6,5 +6,6 @@ export { default as getCore } from "./getCore";
 export { default as getEnvFiles } from "./getEnvFiles";
 export { default as getPackageJSON } from "./getPackageJSON";
 export * as git from "./git";
+export * as npm from "./npm";
 export { default as question } from "./question";
 export { default as sortProperties } from "./sortProperties";

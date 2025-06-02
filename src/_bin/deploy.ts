@@ -1,6 +1,4 @@
-import { EOL } from "os";
-
-import { args, execute, git, question } from "./utils";
+import { args, git, npm, question } from "./utils";
 
 export default async function deploy(): Promise<void> {
   if (!(await git.isInsideRepository())) return;
@@ -28,18 +26,12 @@ export default async function deploy(): Promise<void> {
     return;
   }
 
-  const newTag = await execute(
-    `npm version --no-git-tag-version ${typeOfNewVersion}`,
-    false,
-  )
-    .then((tag) => tag.replace(EOL, ""))
-    .then(validateTag);
-
+  const newTag = await npm.getNewTag(typeOfNewVersion);
   if (!newTag) return;
 
   await git.createCommit("chore: bump package version");
   await git.createTag(`${newTag}-temp`);
-  await execute("npm run regenerate", true);
+  await npm.regenerate();
   await git.deleteTag(`${newTag}-temp`);
   await git.createCommit("chore: bump package version", { amend: true });
   await git.createTag(newTag);
@@ -123,18 +115,6 @@ async function validatePositionOfTheTag(
     throw new Error(
       `The patch release needs to be created from v${lastTagOfMinor.major}.${lastTagOfMinor.minor}.${lastTagOfMinor.patch}`,
     );
-}
-
-function validateTag(tag: string): string | undefined {
-  try {
-    git.getTagInfo(tag);
-    return tag;
-  } catch {
-    console.error(
-      `There was an error creating the tag ${tag}. It probably already exists`,
-    );
-    return undefined;
-  }
 }
 
 async function checkoutTagAndDeleteCurrentBranch(
