@@ -35,22 +35,27 @@ npm run regenerate
 
 This will create all the necessary files to run the application.
 
-## Change port
+## Start
 
-By default `npm start` creates a server from <http://localhost:3000>. In case you want to set another port explicitly, append the `--port=` parameter.
-
-```jsonc
-// ./package.json
-
-{
-  "scripts": {
-    // ...
-    "start": "agusmgarcia-react-core-start --port=3001",
-  },
-}
+```bash
+npm start
 ```
 
-## Run for production
+It creates a server to run the applications. Works in the following context:
+
+- app
+- azure-func
+- node
+
+### Change port
+
+By default the server is created at <http://localhost:3000>. In case you want to set another port explicitly, append the `--port=` parameter.
+
+```bash
+npm start -- --port=3001
+```
+
+### Run for production
 
 By default `npm start` runs in development mode for NodeJS apps. In case you want to run it for prod, run the following command:
 
@@ -58,7 +63,20 @@ By default `npm start` runs in development mode for NodeJS apps. In case you wan
 npm start -- --production
 ```
 
-## Interactive mode
+## Deploy
+
+```bash
+npm run deploy
+```
+
+It is a script that automatically creates corresponding Git tags based on the type of the commits. It also forward the changes to the following tags as well. For example, if you make a fix on top of the tag `v1.0.2`, it is going to create `v1.0.3`. But, if there is also a tag like `v1.1.8`, it is going to cherry-pick the fix and merge it on top of that, creating the tag `v1.1.9`. This action is repeated until the last tag. Works in the following context:
+
+- app
+- azure-func
+- lib
+- node
+
+### Interactive mode
 
 When running `npm run deploy`, the process start merging commits into the differents tags. That's made to propagate changes across upper versions automatically. In case you want to go step by step use the `--interactive` flag.
 
@@ -66,9 +84,20 @@ When running `npm run deploy`, the process start merging commits into the differ
 npm run deploy -- --interactive
 ```
 
-## Skip regenerating files
+## Regenerate
 
-When running `npm run regenerate` all the pertinent files will be regenerated. Here the list of the files:
+```bash
+npm run regenerate
+```
+
+Regenerate the files with the latest version. Works in the following context:
+
+- app
+- azure-func
+- lib
+- node
+
+Here the list of the files:
 
 - .github/CHANGELOG.md
 - .github/README.md _(just creation phase)_
@@ -96,22 +125,15 @@ When running `npm run regenerate` all the pertinent files will be regenerated. H
 - tsconfig.json
 - webpack.config.js
 
+### Skip regenerating files
+
 In case you want to prevent one of the files of being regenerated, use the `--ignore=` flag.
 
-```jsonc
-// ./package.json
-
-{
-  "scripts": {
-    // ...
-    "regenerate": "agusmgarcia-react-core-regenerate --ignore=eslint.config.js --ignore=prettier.config.js",
-  },
-}
+```bash
+npm run regenerate -- --ignore=eslint.config.js -- --ignore=prettier.config.js
 ```
 
-> In this example, it will ignore `eslint.config.js` and `prettier.config.js` files of being regenerated. The generated files vary on the type of the application.
-
-## Force file regeneration
+### Force file regeneration
 
 In case you have changed the core of the project, you may want to run the `regenerate` script with the `--force` flag. That makes to override the user changes.
 
@@ -119,22 +141,28 @@ In case you have changed the core of the project, you may want to run the `regen
 npm run regenerate -- --force
 ```
 
-## Select test files
+## Test
+
+```bash
+npm test
+```
+
+Runs all the tests files located in the project. Works in the following context:
+
+- app
+- azure-func
+- lib
+- node
+
+### Select test files
 
 If you want to run some tests for specific files use the `--pattern` argument to the test script.
 
-```jsonc
-// ./package.json
-
-{
-  "scripts": {
-    // ...
-    "test": "agusmgarcia-react-core-test --pattern=src/mytest.test.ts",
-  },
-}
+```bash
+npm test -- --pattern=src/mytest.test.ts
 ```
 
-## Watch test files
+### Watch test files
 
 If you want to watch files for changes and rerun tests related to changed files use the `--watch` argument to the test script.
 
