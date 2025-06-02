@@ -8,6 +8,10 @@ type PackageJSON = {
   description?: string;
   devDependencies?: Record<string, string>;
   engines?: Record<string, string>;
+  exports?: {
+    default: string;
+    types: string;
+  };
   main?: string;
   name?: string;
   optionalDependencies?: Record<string, string>;
