@@ -143,9 +143,13 @@ async function createPackageJSONFile(
           ? {
               core,
               engines,
-              main: "dist/index.js",
+              exports: {
+                default: "./dist/index.js",
+                types: "./dist/index.d.ts",
+              },
+              main: undefined,
               private: false,
-              types: "dist/index.d.ts",
+              types: undefined,
               version,
             }
           : {
@@ -176,6 +180,9 @@ async function createPackageJSONFile(
         "private",
         "main",
         "types",
+        "exports",
+        "exports.types",
+        "exports.default",
         "author",
         "description",
         "bin",
