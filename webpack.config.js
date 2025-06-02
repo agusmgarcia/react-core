@@ -97,6 +97,11 @@ module.exports = [
         },
       ],
     },
+    optimization: {
+      splitChunks: {
+        chunks: "all",
+      },
+    },
     output: {
       filename: "[name].js",
       globalObject: "this",

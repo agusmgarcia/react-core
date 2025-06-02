@@ -81,6 +81,11 @@ module.exports = {
       },
     ],
   },
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+    },
+  },
   output: {
     filename: (data) =>
       data.chunk?.name === "index"
@@ -203,6 +208,11 @@ module.exports = [
           ],
         },
       ],
+    },
+    optimization: {
+      splitChunks: {
+        chunks: "all",
+      },
     },
     output: {
       filename: "[name].js",
