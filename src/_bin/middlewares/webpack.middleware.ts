@@ -106,6 +106,7 @@ module.exports = {
 `;
 
 const webpackConfig_lib = `const fs = require("fs");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 const RemovePlugin = require("remove-files-webpack-plugin");
 const getCustomTransformers = require("ts-transform-paths").default;
@@ -124,9 +125,13 @@ module.exports = [
     module: {
       rules: [
         {
-          exclude: /node_modules/,
           test: /\\.css$/,
-          use: ["style-loader", "css-loader", "postcss-loader"],
+          use: [
+            MiniCssExtractPlugin.loader,
+            "style-loader",
+            "css-loader",
+            "postcss-loader",
+          ],
         },
         {
           exclude: /node_modules/,
@@ -156,6 +161,7 @@ module.exports = [
       umdNamedDefine: true,
     },
     plugins: [
+      new MiniCssExtractPlugin(),
       new RemovePlugin({
         after: { include: [path.resolve(__dirname, "dist", "_bin")] },
       }),
