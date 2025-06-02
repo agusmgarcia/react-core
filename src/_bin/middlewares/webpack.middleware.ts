@@ -242,46 +242,41 @@ const getCustomTransformers = require("ts-transform-paths").default;
 
 const packageJSON = require("./package.json");
 
-/** @type (env: { production: boolean | undefined }) => import("webpack").Configuration */
-module.exports = function (env) {
-  return {
-    entry: path.resolve(__dirname, "src", "index.ts"),
-    externals: !!env.production
-      ? undefined
-      : Object.keys(packageJSON.dependencies || {}),
-    mode: !!env.production ? "production" : "development",
-    module: {
-      rules: [
-        {
-          exclude: /node_modules/,
-          test: /\\.ts$/,
-          use: [
-            {
-              loader: "ts-loader",
-              options: { getCustomTransformers },
-            },
-          ],
-        },
-      ],
-    },
-    output: {
-      filename: "index.js",
-      globalObject: "this",
-      library: {
-        name: packageJSON.name,
-        type: "umd",
+/** @type import("webpack").Configuration */
+module.exports = {
+  entry: path.resolve(__dirname, "src", "index.ts"),
+  externals: Object.keys(packageJSON.dependencies || {}),
+  module: {
+    rules: [
+      {
+        exclude: /node_modules/,
+        test: /\\.ts$/,
+        use: [
+          {
+            loader: "ts-loader",
+            options: { getCustomTransformers },
+          },
+        ],
       },
-      path: path.resolve(__dirname, "dist"),
-      umdNamedDefine: true,
+    ],
+  },
+  output: {
+    filename: "index.js",
+    globalObject: "this",
+    library: {
+      name: packageJSON.name,
+      type: "umd",
     },
-    resolve: {
-      alias: { "#src": path.resolve(__dirname, "src") },
-      extensions: [".js", ".ts"],
-    },
-    target: "node",
-    watchOptions: {
-      ignored: /node_modules/,
-    },
-  };
+    path: path.resolve(__dirname, "dist"),
+    umdNamedDefine: true,
+  },
+  resolve: {
+    alias: { "#src": path.resolve(__dirname, "src") },
+    extensions: [".js", ".ts"],
+  },
+  target: "node",
+  watchOptions: {
+    ignored: /node_modules/,
+  },
 };
 `;
