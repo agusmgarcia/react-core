@@ -7,6 +7,18 @@ export async function format(): Promise<void> {
   await execute("npm run format", true);
 }
 
+export async function isDependencyInstalled(
+  dependency: string,
+  options?: { peer?: true },
+): Promise<boolean> {
+  return await execute(
+    `npm list -p${!!options?.peer ? " --omit=dev --omit=optional" : ""} ${dependency}`,
+    false,
+  )
+    .then((result) => result.replace(EOL, ""))
+    .then((result) => !!result);
+}
+
 export async function install(
   dependency?: string,
   options?: { dev?: true },
