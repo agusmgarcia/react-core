@@ -1,6 +1,6 @@
 import { type AsyncFunc } from "#src/utils";
 
-import { files, folders, getCore } from "../utils";
+import { files, folders, getCore, npm } from "../utils";
 
 export default async function webpackMiddleware(
   _: string,
@@ -18,11 +18,7 @@ export default async function webpackMiddleware(
   else
     await files.upsertFile(
       "webpack.config.js",
-      core === "azure-func"
-        ? webpackConfig_azure_func
-        : core === "lib"
-          ? webpackConfig_lib
-          : webpackConfig_node,
+      await createWebpackConfigFile(core, regenerate),
       !!regenerate && !ignore.includes("webpack.config.js"),
     );
 
@@ -35,7 +31,16 @@ export default async function webpackMiddleware(
   }
 }
 
-const webpackConfig_azure_func = `const fs = require("fs");
+async function createWebpackConfigFile(
+  core: Extract<
+    Awaited<ReturnType<typeof getCore>>,
+    "azure-func" | "lib" | "node"
+  >,
+  regenerate: "hard" | "soft" | undefined,
+): Promise<string> {
+  if (!regenerate) return "";
+  if (core === "azure-func")
+    return `const fs = require("fs");
 const path = require("path");
 const getCustomTransformers = require("ts-transform-paths").default;
 
@@ -105,7 +110,12 @@ module.exports = {
 };
 `;
 
-const webpackConfig_lib = `const fs = require("fs");
+  if (core === "lib") {
+    const reactAsPeer = await npm.isDependencyInstalled("react", {
+      peer: true,
+    });
+
+    return `const fs = require("fs");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 const RemovePlugin = require("remove-files-webpack-plugin");
@@ -120,7 +130,7 @@ module.exports = [
     entry: path.resolve(__dirname, "src", "index.ts"),
     externals: [
       ...Object.keys(packageJSON.peerDependencies || {}),
-      "react/jsx-runtime",
+      ${reactAsPeer ? `"react/jsx-runtime",` : ""}
     ],
     module: {
       rules: [
@@ -135,14 +145,18 @@ module.exports = [
         },
         {
           exclude: /node_modules/,
-          test: /\\.tsx?$/,
+          test: /\\.ts${reactAsPeer ? "x" : ""}?$/,
           use: [
             {
               loader: "ts-loader",
               options: {
-                compilerOptions: {
+                ${
+                  reactAsPeer
+                    ? `compilerOptions: {
                   jsx: "react-jsx",
-                },
+                },`
+                    : ""
+                }
                 getCustomTransformers,
               },
             },
@@ -168,7 +182,7 @@ module.exports = [
     ],
     resolve: {
       alias: { "#src": path.resolve(__dirname, "src") },
-      extensions: [".js", ".jsx", ".ts", ".tsx"],
+      extensions: [".js"${reactAsPeer ? `, ".jsx"` : ""}, ".ts"${reactAsPeer ? `, ".tsx"` : ""}],
       fallback: {
         assert: false,
         buffer: false,
@@ -213,21 +227,25 @@ module.exports = [
       : {},
     externals: [
       ...Object.keys(packageJSON.peerDependencies || {}),
-      "react/jsx-runtime",
+      ${reactAsPeer ? `"react/jsx-runtime",` : ""}
     ],
     module: {
       rules: [
         {
           exclude: /node_modules/,
-          test: /\\.tsx?$/,
+          test: /\\.ts${reactAsPeer ? "x" : ""}?$/,
           use: [
             {
               loader: "ts-loader",
               options: {
-                compilerOptions: {
+                ${
+                  reactAsPeer
+                    ? `compilerOptions: {
                   declaration: false,
                   jsx: "react-jsx",
-                },
+                },`
+                    : ""
+                }
                 getCustomTransformers,
               },
             },
@@ -255,14 +273,15 @@ module.exports = [
     ],
     resolve: {
       alias: { "#src": path.resolve(__dirname, "src") },
-      extensions: [".js", ".jsx", ".ts", ".tsx"],
+      extensions: [".js"${reactAsPeer ? `, ".jsx"` : ""}, ".ts"${reactAsPeer ? `, ".tsx"` : ""}],
     },
     target: "node",
   },
 ];
 `;
+  }
 
-const webpackConfig_node = `const path = require("path");
+  return `const path = require("path");
 const getCustomTransformers = require("ts-transform-paths").default;
 
 const packageJSON = require("./package.json");
@@ -305,3 +324,4 @@ module.exports = {
   },
 };
 `;
+}
