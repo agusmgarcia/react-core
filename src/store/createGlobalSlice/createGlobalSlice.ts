@@ -160,6 +160,7 @@ function buildContext<TSlice extends SliceOf<any, any>, TOtherSlices>(
         "shallow"
       >;
     },
+    regenerate: () => buildContext(name, controllerProvider, get, set),
     set: (state) => {
       signal.throwIfAborted();
       return set((prev) => {

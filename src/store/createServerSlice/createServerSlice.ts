@@ -142,14 +142,10 @@ export default function createServerSlice<
           subscribe(
             (context) =>
               listener(
-                buildContext(
-                  loadMore,
-                  reload,
-                  context as CreateGlobalSliceTypes.Context<
-                    TSlice,
-                    TOtherSlices
-                  >,
-                ) as SubscribeContext<TSlice, TOtherSlices>,
+                buildContext(loadMore, reload, context) as SubscribeContext<
+                  TSlice,
+                  TOtherSlices
+                >,
               ),
             selector,
           );
@@ -233,11 +229,15 @@ function buildContext<TSlice extends SliceOf<any, any, any, any>, TOtherSlices>(
       context: CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>,
     ]
   >,
-  context: CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>,
+  context:
+    | CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>
+    | CreateGlobalSliceTypes.SubscribeContext<TSlice, TOtherSlices>,
 ): Context<TSlice, TOtherSlices> {
+  context = context as CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>;
   return {
     get: context.get,
     loadMore: (...args) => loadMore(...args, context),
+    regenerate: () => buildContext(loadMore, reload, context.regenerate()),
     reload: (...args) => reload(...args, context),
     set: (state) =>
       context.set((prev) => ({
