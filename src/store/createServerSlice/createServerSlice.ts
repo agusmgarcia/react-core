@@ -91,7 +91,7 @@ export default function createServerSlice<
 
         context.set((prevState) => ({
           ...prevState,
-          data: mergeData(data, (prevState as any).data),
+          data: mergeData(data, prevState.data),
           error: undefined,
           loading: false,
         }));
@@ -218,7 +218,7 @@ export default function createServerSlice<
   };
 }
 
-function buildContext<TSlice extends SliceOf<any, any>, TOtherSlices>(
+function buildContext<TSlice extends SliceOf<any, any, any, any>, TOtherSlices>(
   loadMore: AsyncFunc<
     void,
     [
