@@ -120,7 +120,7 @@ export default function createGlobalSlice<
               controllerProvider,
               get,
               set,
-            );
+            ) as Context<TSlice, TOtherSlices>;
 
             return catchError(
               () =>
@@ -147,7 +147,7 @@ function buildContext<TSlice extends SliceOf<any, any>, TOtherSlices>(
   controllerProvider: AbortControllerProvider,
   get: Parameters<StateCreator<TSlice & TOtherSlices, [], [], TSlice>>[1],
   set: Parameters<StateCreator<TSlice & TOtherSlices, [], [], TSlice>>[0],
-): Context<TSlice, TOtherSlices> {
+): Context<TSlice, TOtherSlices> | SubscribeContext<TSlice, TOtherSlices> {
   controllerProvider.abort("Context aborted!");
   const signal = controllerProvider.signal;
 
@@ -160,6 +160,11 @@ function buildContext<TSlice extends SliceOf<any, any>, TOtherSlices>(
         "shallow"
       >;
     },
+    regenerate: () =>
+      buildContext(name, controllerProvider, get, set) as SubscribeContext<
+        TSlice,
+        TOtherSlices
+      >,
     set: (state) => {
       signal.throwIfAborted();
       return set((prev) => {

@@ -145,7 +145,7 @@ export default function createServerSlice<
                 buildContext(
                   loadMore,
                   reload,
-                  context as CreateGlobalSliceTypes.Context<
+                  context as unknown as CreateGlobalSliceTypes.Context<
                     TSlice,
                     TOtherSlices
                   >,
@@ -234,10 +234,24 @@ function buildContext<TSlice extends SliceOf<any, any, any, any>, TOtherSlices>(
     ]
   >,
   context: CreateGlobalSliceTypes.Context<TSlice, TOtherSlices>,
-): Context<TSlice, TOtherSlices> {
+): Context<TSlice, TOtherSlices> | SubscribeContext<TSlice, TOtherSlices> {
   return {
     get: context.get,
     loadMore: (...args) => loadMore(...args, context),
+    regenerate: () =>
+      buildContext(
+        loadMore,
+        reload,
+        (
+          context as unknown as CreateGlobalSliceTypes.SubscribeContext<
+            TSlice,
+            TOtherSlices
+          >
+        ).regenerate() as unknown as CreateGlobalSliceTypes.Context<
+          TSlice,
+          TOtherSlices
+        >,
+      ),
     reload: (...args) => reload(...args, context),
     set: (state) =>
       context.set((prev) => ({
@@ -247,5 +261,5 @@ function buildContext<TSlice extends SliceOf<any, any, any, any>, TOtherSlices>(
         loading: false,
       })),
     signal: context.signal,
-  };
+  } as Context<TSlice, TOtherSlices> | SubscribeContext<TSlice, TOtherSlices>;
 }

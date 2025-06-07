@@ -37,6 +37,7 @@ export type ExtractStateOf<TSlice extends SliceOf<any, any>> =
  * @template TSlice - The type of the main slice.
  *
  * @property get - Retrieves the current state of the main slice.
+ * @property regenerate - A function to regenerate the subscription context, allowing for dynamic updates.
  * @property signal - An AbortSignal used to manage the lifecycle and cancellation of subscriptions.
  */
 export type SubscribeContext<
@@ -47,6 +48,11 @@ export type SubscribeContext<
    * A function to get the current state of the slice and other slices.
    */
   get: Func<OmitProperty<TSlice & TOtherSlices, "__internal__", "shallow">>;
+
+  /**
+   * A function to regenerate the subscription context.
+   */
+  regenerate: Func<SubscribeContext<TSlice, TOtherSlices>>;
 
   /**
    * An abort signal to manage the lifecycle of subscriptions.
