@@ -80,7 +80,7 @@ export type ExtractExtraMethodsOf<TSlice extends SliceOf<any, any, any, any>> =
  * @property signal - An AbortSignal used to manage the lifecycle and cancellation of subscriptions.
  */
 export type SubscribeContext<
-  TSlice extends SliceOf<any, any>,
+  TSlice extends SliceOf<any, any, any, any>,
   TOtherSlices = {},
 > = {
   /**
@@ -95,12 +95,16 @@ export type SubscribeContext<
 };
 
 /**
- * Represents the context for a slice, providing access to state, a setter function, and an abort signal.
+ * Represents the context provided to a slice, including methods for getting and setting state,
+ * and an abort signal for managing subscriptions.
  *
- * @template TSlice - The slice type for which the context is created.
- * @template TOtherSlices - Additional slices that may be included in the context.
+ * @template TSlice - The slice type for which the context is provided.
+ * @template TOtherSlices - The other slices that may be combined with the current slice.
  */
-export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
+export type Context<
+  TSlice extends SliceOf<any, any, any, any>,
+  TOtherSlices = {},
+> = {
   /**
    * A function to get the current state of the slice and other slices, excluding functions.
    */
@@ -123,13 +127,13 @@ export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
   reload: AsyncFunc<void, [args?: Partial<ExtractSelectedOf<TSlice>>]>;
 
   /**
-   * A function to set the state of the slice.
+   * A function to set the data of the slice.
    *
-   * @param state - A function or value to update the state.
+   * @param data - A function or value to update the data.
    */
   set: Func<
     void,
-    [state: React.SetStateAction<ExtractDataOf<TSlice> | undefined>]
+    [data: React.SetStateAction<ExtractDataOf<TSlice> | undefined>]
   >;
 
   /**
@@ -139,16 +143,20 @@ export type Context<TSlice extends SliceOf<any, any>, TOtherSlices = {}> = {
 };
 
 /**
- * A function type for subscribing to changes in a slice's context.
+ * Represents a subscription function for a slice, allowing listeners to be notified of state changes.
  *
- * @template TSlice - The slice type to subscribe to.
- * @template TOtherSlices - Additional slices that may be included in the subscription.
+ * @template TSlice - The slice type for which the subscription is created.
+ * @template TOtherSlices - The other slices that may be combined with the current slice.
  *
- * @param listener - A function that is called when the context changes.
- * @param selector - An optional function to select specific state properties.
- * @returns A function to unsubscribe from the context.
+ * @param listener - A function to be called when the state changes, receiving the current context.
+ * @param selector - An optional function to select a specific part of the state.
+ *
+ * @returns A function to unsubscribe the listener.
  */
-export type Subscribe<TSlice extends SliceOf<any, any>, TOtherSlices> = (
+export type Subscribe<
+  TSlice extends SliceOf<any, any, any, any>,
+  TOtherSlices,
+> = (
   listener: Func<void, [context: SubscribeContext<TSlice, TOtherSlices>]>,
   selector?: Func<any, [state: OmitFuncs<TSlice & TOtherSlices, "shallow">]>,
 ) => Func;
