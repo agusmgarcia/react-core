@@ -1,3 +1,4 @@
+import type AsyncFunc from "./AsyncFunc.types";
 import Cache from "./Cache";
 import type Func from "./Func.types";
 import isSSR from "./isSSR";
@@ -42,62 +43,27 @@ export default class StorageCache extends Cache {
     this.storageName = storageName;
   }
 
-  /**
-   * Retrieves a cached value associated with the given key or creates it using the provided factory function.
-   * If the value does not exist in the cache, the factory function is invoked to generate the value,
-   * which is then stored in the cache along with its expiration time.
-   *
-   * @template TResult - The type of the result to be cached.
-   * @param key - The unique identifier for the cached value.
-   * @param factory - A function that generates the value to be cached. It can return either a value or a Promise.
-   * @param signal - An AbortSignal to cancel the operation if needed.
-   * @param expiresAt - Optional. Specifies the expiration time for the cached value. It can be:
-   *   - A number representing the timestamp in milliseconds when the value expires.
-   *   - A function that takes the result as input and returns the expiration timestamp.
-   *   - If not provided, a default expiration time is calculated using `this.maxCacheTime`.
-   * @returns A Promise that resolves to the cached or newly created value.
-   * @throws If the factory function throws an error, the error is saved in the cache with a short expiration time
-   *         (1 second) and then re-thrown.
-   */
-  override getOrCreate<TResult>(
+  override async getOrCreate<TResult>(
     key: string,
-    factory: Func<TResult | Promise<TResult>, [signal: AbortSignal]>,
+    factory: Func<TResult> | AsyncFunc<TResult, [signal: AbortSignal]>,
     signal: AbortSignal,
     expiresAt?: number | Func<number, [result: TResult]>,
   ): Promise<TResult> {
-    const newExpiresAt = (result: TResult) =>
-      !expiresAt
-        ? Date.now() + this.maxCacheTime
-        : typeof expiresAt === "number"
-          ? expiresAt
-          : expiresAt(result);
+    const item = await this.rawSet(key, factory, false, signal, expiresAt);
+    saveItemIntoStore(this.storage, this.storageName, key, item);
+    if ("result" in item) return item.result;
+    throw item.error;
+  }
 
-    return super.getOrCreate(
-      key,
-      async (signal) => {
-        try {
-          const result = await factory(signal);
-
-          saveItemIntoStore(this.storage, this.storageName, key, {
-            expiresAt: newExpiresAt(result),
-            result,
-          });
-
-          return result;
-        } catch (error) {
-          signal.throwIfAborted();
-
-          saveItemIntoStore(this.storage, this.storageName, key, {
-            error,
-            expiresAt: Date.now() + 1000,
-          });
-
-          throw error;
-        }
-      },
-      signal,
-      newExpiresAt,
-    );
+  override async set<TValue>(
+    key: string,
+    value: TValue,
+    expiresAt?: number | Func<number, [value: TValue]>,
+  ): Promise<void> {
+    const item = await this.rawSet(key, value, true, undefined, expiresAt);
+    saveItemIntoStore(this.storage, this.storageName, key, item);
+    if ("result" in item) return item.result;
+    throw item.error;
   }
 }
 
