@@ -242,7 +242,8 @@ function buildContext<TSlice extends SliceOf<any, any, any, any>, TOtherSlices>(
     set: (state) =>
       context.set((prev) => ({
         ...prev,
-        data: state instanceof Function ? state(prev.data) : state,
+        data:
+          typeof state === "function" ? (state as Function)(prev.data) : state,
         error: undefined,
         loading: false,
       })),

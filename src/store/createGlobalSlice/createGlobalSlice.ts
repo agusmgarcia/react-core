@@ -113,7 +113,7 @@ export default function createGlobalSlice<
         const element = factory[key];
         result[name][key] = element;
 
-        if (element instanceof Function) {
+        if (typeof element === "function") {
           result[name][key] = (...args: any[]) => {
             const context = buildContext<TSlice, TOtherSlices>(
               name,
@@ -164,7 +164,8 @@ function buildContext<TSlice extends SliceOf<any, any>, TOtherSlices>(
     set: (state) => {
       signal.throwIfAborted();
       return set((prev) => {
-        const newState = state instanceof Function ? state(prev[name]) : state;
+        const newState =
+          typeof state === "function" ? (state as Function)(prev[name]) : state;
         return merges.shallow(prev, { [name]: newState }, 2);
       });
     },

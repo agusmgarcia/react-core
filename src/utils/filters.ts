@@ -59,8 +59,8 @@ export function distinct<TElement>(
             ? equals.shallow(element1, element2)
             : elementOrCompare === "strict"
               ? equals.strict(element1, element2)
-              : elementOrCompare instanceof Function
-                ? elementOrCompare(element1, element2)
+              : typeof elementOrCompare === "function"
+                ? (elementOrCompare as Function)(element1, element2)
                 : false),
     ) === index;
 }
