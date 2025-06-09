@@ -9,19 +9,24 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "noEmit": false,
     "noImplicitOverride": true,
     "outDir": "./dist",
     "paths": {
       "#src/*": ["src/*"]
     },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "resolveJsonModule": true,
     "rootDir": "./src",
     "skipLibCheck": true,
     "strict": true,
-    "target": "es5",
+    "target": "ES2017",
     "tsBuildInfoFile": "node_modules/.typescriptcache"
   },
   "exclude": ["bin", "dist", "node_modules"],

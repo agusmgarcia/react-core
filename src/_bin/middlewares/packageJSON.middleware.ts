@@ -94,21 +94,14 @@ async function createPackageJSONFile(
           test: "agusmgarcia-react-core-test",
         }
       : {
-          build:
-            "node -r ts-node/register -r tsconfig-paths/register src/_bin/build.ts",
-          check:
-            "node -r ts-node/register -r tsconfig-paths/register src/_bin/check.ts",
-          deploy:
-            "node -r ts-node/register -r tsconfig-paths/register src/_bin/deploy.ts",
-          format:
-            "node -r ts-node/register -r tsconfig-paths/register src/_bin/format.ts",
-          postpack:
-            "node -r ts-node/register -r tsconfig-paths/register src/_bin/postpack.ts",
-          prepack:
-            "node -r ts-node/register -r tsconfig-paths/register src/_bin/prepack.ts",
-          start:
-            "node -r ts-node/register -r tsconfig-paths/register src/_bin/start.ts",
-          test: "node -r ts-node/register -r tsconfig-paths/register src/_bin/test.ts",
+          build: "tsx src/_bin/build.ts",
+          check: "tsx src/_bin/check.ts",
+          deploy: "tsx src/_bin/deploy.ts",
+          format: "tsx src/_bin/format.ts",
+          postpack: "tsx src/_bin/postpack.ts",
+          prepack: "tsx src/_bin/prepack.ts",
+          start: "tsx src/_bin/start.ts",
+          test: "tsx src/_bin/test.ts",
         },
   };
 

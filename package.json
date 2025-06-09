@@ -22,15 +22,15 @@
     "agusmgarcia-react-core-test": "bin/test.js"
   },
   "scripts": {
-    "build": "node -r ts-node/register -r tsconfig-paths/register src/_bin/build.ts",
-    "check": "node -r ts-node/register -r tsconfig-paths/register src/_bin/check.ts",
-    "deploy": "node -r ts-node/register -r tsconfig-paths/register src/_bin/deploy.ts",
-    "format": "node -r ts-node/register -r tsconfig-paths/register src/_bin/format.ts",
-    "postpack": "node -r ts-node/register -r tsconfig-paths/register src/_bin/postpack.ts",
-    "prepack": "node -r ts-node/register -r tsconfig-paths/register src/_bin/prepack.ts",
-    "regenerate": "node -r ts-node/register -r tsconfig-paths/register src/_bin/regenerate.ts",
-    "start": "node -r ts-node/register -r tsconfig-paths/register src/_bin/start.ts",
-    "test": "node -r ts-node/register -r tsconfig-paths/register src/_bin/test.ts"
+    "build": "tsx src/_bin/build.ts",
+    "check": "tsx src/_bin/check.ts",
+    "deploy": "tsx src/_bin/deploy.ts",
+    "format": "tsx src/_bin/format.ts",
+    "postpack": "tsx src/_bin/postpack.ts",
+    "prepack": "tsx src/_bin/prepack.ts",
+    "regenerate": "tsx src/_bin/regenerate.ts",
+    "start": "tsx src/_bin/start.ts",
+    "test": "tsx src/_bin/test.ts"
   },
   "peerDependencies": {
     "@next/env": "^15.3.3",
@@ -77,8 +77,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
     "@types/semver": "^7.7.0",
-    "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0"
+    "tsx": "^4.19.4"
   },
   "engines": {
     "node": ">=18.18.0"
