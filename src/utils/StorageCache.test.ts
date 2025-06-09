@@ -149,4 +149,88 @@ describe("StorageCache", () => {
     const stored = JSON.parse(localStorageMock.getItem("testCache")!);
     expect(stored.exp.expiresAt).toBeGreaterThan(Date.now());
   });
+
+  it("should use versioned storage name and delete older versions", async () => {
+    // Simulate existing storages with different versions
+    localStorageMock.setItem(
+      "testCache",
+      JSON.stringify({ old: { result: 1 } }),
+    );
+    localStorageMock.setItem(
+      "testCache.1",
+      JSON.stringify({ v1: { result: 2 } }),
+    );
+    localStorageMock.setItem(
+      "testCache.2",
+      JSON.stringify({ v2: { result: 3 } }),
+    );
+
+    // Mock key/length for iteration
+    (localStorageMock as any).length = 3;
+    (localStorageMock.key as jest.Mock)
+      .mockImplementationOnce(
+        (i: number) => ["testCache", "testCache.1", "testCache.2"][i],
+      )
+      .mockImplementationOnce(
+        (i: number) => ["testCache", "testCache.1", "testCache.2"][i],
+      )
+      .mockImplementationOnce(
+        (i: number) => ["testCache", "testCache.1", "testCache.2"][i],
+      );
+
+    const cache = new StorageCache("testCache", "local", 1000, "2");
+    await cache.set("foo", "bar");
+
+    // Only "testCache.2" should remain
+    expect(localStorageMock.removeItem).toHaveBeenCalledWith("testCache");
+    expect(localStorageMock.removeItem).toHaveBeenCalledWith("testCache.1");
+    expect(localStorageMock.removeItem).not.toHaveBeenCalledWith("testCache.2");
+    expect(localStorageMock.setItem).toHaveBeenCalledWith(
+      "testCache.2",
+      expect.any(String),
+    );
+    const stored = JSON.parse(localStorageMock.getItem("testCache.2")!);
+    expect(stored.foo.result).toBe("bar");
+  });
+
+  it("should use unversioned storage name if version is empty", async () => {
+    const cache = new StorageCache("myCache", "session", 1000, "");
+    await cache.set("a", 42);
+    expect(sessionStorageMock.setItem).toHaveBeenCalledWith(
+      "myCache",
+      expect.any(String),
+    );
+    const stored = JSON.parse(sessionStorageMock.getItem("myCache")!);
+    expect(stored.a.result).toBe(42);
+  });
+
+  it("should use versioned storage name if version is provided", async () => {
+    const cache = new StorageCache("myCache", "session", 1000, "v5");
+    await cache.set("b", 99);
+    expect(sessionStorageMock.setItem).toHaveBeenCalledWith(
+      "myCache.v5",
+      expect.any(String),
+    );
+    const stored = JSON.parse(sessionStorageMock.getItem("myCache.v5")!);
+    expect(stored.b.result).toBe(99);
+  });
+
+  it("should not delete unrelated keys in storage", async () => {
+    localStorageMock.setItem("unrelated", JSON.stringify({}));
+    (localStorageMock as any).length = 2;
+    (localStorageMock.key as jest.Mock)
+      .mockImplementationOnce((i: number) => ["testCache", "unrelated"][i])
+      .mockImplementationOnce((i: number) => ["testCache", "unrelated"][i]);
+    const cache = new StorageCache("testCache", "local", 1000, "v1");
+    await cache.set("foo", "bar");
+    expect(localStorageMock.removeItem).not.toHaveBeenCalledWith("unrelated");
+  });
+
+  it("should not throw if storage is empty or missing", async () => {
+    localStorageMock.getItem = jest.fn(() => null);
+    const cache = new StorageCache("emptyCache", "local", 1000, "v1");
+    await expect(
+      cache.getOrCreate("foo", () => "bar", new AbortController().signal),
+    ).resolves.toBe("bar");
+  });
 });

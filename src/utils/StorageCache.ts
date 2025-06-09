@@ -36,11 +36,18 @@ export default class StorageCache extends Cache {
    * @param storage - The storage mechanism (e.g., `localStorage` or `sessionStorage`) where cached items will be persisted.
    * @param maxCacheTime - Optional. The maximum time (in milliseconds) that a cached item is considered valid.
    *                       If not provided, a default value will be used.
+   * @param version - The version of the cache, used for cache invalidation.
    */
-  constructor(storageName: string, storage: Storage, maxCacheTime?: number) {
+  constructor(
+    storageName: string,
+    storage: Storage,
+    maxCacheTime?: number,
+    version?: string,
+  ) {
     super(maxCacheTime, loadItemsFromStore(storage, storageName));
     this.storage = storage;
-    this.storageName = storageName;
+    this.storageName = `${storageName}${!!version ? `.${version}` : ""}`;
+    deleteOlderStorages(storage, storageName, version || "");
   }
 
   override async getOrCreate<TResult>(
@@ -68,8 +75,8 @@ export default class StorageCache extends Cache {
 }
 
 function loadItemsFromStore(
-  storage: StorageCache["storage"],
-  storageName: StorageCache["storageName"],
+  storage: Storage,
+  storageName: string,
 ): Cache["items"] {
   if (isSSR()) return {};
 
@@ -80,8 +87,8 @@ function loadItemsFromStore(
 }
 
 function saveItemIntoStore(
-  storage: StorageCache["storage"],
-  storageName: StorageCache["storageName"],
+  storage: Storage,
+  storageName: string,
   key: string,
   item: Cache["items"][string],
 ): void {
@@ -91,4 +98,25 @@ function saveItemIntoStore(
   items[key] = item;
 
   window[`${storage}Storage`].setItem(storageName, JSON.stringify(items));
+}
+
+function deleteOlderStorages(
+  storage: Storage,
+  storageName: string,
+  version: string,
+): void {
+  if (isSSR()) return;
+
+  const realStorageName = `${storageName}${!!version ? `.${version}` : ""}`;
+  const keysToDelete = new Array<string>();
+
+  for (let i = 0; i < window[`${storage}Storage`].length; i++) {
+    const key = window[`${storage}Storage`].key(i);
+    if (!key) continue;
+    if (key === realStorageName) continue;
+    if (!key.startsWith(storageName)) continue;
+    keysToDelete.push(key);
+  }
+
+  keysToDelete.forEach((key) => window[`${storage}Storage`].removeItem(key));
 }
