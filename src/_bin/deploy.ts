@@ -34,6 +34,7 @@ export default async function deploy(): Promise<void> {
   await npm.regenerate();
   await git.deleteTag(`${newTag}-temp`);
   await git.createCommit("chore: bump package version", { amend: true });
+  if (args.has("no-tag")) return;
   await git.createTag(newTag);
   await checkoutTagAndDeleteCurrentBranch(newTag);
   await createNextRelease(typeOfNewVersion, newTag, lastTagMerged);

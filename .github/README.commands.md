@@ -84,6 +84,14 @@ When running `npm run deploy`, the process start merging commits into the differ
 npm run deploy -- --interactive
 ```
 
+### No tag
+
+When running `npm run deploy`, the process runs some processes and commits the changes under tags. If you want to skip the tag creation you can use the `--no-tag` flag. This will cause to skip the first tag creation and the abortion of the subsequent commands.
+
+```bash
+npm run deploy -- --no-tag
+```
+
 ## Regenerate
 
 ```bash
