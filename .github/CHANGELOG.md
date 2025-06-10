@@ -6,11 +6,15 @@ All notable changes to this project will be documented in this file.
 
 > May 24, 2025
 
+### Fixes 🎯
+
 - **createServerSlice**: add reload and loadMore in context
 
 ## [v4.4.4](https://github.com/agusmgarcia/react-core/tree/v4.4.4)
 
 > May 18, 2025
+
+### Fixes 🎯
 
 - **store**: adjust SubscribeContext typings
 - **createGlobalSlice**: adjust setState type
@@ -18,6 +22,8 @@ All notable changes to this project will be documented in this file.
 ## [v4.4.3](https://github.com/agusmgarcia/react-core/tree/v4.4.3)
 
 > May 17, 2025
+
+### Fixes 🎯
 
 - **store**: add SubscribeContext
 - **catchError**: add module
@@ -33,6 +39,8 @@ All notable changes to this project will be documented in this file.
 
 > May 9, 2025
 
+### Fixes 🎯
+
 - **Cache**: prevent caching error if signal is aborted
 - **store**: clear timeout if listener is executed first
 - **store**: provide a reason to the signal
@@ -41,6 +49,8 @@ All notable changes to this project will be documented in this file.
 ## [v4.4.1](https://github.com/agusmgarcia/react-core/tree/v4.4.1)
 
 > May 9, 2025
+
+### Fixes 🎯
 
 - **Merge**: adjust type implementation
 - **AddArgumentToObject**: adjust type implementation
@@ -59,24 +69,29 @@ All notable changes to this project will be documented in this file.
 
 > April 29, 2025
 
+### Features ✅
+
+- **github.middleware**: add ability to merge workflows
+- **children**: add isOfType function
+- **children**: add mapOfType function
+- **merges**: change the options shape
+- **throwError**: add utility
+- add node support
+- **regenerate**: add force argument
+
+### Fixes 🎯
+
 - **package.json**: stop regenerating regenerate script
 - **filters**: make distinct to include strict comparison
 - **\_app.tsx**: consider base path when locating favicon
-- **github.middleware**: add ability to merge workflows
 - **sortProperties**: add support for arrays
 - use latest dependencies versions
-- **children**: add isOfType function
-- **children**: add mapOfType function
 - add documentation
 - improve testing cases
 - **getChildrenOfType**: include components without children
 - **filters**: deprecate options
-- **merges**: change the options shape
-- **throwError**: add utility
 - remove pages on start
 - **build**: add command for libraries
-- add node support
-- **regenerate**: add force argument
 - **httpTrigger1.ts**: adjust path of the initial function
 - **.gitignore**: stop ignoring .next for non apps
 - **tsconfig.json**: adjust excludes
@@ -95,11 +110,15 @@ All notable changes to this project will be documented in this file.
 
 > April 16, 2025
 
+### Fixes 🎯
+
 - prevent fails when no git repository found
 
 ## [v4.3.8](https://github.com/agusmgarcia/react-core/tree/v4.3.8)
 
 > April 12, 2025
+
+### Fixes 🎯
 
 - **createServerSlice**: reset error and loading on data set
 
@@ -107,17 +126,23 @@ All notable changes to this project will be documented in this file.
 
 > April 11, 2025
 
+### Fixes 🎯
+
 - **local.settings.json**: add isEncrypted flag
 
 ## [v4.3.6](https://github.com/agusmgarcia/react-core/tree/v4.3.6)
 
 > April 11, 2025
 
+### Fixes 🎯
+
 - **local.settings.json**: adjust creation process
 
 ## [v4.3.5](https://github.com/agusmgarcia/react-core/tree/v4.3.5)
 
 > April 11, 2025
+
+### Fixes 🎯
 
 - **createObjectWithPropertiesSorted**: delete module
 - **azureFunction.middleware**: allow custom values for localSettings and funcignore
@@ -146,6 +171,8 @@ All notable changes to this project will be documented in this file.
 
 > April 6, 2025
 
+### Fixes 🎯
+
 - **github.middleware**: move some properties to vars
 - **azureFunction.middleware**: adjust local.settings.json data
 - update README's files
@@ -154,11 +181,15 @@ All notable changes to this project will be documented in this file.
 
 > April 5, 2025
 
+### Fixes 🎯
+
 - adjust libraries dependencies
 
 ## [v4.3.2](https://github.com/agusmgarcia/react-core/tree/v4.3.2)
 
 > April 5, 2025
+
+### Fixes 🎯
 
 - **github.middleware**: add missing app settings for azure functions
 - **packageJSON.middleware**: remove unwanted character
@@ -167,6 +198,8 @@ All notable changes to this project will be documented in this file.
 
 > April 4, 2025
 
+### Fixes 🎯
+
 - **github.middleware**: remove dev deps before deploying azure function
 - **azureFunction.middleware**: adjust funcignore
 
@@ -174,9 +207,14 @@ All notable changes to this project will be documented in this file.
 
 > April 4, 2025
 
+### Features ✅
+
 - add azure-function support
 - **folders**: add isEmpty method
 - **folders**: add readFolder method
+
+### Fixes 🎯
+
 - **files**: move readFile method into a separated file
 - **getCore**: adjust return type
 - **createObjectWithPropertiesSorted**: move it into a separated file
@@ -188,11 +226,15 @@ All notable changes to this project will be documented in this file.
 
 > April 4, 2025
 
+### Fixes 🎯
+
 - **webpack.middleware**: make jsx-runtime external
 
 ## [v4.2.5](https://github.com/agusmgarcia/react-core/tree/v4.2.5)
 
 > April 3, 2025
+
+### Fixes 🎯
 
 - **test**: include the --pattern argument
 
@@ -200,11 +242,15 @@ All notable changes to this project will be documented in this file.
 
 > April 1, 2025
 
+### Fixes 🎯
+
 - **git**: remove quotes from commit msg
 
 ## [v4.2.3](https://github.com/agusmgarcia/react-core/tree/v4.2.3)
 
 > April 1, 2025
+
+### Fixes 🎯
 
 - **github.middleware**: adjust logic to create changelog file
 - **git**: adjust the way commits are being extracted
@@ -213,6 +259,8 @@ All notable changes to this project will be documented in this file.
 ## [v4.2.2](https://github.com/agusmgarcia/react-core/tree/v4.2.2)
 
 > March 31, 2025
+
+### Fixes 🎯
 
 - **git**: stop using quotes for commit message
 - **github.middleware**: aggregate server calls when creating changelog
@@ -223,16 +271,23 @@ All notable changes to this project will be documented in this file.
 
 > March 29, 2025
 
+### Fixes 🎯
+
 - **webpack.middleware**: add getCustomTransformers
 
 ## [v4.2.0](https://github.com/agusmgarcia/react-core/tree/v4.2.0)
 
 > March 28, 2025
 
+### Features ✅
+
 - add core property under package.json file
 - regenerate package.json
 - **git**: add getRepositoryDetails function
 - remove files from the other type of app
+
+### Fixes 🎯
+
 - **eslint.config.js**: ignore d.ts files
 - adjust libraries dependencies
 - **deploy.ts**: stop using ??
@@ -241,17 +296,23 @@ All notable changes to this project will be documented in this file.
 
 > March 28, 2025
 
+### Fixes 🎯
+
 - stop importing React for libraries
 
 ## [v4.1.3](https://github.com/agusmgarcia/react-core/tree/v4.1.3)
 
 > March 28, 2025
 
+### Fixes 🎯
+
 - **github.middleware**: regenerate changelog file using remote url
 
 ## [v4.1.2](https://github.com/agusmgarcia/react-core/tree/v4.1.2)
 
 > March 28, 2025
+
+### Fixes 🎯
 
 - **isLibrary**: consider private property as string
 - remove @eslint/compat peers
@@ -261,17 +322,24 @@ All notable changes to this project will be documented in this file.
 
 > March 22, 2025
 
+### Fixes 🎯
+
 - **createServerSlice**: remove set method from type
 
 ## [v4.1.0](https://github.com/agusmgarcia/react-core/tree/v4.1.0)
 
 > March 22, 2025
 
+### Features ✅
+
 - **createServerSlice**: add ability to support extra methods
 - **Merge**: add type
 - **createServerSlice**: make prevData available in fetcher
 - **nextjs.middleware**: start creating \_app files
 - **nextjs.middleware**: omit devIndicators
+
+### Fixes 🎯
+
 - **createServerSlice**: readjust methods order
 - **createGlobalSlice**: adjust types
 
@@ -279,11 +347,15 @@ All notable changes to this project will be documented in this file.
 
 > March 20, 2025
 
+### Fixes 🎯
+
 - adjust peer dependencies
 
 ## [v4.0.1](https://github.com/agusmgarcia/react-core/tree/v4.0.1)
 
 > March 20, 2025
+
+### Fixes 🎯
 
 - **useElementAtBottom**: adjust compatibility with useRef
 - **useElementAtTop**: adjust compatibility with useRef
@@ -293,22 +365,32 @@ All notable changes to this project will be documented in this file.
 
 > March 19, 2025
 
-- start using node 22.14
+### Breaking changes ❗️
+
 - change prettier config
 - bump to nextjs 15, react 19 and eslint 9
 - **deploy**: propagate release
 - **deploy**: validate tag position before publishing
 - **postpack**: stop using simulated flag
-- **useElementAtBottom**: handle scenarios where element is initially null
-- **useElementAtTop**: handle scenarios where element is initially null
+
+### Features ✅
+
 - **useDimensions**: add hook
 - **useDevicePixelRatio**: add hook
+
+### Fixes 🎯
+
+- start using node 22.14
+- **useElementAtBottom**: handle scenarios where element is initially null
+- **useElementAtTop**: handle scenarios where element is initially null
 - **README.md**: update file
 - bump dependencies
 
 ## [v3.9.1](https://github.com/agusmgarcia/react-core/tree/v3.9.1)
 
 > March 9, 2025
+
+### Fixes 🎯
 
 - **github.middleware**: regenerate it using UTC time
 - **git**: adjust the way of getting creationg date
@@ -317,12 +399,17 @@ All notable changes to this project will be documented in this file.
 
 > March 8, 2025
 
-- **store**: start using merge utility
+### Features ✅
+
 - **merges**: add utility
 - **github.middleware**: delete release on error
+- **git**: add isCurrentBranchSynced method
+
+### Fixes 🎯
+
+- **store**: start using merge utility
 - **github.middleware**: stop enable pages automatically
 - **deploy**: check whether branch is synced and tag doesn't exist
-- **git**: add isCurrentBranchSynced method
 - **execute**: make the wildcard complex to be detected
 - **tailwind.middleware**: adjust tailwind.config file
 - **README**: update files
@@ -331,11 +418,16 @@ All notable changes to this project will be documented in this file.
 
 > March 2, 2025
 
+### Features ✅
+
+- **test**: add watch flag
+
+### Fixes 🎯
+
 - **github.middleware**: stop forcing GitHub NPM registry
 - **webpack.middleware**: handle scenario for no-peers
 - **README.md**: add more details to the getting started section
 - **node.middleware**: omit tests definitions when packaging
-- **test**: add watch flag
 - **eslint.middleware**: make react in jsx scope
 - add a method to get process args
 - **test**: remove .swc folder on error too
@@ -347,13 +439,18 @@ All notable changes to this project will be documented in this file.
 
 > February 26, 2025
 
-- call scripts directly
+### Features ✅
+
 - run scripts in sequence
 - **getChildrenOfType**: add utility
 - **Tuple**: add type
 - **UnionToTuple**: add type
 - **TupleToUnion**: add type
 - **UnionToIntersection**: add type
+
+### Fixes 🎯
+
+- call scripts directly
 - **github.middleware**: stop scaping markdown in CHANGELOG file
 - **github.middleware**: display a message when no commits have been included in changelog
 - **start**: use available port if not specified
@@ -362,10 +459,15 @@ All notable changes to this project will be documented in this file.
 
 > February 16, 2025
 
-- move instructions into the git module
+### Features ✅
+
 - **start**: add port argument
 - **Cache**: handle errors properly
 - **createServer**: add loadMore function
+
+### Fixes 🎯
+
+- move instructions into the git module
 - **postpack**: adjust arguments structure
 - **nextjs.middleware**: start regenerating next.config.js
 
@@ -373,22 +475,34 @@ All notable changes to this project will be documented in this file.
 
 > February 12, 2025
 
+### Features ✅
+
+- add tailwind in the library
+
+### Fixes 🎯
+
 - **github.middleware**: escape markdown
 - **nextjs.middleware**: prevent regenerating next.config.js
 - **typescript.middleware**: adjust tsconfig
-- add tailwind in the library
 - **github.middleware**: enable pages automatically
 
 ## [v3.4.0](https://github.com/agusmgarcia/react-core/tree/v3.4.0)
 
 > February 7, 2025
 
-- **store**: prevent subscribing in SSR context
+### Features ✅
+
 - **store**: add initial state
+
+### Fixes 🎯
+
+- **store**: prevent subscribing in SSR context
 
 ## [v3.3.1](https://github.com/agusmgarcia/react-core/tree/v3.3.1)
 
 > February 7, 2025
+
+### Fixes 🎯
 
 - **deploy**: adjust naming convention
 
@@ -396,7 +510,12 @@ All notable changes to this project will be documented in this file.
 
 > February 7, 2025
 
+### Features ✅
+
 - **deploy**: add deploy cli
+
+### Fixes 🎯
+
 - reorganize imports
 - **dates**: adjust calculation to get first date of the month
 - **execute**: adjust the way of getting parameters
@@ -404,6 +523,8 @@ All notable changes to this project will be documented in this file.
 ## [v3.2.2](https://github.com/agusmgarcia/react-core/tree/v3.2.2)
 
 > February 5, 2025
+
+### Fixes 🎯
 
 - **store**: adjust typings
 - **prettier.middleware**: stop finding prettier config
@@ -414,14 +535,21 @@ All notable changes to this project will be documented in this file.
 
 > February 4, 2025
 
+### Fixes 🎯
+
 - **OmitFuncs**: ignore arrays and functions
 
 ## [v3.2.0](https://github.com/agusmgarcia/react-core/tree/v3.2.0)
 
 > February 4, 2025
 
+### Features ✅
+
 - **filters**: add paginate function
 - **Cache**: add ability to set custom expiration per key
+
+### Fixes 🎯
+
 - **dates**: allow receiving number in the toString method
 - **createServerSlice**: adjust input typings
 
@@ -429,17 +557,24 @@ All notable changes to this project will be documented in this file.
 
 > February 3, 2025
 
+### Features ✅
+
 - **store**: add ability to set up the initial pagination
 - **store**: add pagination to the reload method
 - **store**: add load more functionality
-- **store**: prevent accessing functions inside store
 - **OmitFuncs**: add utility
 - **filters**: add utility
 - **dates**: export toString method
 
+### Fixes 🎯
+
+- **store**: prevent accessing functions inside store
+
 ## [v3.0.2](https://github.com/agusmgarcia/react-core/tree/v3.0.2)
 
 > January 31, 2025
+
+### Fixes 🎯
 
 - **store**: make run the first time
 - **README.md**: adjust store doc
@@ -448,6 +583,8 @@ All notable changes to this project will be documented in this file.
 ## [v3.0.1](https://github.com/agusmgarcia/react-core/tree/v3.0.1)
 
 > January 29, 2025
+
+### Fixes 🎯
 
 - **eslint.middleware**: encapsulate functions outside the module
 - **getPackageJSON**: create a method to get the object
@@ -459,10 +596,10 @@ All notable changes to this project will be documented in this file.
 
 > January 18, 2025
 
+### Breaking changes ❗️
+
 - **github.middleware**: regenerate CHANGELOG file
-- **getProjectName**: add utility
 - **store**: separate store
-- **StorageCache**: remove uneeded casts
 - **currencies**: remove it
 - **dates**: remove formatDate
 - **useValueTracker**: remove it
@@ -471,9 +608,19 @@ All notable changes to this project will be documented in this file.
 - **replaceString**: change shape of the model
 - **Func.types**: remove the old-way
 
+### Features ✅
+
+- **getProjectName**: add utility
+
+### Fixes 🎯
+
+- **StorageCache**: remove uneeded casts
+
 ## [v2.12.2](https://github.com/agusmgarcia/react-core/tree/v2.12.2)
 
 > January 11, 2025
+
+### Fixes 🎯
 
 - **prettier.middleware**: start using EOL
 - prevent dependecy error
@@ -482,19 +629,28 @@ All notable changes to this project will be documented in this file.
 
 > January 9, 2025
 
+### Fixes 🎯
+
 - bump vulnerable dependencies
 
 ## [v2.12.0](https://github.com/agusmgarcia/react-core/tree/v2.12.0)
 
 > November 28, 2024
 
+### Features ✅
+
 - add simulated flag when packing the library
+
+### Fixes 🎯
+
 - **StorageCache**: adjust typings
 - **Cache**: adjust typings
 
 ## [v2.11.1](https://github.com/agusmgarcia/react-core/tree/v2.11.1)
 
 > November 23, 2024
+
+### Fixes 🎯
 
 - **StorageCache**: adjust types
 - **Cache**: adjust types
@@ -503,8 +659,13 @@ All notable changes to this project will be documented in this file.
 
 > November 23, 2024
 
+### Features ✅
+
 - **StorageCache**: add utility
 - **Cache**: add utility
+
+### Fixes 🎯
+
 - bump vulnerable dependencies
 - **package.json**: adjust scripts
 
@@ -512,21 +673,31 @@ All notable changes to this project will be documented in this file.
 
 > November 2, 2024
 
-- **README.md**: prepare it for the next major version
+### Features ✅
+
 - **replaceString**: add ability to introduce conditions
 - **isOnlyId**: add utils
 - **finds**: add singleOrDefault method
+
+### Fixes 🎯
+
+- **README.md**: prepare it for the next major version
 - **replaceString**: handle scenarios for undefined message
 
 ## [v2.9.0](https://github.com/agusmgarcia/react-core/tree/v2.9.0)
 
 > October 31, 2024
 
-- adjust README.md paths
-- update packages
+### Features ✅
+
 - **github.middleware**: remove scope
 - **eslint.middleware**: add eslint-plugin-boundaries for app
 - **eslint.middleware**: add eslint-plugin-tailwindcss
+
+### Fixes 🎯
+
+- adjust README.md paths
+- update packages
 - **tailwindcss.middleware**: adjust tailwind config file
 - **nextjs.middleware**: adjust nextjs config file
 
@@ -534,14 +705,21 @@ All notable changes to this project will be documented in this file.
 
 > October 16, 2024
 
+### Fixes 🎯
+
 - adjust engine compatibility to minimum
 
 ## [v2.8.0](https://github.com/agusmgarcia/react-core/tree/v2.8.0)
 
 > October 14, 2024
 
+### Features ✅
+
 - **finds**: add utility
 - **dates**: add validate feature
+
+### Fixes 🎯
+
 - **useElementAtTop**: use devicePixelRatio as unit
 - **useElementAtBottom**: use devicePixelRatio as unit
 
@@ -549,7 +727,12 @@ All notable changes to this project will be documented in this file.
 
 > September 21, 2024
 
+### Features ✅
+
 - **useMediaQuery**: add initialValue
+
+### Fixes 🎯
+
 - **useValueTracker**: track change events
 - **README.md**: update file
 - **useValueTracker**: deprecate it
@@ -562,6 +745,8 @@ All notable changes to this project will be documented in this file.
 
 > August 29, 2024
 
+### Fixes 🎯
+
 - **useFocusTracker**: separate focusin vs focusout handlers
 - **useValueTracker**: use input instead of change event
 - **useElementAtTop**: consider element beign resized
@@ -572,13 +757,18 @@ All notable changes to this project will be documented in this file.
 
 > August 24, 2024
 
-- bump vulnerable dependencies
-- **README.utilities**: adjust documentation
+### Features ✅
+
 - **dates**: add ability to get date, month and year
 - **dates**: add toDateString
 - **useValueTracker**: add utility
 - **useFocusTracker**: add utility
 - **mergeRefs**: add utility
+
+### Fixes 🎯
+
+- bump vulnerable dependencies
+- **README.utilities**: adjust documentation
 - **getCurrentDate**: add timeZoneName parameter
 - **getCurrentDate**: consider timeZone
 - **useElementAtBottom**: adjust logic to detect scenario
@@ -589,14 +779,21 @@ All notable changes to this project will be documented in this file.
 
 > August 14, 2024
 
+### Features ✅
+
 - **capitalize**: add utility
 - **isChildOf**: add utility
 - **isParentOf**: add utility
+
+### Fixes 🎯
+
 - **jest.middleware**: adjust jest config file generation
 
 ## [v2.4.2](https://github.com/agusmgarcia/react-core/tree/v2.4.2)
 
 > July 20, 2024
+
+### Fixes 🎯
 
 - **github.middleware**: adjust deployment steps
 
@@ -604,23 +801,35 @@ All notable changes to this project will be documented in this file.
 
 > July 20, 2024
 
+### Fixes 🎯
+
 - **github.middleware**: adjust deployment steps
 
 ## [v2.4.0](https://github.com/agusmgarcia/react-core/tree/v2.4.0)
 
 > July 19, 2024
 
+### Features ✅
+
 - **eslint.middleware**: add consistent type import rule
+
+### Fixes 🎯
+
 - adjust paths resolver for libraries
 
 ## [v2.3.0](https://github.com/agusmgarcia/react-core/tree/v2.3.0)
 
 > July 18, 2024
 
+### Features ✅
+
 - separate workflows in two
 - add tsconfig-paths resolver
 - add test command
 - **blockUntil**: add utility
+
+### Fixes 🎯
+
 - **useElementAtBottom**: add some margins
 - **useElementAtTop**: add some margins
 - **github.middleware**: re-organize steps
@@ -636,12 +845,19 @@ All notable changes to this project will be documented in this file.
 
 > June 22, 2024
 
+### Features ✅
+
 - **webpack.middleware**: add support for commands
+
+### Fixes 🎯
+
 - **tailwindcss.middleware**: prevent overriding tailwind.config.js file
 
 ## [v2.1.1](https://github.com/agusmgarcia/react-core/tree/v2.1.1)
 
 > June 19, 2024
+
+### Fixes 🎯
 
 - **prettier.middleware**: adjust .prettierrc file
 - **README.utilities.md**: adjust Func documentation
@@ -651,12 +867,17 @@ All notable changes to this project will be documented in this file.
 
 > June 19, 2024
 
+### Features ✅
+
 - **tailwindcss.middleware**: add tailwind support
 - **useElementAtBottom**: add utility
 - **useElementAtTop**: add utility
 - **AsyncFunc.types**: add utility
 - **Func.types**: move result and args positions
 - **delay**: add utility
+
+### Fixes 🎯
+
 - **prettier.middleware**: adjust eslintrc format
 - **currencies**: add return type
 - **useMediaQuery**: add return type
@@ -668,6 +889,8 @@ All notable changes to this project will be documented in this file.
 
 > June 10, 2024
 
+### Fixes 🎯
+
 - stop regenerating .env and .env.local
 - **OnlyId**: mark rest of props to partial
 
@@ -675,26 +898,36 @@ All notable changes to this project will be documented in this file.
 
 > June 10, 2024
 
+### Fixes 🎯
+
 - **.gitignore**: exclude .next folder
 
 ## [v2.0.0](https://github.com/agusmgarcia/react-core/tree/v2.0.0)
 
 > June 8, 2024
 
+### Breaking changes ❗️
+
+- rename commands
+
+### Features ✅
+
+- include .npmignore generation
+- include .gitignore generation
+- add store
+- **regenerate**: add command
+- add utilities
+- **withContext.core**: start creating .nvmrc file
+
+### Fixes 🎯
+
 - **useSWR**: adjust input and outputs
 - store global variables in globalThis
-- include .npmignore generation
 - include sub README files
-- include .gitignore generation
 - stop regenerating README and CHANGELOG
 - start using its own commands
 - **README.md**: update file
-- add store
-- rename commands
-- **regenerate**: add command
 - restructure commands module
-- add utilities
-- **withContext.core**: start creating .nvmrc file
 - **withContext.webpack**: modify getting absolute paths
 - prettify content
 - move commands inside a folder
@@ -703,17 +936,23 @@ All notable changes to this project will be documented in this file.
 
 > June 1, 2024
 
+### Fixes 🎯
+
 - **withContext.github**: use node version 20
 
 ## [v1.3.2](https://github.com/agusmgarcia/react-core/tree/v1.3.2)
 
 > May 23, 2024
 
+### Fixes 🎯
+
 - bump peer dependencies
 
 ## [v1.3.1](https://github.com/agusmgarcia/react-core/tree/v1.3.1)
 
 > February 23, 2024
+
+### Fixes 🎯
 
 - **withContext.github**: remove empty space
 - **.nvmrc**: add file
@@ -722,12 +961,19 @@ All notable changes to this project will be documented in this file.
 
 > December 22, 2023
 
-- check package matches tag
+### Features ✅
+
 - **withContext.github**: check whether package matches tag
+
+### Fixes 🎯
+
+- check package matches tag
 
 ## [v1.2.1](https://github.com/agusmgarcia/react-core/tree/v1.2.1)
 
 > November 30, 2023
+
+### Fixes 🎯
 
 - **execute**: make compatible with windows
 
@@ -735,12 +981,19 @@ All notable changes to this project will be documented in this file.
 
 > November 27, 2023
 
-- restrict to use node 16
+### Features ✅
+
 - **withContext.github**: add support to trigger workflows
+
+### Fixes 🎯
+
+- restrict to use node 16
 
 ## [v1.1.1](https://github.com/agusmgarcia/react-core/tree/v1.1.1)
 
 > October 31, 2023
+
+### Fixes 🎯
 
 - change force by skip
 
@@ -748,13 +1001,20 @@ All notable changes to this project will be documented in this file.
 
 > October 30, 2023
 
+### Features ✅
+
+- add force flag
+
+### Fixes 🎯
+
 - bump pakcage version
 - delete bin folder after pack
-- add force flag
 
 ## [v1.0.3](https://github.com/agusmgarcia/react-core/tree/v1.0.3)
 
 > October 27, 2023
+
+### Fixes 🎯
 
 - **CHANGELOG.md**: update file
 - ignore more files
@@ -766,6 +1026,8 @@ All notable changes to this project will be documented in this file.
 
 > October 27, 2023
 
+### Fixes 🎯
+
 - bum package version
 - **withContext.prettier**: adjust ignore file
 - **withContext.eslint**: adjust ignore file
@@ -773,6 +1035,8 @@ All notable changes to this project will be documented in this file.
 ## [v1.0.1](https://github.com/agusmgarcia/react-core/tree/v1.0.1)
 
 > October 27, 2023
+
+### Fixes 🎯
 
 - start ignoring more files
 - **withContext.prettier**: ignore more files
@@ -782,6 +1046,8 @@ All notable changes to this project will be documented in this file.
 ## [v1.0.0](https://github.com/agusmgarcia/react-core/tree/v1.0.0)
 
 > October 27, 2023
+
+### Features ✅
 
 - export commands
 - **core**: add commands
@@ -798,4 +1064,7 @@ All notable changes to this project will be documented in this file.
 - **IgnorableError**: add class
 - **exists**: add utils
 - **createFolder**: add utils
+
+### Fixes 🎯
+
 - setup project

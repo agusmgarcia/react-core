@@ -114,9 +114,11 @@ async function createChangelogFile(
 ): Promise<string> {
   if (!regenerate) return "";
 
-  function transformCommit({ commit }: { commit: string }): string {
-    const commitInfo = git.getCommitInfo(commit);
-    return `- ${!!commitInfo.scope ? `**${commitInfo.scope}**: ` : ""}${commitInfo.message}`;
+  function transformCommit({
+    message,
+    scope,
+  }: ReturnType<typeof git.getCommitInfo>): string {
+    return `- ${!!scope ? `**${scope}**: ` : ""}${message}`;
   }
 
   let fragments = "";
@@ -146,8 +148,25 @@ async function createChangelogFile(
                 ? lastCommitIndex
                 : lastCommitIndex + 1,
             )
+            .map((c) => ({
+              createdAt: c.createdAt,
+              ...git.getCommitInfo(c.commit),
+            }))
+            .reverse();
+
+          const breakingChangeCommits = commits
+            .filter((c) => c.isBreakingChange)
             .map(transformCommit)
-            .reverse()
+            .join(EOL);
+
+          const featureCommits = commits
+            .filter((c) => c.type === "feat" && !c.isBreakingChange)
+            .map(transformCommit)
+            .join(EOL);
+
+          const fixCommits = commits
+            .filter((c) => c.type !== "feat" && !c.isBreakingChange)
+            .map(transformCommit)
             .join(EOL);
 
           const date = detailedCommits[
@@ -164,9 +183,10 @@ async function createChangelogFile(
           return `## ${!!remoteURL ? `[${tagValue}](${remoteURL}/tree/${tagValue})` : tagValue}
 
 > ${date}
-
-${!!commits ? commits : "- No compatible changes to show"}
-`;
+${!breakingChangeCommits && !featureCommits && !fixCommits ? `${EOL}- No compatible changes to show${EOL}` : ""}
+${!!breakingChangeCommits ? `### Breaking changes ❗️${EOL}${EOL}${breakingChangeCommits}${EOL}` : ""}
+${!!featureCommits ? `### Features ✅${EOL}${EOL}${featureCommits}${EOL}` : ""}
+${!!fixCommits ? `### Fixes 🎯${EOL}${EOL}${fixCommits}${EOL}` : ""}`;
         })
         .reverse(),
     ).then((fragments) => fragments.join(EOL));
