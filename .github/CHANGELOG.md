@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.5.0](https://github.com/agusmgarcia/react-core/tree/v4.5.0)
+
+> June 11, 2025
+
+### Features ✅
+
+- **StorageCache**: add maxErrorTime parameter
+- **Cache**: add maxErrorTime parameter
+- **CHANGELOG.md**: group commits by scope
+- **deploy**: add --no-tag flag
+- **tsconfig.json**: output es format
+- **StorageCache**: add version
+- **StorageCache**: add set value
+- **Cache**: add set value
+- **store**: add regenerate method
+- support node packages
+- **packageJSON**: keep author, description and name when regenerating with force
+
+### Fixes 🎯
+
+- **Cache**: reduce test execution time
+- adjust vulnerable dependencies
+- update dependencies
+- use typeof function instead of instanceOf
+- **createServerSlice**: add missing types
+- **packageJSON**: replace main and types by exports
+- **packageJSON**: unset main for node
+- **webpack**: exclude react in case it is not listed under peer deps
+- **webpack**: ignore all node modules
+- **webpack**: exclude dependencies when building node
+- **webpack**: start using MiniCSSExtractPlugin
+- **webpack**: add code splitting
+- consider ignore flag when deleting files
+- encapsulate npm inside a module
+- sort properties recursively
+- **README.commands.md**: update file
+
 ## [v4.4.5](https://github.com/agusmgarcia/react-core/tree/v4.4.5)
 
 > May 24, 2025
