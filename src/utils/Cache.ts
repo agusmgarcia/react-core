@@ -7,7 +7,8 @@ import type Func from "./Func.types";
  * A utility class for caching asynchronous operations with expiration times.
  */
 export default class Cache {
-  protected readonly maxCacheTime: number;
+  private readonly maxCacheTime: number;
+  private readonly maxErrorTime: number;
 
   private readonly mutexes: Record<string, Mutex>;
   private readonly items: Items;
@@ -19,9 +20,16 @@ export default class Cache {
    *
    * @param maxCacheTime - The maximum time (in milliseconds) an item can remain in the cache before expiring. Defaults to 15 minutes (900,000 ms).
    * @param items - An optional initial set of cached items. Each item includes an expiration time and either a result or an error.
+   * @param maxErrorTime - The maximum time (in milliseconds) an error can remain in the cache before it is considered expired. Defaults to 1 second (1,000 ms).
    */
-  constructor(maxCacheTime = 900_000, items: Items | Promise<Items> = {}) {
+  // TODO: transform parameters in an object for the next major version.
+  constructor(
+    maxCacheTime = 900_000,
+    items: Items | Promise<Items> = {},
+    maxErrorTime = 1_000,
+  ) {
     this.maxCacheTime = maxCacheTime;
+    this.maxErrorTime = maxErrorTime;
     this.mutexes = {};
     this.items = {};
     this.itemsPromise = (
@@ -94,7 +102,7 @@ export default class Cache {
           this.items[key] = { expiresAt, result };
         } catch (error) {
           signal.throwIfAborted();
-          expiresAt = Date.now() + 1_000;
+          expiresAt = Date.now() + this.maxErrorTime;
           this.items[key] = { error, expiresAt };
         }
       }
