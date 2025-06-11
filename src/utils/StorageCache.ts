@@ -37,14 +37,16 @@ export default class StorageCache extends Cache {
    * @param maxCacheTime - Optional. The maximum time (in milliseconds) that a cached item is considered valid.
    *                       If not provided, a default value will be used.
    * @param version - The version of the cache, used for cache invalidation.
+   * @param maxErrorTime - The maximum time (in milliseconds) an error can remain in the cache before it is considered expired. Defaults to 1 second (1,000 ms).
    */
   constructor(
     storageName: string,
     storage: Storage,
     maxCacheTime?: number,
     version?: string,
+    maxErrorTime?: number,
   ) {
-    super(maxCacheTime, loadItemsFromStore(storage, storageName));
+    super(maxCacheTime, loadItemsFromStore(storage, storageName), maxErrorTime);
     this.storage = storage;
     this.storageName = `${storageName}${!!version ? `.${version}` : ""}`;
     deleteOlderStorages(storage, storageName, version || "");

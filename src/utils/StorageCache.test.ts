@@ -9,13 +9,6 @@ describe("StorageCache", () => {
   let localStorageMock: Storage;
   let sessionStorageMock: Storage;
 
-  beforeAll(() => {
-    AbortSignal.prototype.throwIfAborted = function (this: AbortSignal) {
-      if (!this.aborted) return;
-      throw new Error(this.reason);
-    };
-  });
-
   beforeEach(() => {
     localStorageMock = (() => {
       let store: Record<string, string> = {};
