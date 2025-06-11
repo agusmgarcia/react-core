@@ -2,13 +2,6 @@ import Cache from "./Cache";
 import delay from "./delay";
 
 describe("Cache", () => {
-  beforeAll(() => {
-    AbortSignal.prototype.throwIfAborted = function (this: AbortSignal) {
-      if (!this.aborted) return;
-      throw new Error(this.reason);
-    };
-  });
-
   it("should cache and retrieve a value", async () => {
     const cache = new Cache();
     const factory = jest.fn(() => Promise.resolve("foo"));
@@ -35,7 +28,7 @@ describe("Cache", () => {
 
   it("should expire cache after maxCacheTime", async () => {
     let value = 1;
-    const cache = new Cache(100);
+    const cache = new Cache(10);
     const factory = jest.fn(() => Promise.resolve(value++));
 
     const result1 = await cache.getOrCreate(
@@ -46,7 +39,7 @@ describe("Cache", () => {
     expect(result1).toBe(1);
 
     // Wait for cache to expire
-    await new Promise((resolve) => setTimeout(resolve, 110));
+    await delay(20);
     const result2 = await cache.getOrCreate(
       "key",
       factory,
@@ -71,7 +64,7 @@ describe("Cache", () => {
   });
 
   it("should cache errors for 1 second", async () => {
-    const cache = new Cache();
+    const cache = new Cache(undefined, undefined, 10);
     const factory = jest.fn().mockRejectedValue(new Error("fail"));
     await expect(
       cache.getOrCreate("err", factory, new AbortController().signal),
@@ -84,7 +77,7 @@ describe("Cache", () => {
     expect(factory).toHaveBeenCalledTimes(1);
 
     // Wait for error cache to expire
-    await new Promise((r) => setTimeout(r, 1100));
+    await delay(20);
     factory.mockResolvedValue("ok");
     const result = await cache.getOrCreate(
       "err",
@@ -98,7 +91,7 @@ describe("Cache", () => {
   it("should support custom expiresAt as number", async () => {
     const cache = new Cache();
     const factory = jest.fn().mockResolvedValue("bar");
-    const expiresAt = Date.now() + 50;
+    const expiresAt = Date.now() + 10;
 
     await cache.getOrCreate(
       "custom",
@@ -108,7 +101,7 @@ describe("Cache", () => {
     );
 
     // Wait for expiration
-    await new Promise((r) => setTimeout(r, 60));
+    await delay(20);
     await cache.getOrCreate(
       "custom",
       factory,
@@ -121,7 +114,7 @@ describe("Cache", () => {
   it("should support custom expiresAt as function", async () => {
     const cache = new Cache();
     const factory = jest.fn().mockResolvedValue("baz");
-    const expiresAtFn = jest.fn().mockReturnValue(Date.now() + 50);
+    const expiresAtFn = jest.fn().mockReturnValue(Date.now() + 10);
     await cache.getOrCreate(
       "fn",
       factory,
@@ -130,7 +123,7 @@ describe("Cache", () => {
     );
 
     // Wait for expiration
-    await new Promise((r) => setTimeout(r, 60));
+    await delay(20);
     await cache.getOrCreate(
       "fn",
       factory,
@@ -175,7 +168,7 @@ describe("Cache", () => {
     const factory = jest.fn().mockImplementation(async () => {
       if (running) throw new Error("Concurrent call");
       running = true;
-      await new Promise((r) => setTimeout(r, 30));
+      await delay(30);
       running = false;
       return "mutex";
     });
@@ -212,10 +205,11 @@ describe("Cache", () => {
   });
 
   it("should initialize cache with items from a direct object", async () => {
-    const now = Date.now();
+    const expiresAt = Date.now() + 1000;
+
     const cache = new Cache(900_000, {
-      a: { expiresAt: now + 1000, result: 123 },
-      b: { error: new Error("fail b"), expiresAt: now + 1000 },
+      a: { expiresAt, result: 123 },
+      b: { error: new Error("fail b"), expiresAt },
     });
 
     const factory = jest.fn();
@@ -235,7 +229,7 @@ describe("Cache", () => {
 
   it("should wait for promise items to resolve before serving requests", async () => {
     async function loadItems(): Promise<Record<string, any>> {
-      await delay(1000);
+      await delay(10);
       return {};
     }
 
@@ -254,9 +248,8 @@ describe("Cache", () => {
   });
 
   it("should use initial items and expire them correctly", async () => {
-    const now = Date.now();
     const cache = new Cache(900_000, {
-      exp: { expiresAt: now + 50, result: "soon" },
+      exp: { expiresAt: Date.now() + 10, result: "soon" },
     });
 
     const factory = jest.fn().mockResolvedValue("after");
@@ -271,7 +264,7 @@ describe("Cache", () => {
     expect(factory).not.toHaveBeenCalled();
 
     // Wait for expiration
-    await new Promise((r) => setTimeout(r, 60));
+    await delay(20);
     const result2 = await cache.getOrCreate(
       "exp",
       factory,
