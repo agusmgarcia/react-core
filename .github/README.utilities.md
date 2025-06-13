@@ -11,6 +11,18 @@ type Person = { name: string; setName: Func<void, [name: string]> };
 type PersonWithContext = AddArgumentToObject<Person, number>; // => { name: string; setName: Func<void, [name: string, parameter: number]> }
 ```
 
+## Aggregate response
+
+```typescript
+const result = await aggregateResponse(
+  (pageIndex, pageSize) =>
+    fetch(`/api?page=${pageIndex}&limit=${pageSize}`).then((result) =>
+      result.json(),
+    ),
+  10,
+);
+```
+
 ## Async func
 
 ```typescript
