@@ -33,6 +33,12 @@ export function removeFolder(path: string): Promise<void> {
   );
 }
 
+export function removeFolderIfEmpty(path: string): Promise<void> {
+  return isEmpty(path).then((empty) =>
+    empty ? removeFolder(path) : Promise.resolve(),
+  );
+}
+
 export async function upsertFolder(path: string): Promise<void> {
   if (await exists(path)) return;
 

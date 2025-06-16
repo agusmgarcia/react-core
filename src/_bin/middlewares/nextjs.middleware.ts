@@ -13,7 +13,12 @@ export default async function nextJSMiddleware(
   const core = await getCore();
 
   await Promise.all([
-    core === "app" || command !== "start"
+    (command === "build" && core === "app") ||
+    command === "check" ||
+    command === "format" ||
+    command === "regenerate" ||
+    (command === "start" && core === "app") ||
+    command === "test"
       ? folders.upsertFolder("pages").then(() =>
           Promise.all([
             core === "app"
@@ -36,7 +41,7 @@ export default async function nextJSMiddleware(
                 ),
           ]),
         )
-      : folders.removeFolder("pages"),
+      : folders.removeFolderIfEmpty("pages"),
     core === "app"
       ? files.upsertFile(
           "next.config.js",
@@ -69,7 +74,7 @@ export default async function nextJSMiddleware(
         : Promise.resolve(),
       core !== "app" ? folders.removeFolder("out") : Promise.resolve(),
       core !== "app" ? folders.removeFolder(".next") : Promise.resolve(),
-      core !== "app" ? folders.removeFolder("pages") : Promise.resolve(),
+      folders.removeFolderIfEmpty("pages"),
     ]);
   }
 }
