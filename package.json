@@ -1,7 +1,7 @@
 {
   "name": "@agusmgarcia/react-core",
   "core": "lib",
-  "version": "4.5.0",
+  "version": "4.5.1",
   "private": false,
   "exports": {
     "types": "./dist/index.d.ts",

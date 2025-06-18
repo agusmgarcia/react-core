@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.5.1](https://github.com/agusmgarcia/react-core/tree/v4.5.1)
+
+> June 18, 2025
+
+### Fixes 🎯
+
+- remove pages folder only when is empty
+- bump dependencies
+
 ## [v4.5.0](https://github.com/agusmgarcia/react-core/tree/v4.5.0)
 
 > June 11, 2025
