@@ -3,8 +3,6 @@ import Cache from "./Cache";
 import type Func from "./Func.types";
 import isSSR from "./isSSR";
 
-type Storage = "local" | "session";
-
 /**
  * A specialized cache implementation that uses browser storage mechanisms
  * (`localStorage` or `sessionStorage`) to persist cached items across sessions.
@@ -14,14 +12,6 @@ type Storage = "local" | "session";
  * @remarks
  * This class is designed to work in environments where browser storage is available.
  * It gracefully handles server-side rendering (SSR) scenarios by avoiding storage access.
- *
- * @example
- * ```typescript
- * const storageCache = new StorageCache("myCache", "local", 60000);
- * const value = await storageCache.getOrCreate("key", async () => {
- *   return fetchDataFromAPI();
- * });
- * ```
  *
  * @extends Cache
  */
@@ -33,23 +23,17 @@ export default class StorageCache extends Cache {
    * Creates an instance of the `StorageCache` class.
    *
    * @param storageName - The name of the storage to be used for caching.
-   * @param storage - The storage mechanism (e.g., `localStorage` or `sessionStorage`) where cached items will be persisted.
-   * @param maxCacheTime - Optional. The maximum time (in milliseconds) that a cached item is considered valid.
-   *                       If not provided, a default value will be used.
-   * @param version - The version of the cache, used for cache invalidation.
-   * @param maxErrorTime - The maximum time (in milliseconds) an error can remain in the cache before it is considered expired. Defaults to 1 second (1,000 ms).
+   * @param options - Optional configuration options for the cache.
    */
-  constructor(
-    storageName: string,
-    storage: Storage,
-    maxCacheTime?: number,
-    version?: string,
-    maxErrorTime?: number,
-  ) {
-    super(maxCacheTime, loadItemsFromStore(storage, storageName), maxErrorTime);
-    this.storage = storage;
-    this.storageName = `${storageName}${!!version ? `.${version}` : ""}`;
-    deleteOlderStorages(storage, storageName, version || "");
+  constructor(storageName: string, options?: Partial<Options>) {
+    super({
+      items: loadItemsFromStore(options?.storage || "session", storageName),
+      maxCacheTime: options?.maxCacheTime,
+      maxErrorTime: options?.maxErrorTime,
+    });
+    this.storage = options?.storage || "session";
+    this.storageName = `${storageName}${!!options?.version ? `.${options.version}` : ""}`;
+    deleteOlderStorages(this.storage, storageName, options?.version || "");
   }
 
   override async getOrCreate<TResult>(
@@ -122,3 +106,31 @@ function deleteOlderStorages(
 
   keysToDelete.forEach((key) => window[`${storage}Storage`].removeItem(key));
 }
+
+type Options = {
+  /**
+   * The maximum time in milliseconds that cached items are considered valid.
+   * Defaults to 15 minutes (900,000 ms).
+   */
+  maxCacheTime: number;
+  /**
+   * The maximum time in milliseconds that errors are cached before they are considered expired.
+   * Defaults to 1 second (1,000 ms).
+   */
+  maxErrorTime: number;
+  /**
+   * The storage type to use for caching.
+   * Can be either "local" for `localStorage` or "session" for `sessionStorage`.
+   * Defaults to "session".
+   */
+  storage: Storage;
+  /**
+   * The version of the cache.
+   * This is used to differentiate between different versions of the cache.
+   * If not provided, the cache will not include a version suffix in the storage key.
+   * This can be useful for cache invalidation when the structure of cached items changes.
+   */
+  version: string;
+};
+
+type Storage = "local" | "session";

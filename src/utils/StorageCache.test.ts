@@ -62,7 +62,7 @@ describe("StorageCache", () => {
   });
 
   it("should store and retrieve values using localStorage", async () => {
-    const cache = new StorageCache("testCache", "local", 1000);
+    const cache = new StorageCache("testCache", { storage: "local" });
     const value = await cache.getOrCreate(
       "foo",
       () => "bar",
@@ -75,7 +75,7 @@ describe("StorageCache", () => {
   });
 
   it("should store and retrieve values using sessionStorage", async () => {
-    const cache = new StorageCache("testCache", "session", 1000);
+    const cache = new StorageCache("testCache");
     const value = await cache.getOrCreate(
       "baz",
       () => "qux",
@@ -88,7 +88,7 @@ describe("StorageCache", () => {
   });
 
   it("should use the factory only if value is not cached", async () => {
-    const cache = new StorageCache("testCache", "local", 1000);
+    const cache = new StorageCache("testCache", { storage: "local" });
     const factory = jest.fn(() => "abc");
     await cache.getOrCreate("key", factory, new AbortController().signal);
     await cache.getOrCreate("key", factory, new AbortController().signal);
@@ -96,7 +96,7 @@ describe("StorageCache", () => {
   });
 
   it("should handle errors from factory and cache them briefly", async () => {
-    const cache = new StorageCache("testCache", "local", 1000);
+    const cache = new StorageCache("testCache", { storage: "local" });
     const factory = jest.fn(() => {
       throw new Error("fail");
     });
@@ -112,7 +112,7 @@ describe("StorageCache", () => {
 
   it("should not access storage in SSR", async () => {
     mockIsSSR.mockReturnValue(true);
-    const cache = new StorageCache("ssrCache", "local", 1000);
+    const cache = new StorageCache("ssrCache", { storage: "local" });
     const value = await cache.getOrCreate(
       "foo",
       () => "bar",
@@ -123,14 +123,14 @@ describe("StorageCache", () => {
   });
 
   it("should allow setting values directly", async () => {
-    const cache = new StorageCache("testCache", "local", 1000);
+    const cache = new StorageCache("testCache", { storage: "local" });
     await cache.set("direct", 123);
     const stored = JSON.parse(localStorageMock.getItem("testCache")!);
     expect(stored.direct.result).toBe(123);
   });
 
   it("should respect expiresAt function", async () => {
-    const cache = new StorageCache("testCache", "local", 1000);
+    const cache = new StorageCache("testCache", { storage: "local" });
     const expiresAt = jest.fn(() => Date.now() + 5000);
     await cache.getOrCreate(
       "exp",
@@ -171,7 +171,10 @@ describe("StorageCache", () => {
         (i: number) => ["testCache", "testCache.1", "testCache.2"][i],
       );
 
-    const cache = new StorageCache("testCache", "local", 1000, "2");
+    const cache = new StorageCache("testCache", {
+      storage: "local",
+      version: "2",
+    });
     await cache.set("foo", "bar");
 
     // Only "testCache.2" should remain
@@ -187,7 +190,7 @@ describe("StorageCache", () => {
   });
 
   it("should use unversioned storage name if version is empty", async () => {
-    const cache = new StorageCache("myCache", "session", 1000, "");
+    const cache = new StorageCache("myCache");
     await cache.set("a", 42);
     expect(sessionStorageMock.setItem).toHaveBeenCalledWith(
       "myCache",
@@ -198,7 +201,7 @@ describe("StorageCache", () => {
   });
 
   it("should use versioned storage name if version is provided", async () => {
-    const cache = new StorageCache("myCache", "session", 1000, "v5");
+    const cache = new StorageCache("myCache", { version: "v5" });
     await cache.set("b", 99);
     expect(sessionStorageMock.setItem).toHaveBeenCalledWith(
       "myCache.v5",
@@ -214,14 +217,20 @@ describe("StorageCache", () => {
     (localStorageMock.key as jest.Mock)
       .mockImplementationOnce((i: number) => ["testCache", "unrelated"][i])
       .mockImplementationOnce((i: number) => ["testCache", "unrelated"][i]);
-    const cache = new StorageCache("testCache", "local", 1000, "v1");
+    const cache = new StorageCache("testCache", {
+      storage: "local",
+      version: "v1",
+    });
     await cache.set("foo", "bar");
     expect(localStorageMock.removeItem).not.toHaveBeenCalledWith("unrelated");
   });
 
   it("should not throw if storage is empty or missing", async () => {
     localStorageMock.getItem = jest.fn(() => null);
-    const cache = new StorageCache("emptyCache", "local", 1000, "v1");
+    const cache = new StorageCache("emptyCache", {
+      storage: "local",
+      version: "v1",
+    });
     await expect(
       cache.getOrCreate("foo", () => "bar", new AbortController().signal),
     ).resolves.toBe("bar");
