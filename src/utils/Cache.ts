@@ -18,22 +18,17 @@ export default class Cache {
   /**
    * Creates an instance of the Cache class.
    *
-   * @param maxCacheTime - The maximum time (in milliseconds) an item can remain in the cache before expiring. Defaults to 15 minutes (900,000 ms).
-   * @param items - An optional initial set of cached items. Each item includes an expiration time and either a result or an error.
-   * @param maxErrorTime - The maximum time (in milliseconds) an error can remain in the cache before it is considered expired. Defaults to 1 second (1,000 ms).
+   * @param options - Optional configuration for the cache.
    */
-  // TODO: transform parameters in an object for the next major version.
-  constructor(
-    maxCacheTime = 900_000,
-    items: Items | Promise<Items> = {},
-    maxErrorTime = 1_000,
-  ) {
-    this.maxCacheTime = maxCacheTime;
-    this.maxErrorTime = maxErrorTime;
+  constructor(options?: Partial<Options>) {
+    this.maxCacheTime = options?.maxCacheTime || 900_000;
+    this.maxErrorTime = options?.maxErrorTime || 1_000;
     this.mutexes = {};
     this.items = {};
     this.itemsPromise = (
-      items instanceof Promise ? items : Promise.resolve(items)
+      options?.items instanceof Promise
+        ? options.items
+        : Promise.resolve(options?.items || {})
     ).then((items) =>
       Object.keys(items).forEach((k) => (this.items[k] = items[k])),
     );
@@ -163,6 +158,25 @@ export default class Cache {
     throw item.error;
   }
 }
+
+type Options = {
+  /**
+   * The initial items to populate the cache with.
+   * Can be a synchronous object or a Promise resolving to an object.
+   * If not provided, an empty object will be used.
+   */
+  items: Items | Promise<Items>;
+  /**
+   * The maximum time (in milliseconds) that a cached item is considered valid.
+   * Defaults to 15 minutes (900,000 ms).
+   */
+  maxCacheTime: number;
+  /**
+   * The maximum time (in milliseconds) an error can remain in the cache before it is considered expired.
+   * Defaults to 1 second (1,000 ms).
+   */
+  maxErrorTime: number;
+};
 
 type Item = { expiresAt: number } & ({ result: any } | { error: any });
 

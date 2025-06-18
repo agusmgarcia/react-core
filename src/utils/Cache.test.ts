@@ -28,7 +28,7 @@ describe("Cache", () => {
 
   it("should expire cache after maxCacheTime", async () => {
     let value = 1;
-    const cache = new Cache(10);
+    const cache = new Cache({ maxCacheTime: 10 });
     const factory = jest.fn(() => Promise.resolve(value++));
 
     const result1 = await cache.getOrCreate(
@@ -63,8 +63,8 @@ describe("Cache", () => {
     expect(factory).not.toHaveBeenCalled();
   });
 
-  it("should cache errors for 1 second", async () => {
-    const cache = new Cache(undefined, undefined, 10);
+  it("should cache errors for 10 milisecond", async () => {
+    const cache = new Cache({ maxErrorTime: 10 });
     const factory = jest.fn().mockRejectedValue(new Error("fail"));
     await expect(
       cache.getOrCreate("err", factory, new AbortController().signal),
@@ -185,7 +185,7 @@ describe("Cache", () => {
       err: { error: new Error("init error"), expiresAt: Date.now() + 1000 },
       foo: { expiresAt: Date.now() + 1000, result: "bar" },
     };
-    const cache = new Cache(900_000, Promise.resolve(initialItems));
+    const cache = new Cache({ items: Promise.resolve(initialItems) });
 
     // Should retrieve pre-cached value
     const factory = jest.fn();
@@ -207,9 +207,11 @@ describe("Cache", () => {
   it("should initialize cache with items from a direct object", async () => {
     const expiresAt = Date.now() + 1000;
 
-    const cache = new Cache(900_000, {
-      a: { expiresAt, result: 123 },
-      b: { error: new Error("fail b"), expiresAt },
+    const cache = new Cache({
+      items: {
+        a: { expiresAt, result: 123 },
+        b: { error: new Error("fail b"), expiresAt },
+      },
     });
 
     const factory = jest.fn();
@@ -233,7 +235,7 @@ describe("Cache", () => {
       return {};
     }
 
-    const cache = new Cache(900_000, loadItems());
+    const cache = new Cache({ items: loadItems() });
     const factory = jest.fn().mockResolvedValue("late");
 
     // Start getOrCreate before items are resolved
@@ -248,8 +250,10 @@ describe("Cache", () => {
   });
 
   it("should use initial items and expire them correctly", async () => {
-    const cache = new Cache(900_000, {
-      exp: { expiresAt: Date.now() + 10, result: "soon" },
+    const cache = new Cache({
+      items: {
+        exp: { expiresAt: Date.now() + 10, result: "soon" },
+      },
     });
 
     const factory = jest.fn().mockResolvedValue("after");
