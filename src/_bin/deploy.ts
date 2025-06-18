@@ -1,4 +1,4 @@
-import { args, git, npm, question } from "./utils";
+import { args, execute, git, npm, question } from "./utils";
 
 export default async function deploy(): Promise<void> {
   if (!(await git.isInsideRepository())) return;
@@ -31,7 +31,7 @@ export default async function deploy(): Promise<void> {
 
   await git.createCommit("chore: bump package version");
   await git.createTag(`${newTag}-temp`);
-  await npm.regenerate();
+  await execute("npm run regenerate", true); // TODO:
   await git.deleteTag(`${newTag}-temp`);
   await git.createCommit("chore: bump package version", { amend: true });
   if (args.has("no-tag")) return;

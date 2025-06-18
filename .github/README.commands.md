@@ -108,14 +108,13 @@ Regenerate the files with the latest version. Works in the following context:
 Here the list of the files:
 
 - .github/CHANGELOG.md
-- .github/README.md _(just creation phase)_
-- .github/workflows/deploy-app.yml
-- .github/workflows/deploy-azure-func.yml
-- .github/workflows/deploy-node.yml
-- .github/workflows/publish-lib.yml
-- pages/\_app.css _(just creation phase)_
-- pages/\_app.tsx _(just creation phase)_
-- src/index.ts _(just creation phase)_
+- .github/README.md
+- .github/workflows/release.yml
+- pages/\_app.css
+- pages/\_app.tsx
+- src/index.css
+- src/index.ts
+- src/functions/httpTrigger1.ts
 - .env.local
 - .funcignore
 - .gitignore
@@ -129,25 +128,8 @@ Here the list of the files:
 - package.json
 - postcss.config.js
 - prettier.config.js
-- tailwind.config.js _(just creation phase)_
 - tsconfig.json
 - webpack.config.js
-
-### Skip regenerating files
-
-In case you want to prevent one of the files of being regenerated, use the `--ignore=` flag.
-
-```bash
-npm run regenerate -- --ignore=eslint.config.js -- --ignore=prettier.config.js
-```
-
-### Force file regeneration
-
-In case you have changed the core of the project, you may want to run the `regenerate` script with the `--force` flag. That makes to override the user changes.
-
-```bash
-npm run regenerate -- --force
-```
 
 ## Test
 

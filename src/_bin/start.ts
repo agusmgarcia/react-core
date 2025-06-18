@@ -1,21 +1,20 @@
 import run from "./_run";
-import { args, execute, getCore, getEnvFiles } from "./utils";
+import { args, execute, getEnvFiles, getPackageJSON } from "./utils";
 
 export default async function start(): Promise<void> {
-  const core = await getCore();
+  const core = await getPackageJSON().then((json) => json.core);
 
   const port = args.get("port").find((_, i) => !i);
   const production = args.has("production");
 
   if (core === "app")
-    await run("start", false, () =>
+    await run("start", () =>
       execute(`next dev${!!port ? ` --port ${port}` : ""}`, true),
     );
 
   if (core === "azure-func")
     await run(
       "start",
-      false,
       () => execute("del dist", true),
       () => execute("webpack --mode=development", true),
       () =>
@@ -34,7 +33,6 @@ export default async function start(): Promise<void> {
     if (production) {
       await run(
         "start",
-        false,
         () => execute("del dist", true),
         () => execute("webpack --mode=production", true),
         () =>
@@ -46,7 +44,6 @@ export default async function start(): Promise<void> {
     } else {
       await run(
         "start",
-        false,
         () => execute("del dist", true),
         () => execute("webpack --mode=development", true),
         () =>

@@ -19,15 +19,13 @@ module.exports = defineConfig([
   {
     extends: compat.extends(
       "next/core-web-vitals",
-      "plugin:tailwindcss/recommended",
       "plugin:import/recommended",
     ),
 
     ignores: ["**/*.d.ts"],
 
     languageOptions: {
-      ecmaVersion: 5,
-      globals: {},
+      ecmaVersion: "latest",
       parser: tsParser,
       sourceType: "module",
     },
@@ -129,13 +127,6 @@ module.exports = defineConfig([
         },
       ],
 
-      "tailwindcss/classnames-order": "error",
-      "tailwindcss/enforces-negative-arbitrary-values": "error",
-      "tailwindcss/enforces-shorthand": "error",
-      "tailwindcss/no-arbitrary-value": "off",
-      "tailwindcss/no-contradicting-classname": "error",
-      "tailwindcss/no-custom-classname": "error",
-      "tailwindcss/no-unnecessary-arbitrary-value": "error",
       "unused-imports/no-unused-imports": "error",
 
       "unused-imports/no-unused-vars": [

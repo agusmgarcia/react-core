@@ -1,13 +1,13 @@
 import run from "./_run";
-import { args, execute, files, getCore, getPackageJSON } from "./utils";
+import { args, execute, files, getPackageJSON } from "./utils";
 
 export default async function prepack(): Promise<void> {
-  if ((await getCore()) !== "lib") return;
+  const core = await getPackageJSON().then((json) => json.core);
+  if (core !== "lib") return;
 
   const includeNode = args.has("include-node");
   await run(
     "prepack",
-    false,
     () => execute("del bin dist *.tgz README.md CHANGELOG.md", true),
     () => execute("webpack --mode=production", true),
     () => execute("cpy README.md CHANGELOG.md ../.. --cwd=.github", true),
@@ -31,7 +31,6 @@ async function omitNodeFromPackageJSON(): Promise<void> {
   await files.upsertFile(
     "package.json",
     JSON.stringify(packageJSON, undefined, 2),
-    true,
   );
 }
 

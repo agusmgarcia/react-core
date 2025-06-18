@@ -4,7 +4,6 @@ import { execute } from "./utils";
 export default async function format(): Promise<void> {
   await run(
     "format",
-    false,
     () =>
       execute(
         "next lint --cache-location ./node_modules/.eslintcache --cache-strategy content --dir . --fix",

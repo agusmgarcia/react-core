@@ -18,7 +18,7 @@ module.exports = [
     module: {
       rules: [
         {
-          test: /\.css$/,
+          test: /.css$/,
           use: [
             MiniCssExtractPlugin.loader,
             "style-loader",
@@ -99,7 +99,7 @@ module.exports = [
     module: {
       rules: [
         {
-          test: /\.css$/,
+          test: /.css$/,
           use: [
             MiniCssExtractPlugin.loader,
             "style-loader",
@@ -135,6 +135,7 @@ module.exports = [
       path: path.resolve(__dirname, "dist"),
       umdNamedDefine: true,
     },
+    plugins: [new MiniCssExtractPlugin()],
     resolve: {
       alias: { "#src": path.resolve(__dirname, "src") },
       extensions: [".js", ".jsx", ".ts", ".tsx"],

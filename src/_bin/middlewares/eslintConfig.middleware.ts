@@ -1,35 +1,27 @@
-import { type AsyncFunc } from "#src/utils";
+import { files } from "../utils";
+import createMiddleware, { type Context } from "./createMiddleware";
 
-import { files, getCore } from "../utils";
+const MIDDLEWARE = createMiddleware<string>({
+  path: "eslint.config.js",
+  template: getTemplate,
+  valid: ["app", "azure-func", "lib", "node"],
+});
 
-export default async function eslintMiddleware(
-  _: string,
-  next: AsyncFunc,
-  regenerate: "hard" | "soft" | undefined,
-  ignore: string[],
+export default async function eslintConfigMiddleware(
+  context: Context,
 ): Promise<void> {
-  const core = await getCore();
-
   await Promise.all([
-    files.removeFile(".eslintrc", true),
-    files.removeFile(".eslintignore", true),
-    files.upsertFile(
-      "eslint.config.js",
-      core === "app"
-        ? eslintConfig_app
-        : core === "azure-func"
-          ? eslintConfig_azure_func
-          : core === "lib"
-            ? eslintConfig_lib
-            : eslintConfig_node,
-      !!regenerate && !ignore.includes("eslint.config.js"),
-    ),
+    MIDDLEWARE(context),
+    files.removeFile(".eslintrc"),
+    files.removeFile(".eslintignore"),
+    files.removeFile("eslint.config.mjs"),
+    files.removeFile("eslint.config.ts"),
   ]);
-
-  await next();
 }
 
-const eslintConfig_app = `const { FlatCompat } = require("@eslint/eslintrc");
+function getTemplate(context: Context): string {
+  return context.core === "app"
+    ? `const { FlatCompat } = require("@eslint/eslintrc");
 const js = require("@eslint/js");
 const typescriptEslint = require("@typescript-eslint/eslint-plugin");
 const tsParser = require("@typescript-eslint/parser");
@@ -46,19 +38,17 @@ const compat = new FlatCompat({
 });
 
 module.exports = defineConfig([
-  globalIgnores(["**/.next", "**/node_modules", "**/out"]),
+  globalIgnores(["**/dist", "**/node_modules"]),
   {
     extends: compat.extends(
       "next/core-web-vitals",
-      "plugin:tailwindcss/recommended",
       "plugin:import/recommended",
     ),
 
     ignores: ["**/*.d.ts"],
 
     languageOptions: {
-      ecmaVersion: 5,
-      globals: {},
+      ecmaVersion: "latest",
       parser: tsParser,
       sourceType: "module",
     },
@@ -158,13 +148,6 @@ module.exports = defineConfig([
         },
       ],
 
-      "tailwindcss/classnames-order": "error",
-      "tailwindcss/enforces-negative-arbitrary-values": "error",
-      "tailwindcss/enforces-shorthand": "error",
-      "tailwindcss/no-arbitrary-value": "off",
-      "tailwindcss/no-contradicting-classname": "error",
-      "tailwindcss/no-custom-classname": "error",
-      "tailwindcss/no-unnecessary-arbitrary-value": "error",
       "unused-imports/no-unused-imports": "error",
 
       "unused-imports/no-unused-vars": [
@@ -179,9 +162,9 @@ module.exports = defineConfig([
     },
   },
 ]);
-`;
-
-const eslintConfig_azure_func = `const { FlatCompat } = require("@eslint/eslintrc");
+`
+    : context.core === "azure-func"
+      ? `const { FlatCompat } = require("@eslint/eslintrc");
 const js = require("@eslint/js");
 const typescriptEslint = require("@typescript-eslint/eslint-plugin");
 const tsParser = require("@typescript-eslint/parser");
@@ -207,8 +190,7 @@ module.exports = defineConfig([
     ignores: ["**/*.d.ts"],
 
     languageOptions: {
-      ecmaVersion: 5,
-      globals: {},
+      ecmaVersion: "latest",
       parser: tsParser,
       sourceType: "module",
     },
@@ -315,9 +297,9 @@ module.exports = defineConfig([
     },
   },
 ]);
-`;
-
-const eslintConfig_lib = `const { FlatCompat } = require("@eslint/eslintrc");
+`
+      : context.core === "lib"
+        ? `const { FlatCompat } = require("@eslint/eslintrc");
 const js = require("@eslint/js");
 const typescriptEslint = require("@typescript-eslint/eslint-plugin");
 const tsParser = require("@typescript-eslint/parser");
@@ -338,15 +320,13 @@ module.exports = defineConfig([
   {
     extends: compat.extends(
       "next/core-web-vitals",
-      "plugin:tailwindcss/recommended",
       "plugin:import/recommended",
     ),
 
     ignores: ["**/*.d.ts"],
 
     languageOptions: {
-      ecmaVersion: 5,
-      globals: {},
+      ecmaVersion: "latest",
       parser: tsParser,
       sourceType: "module",
     },
@@ -448,13 +428,6 @@ module.exports = defineConfig([
         },
       ],
 
-      "tailwindcss/classnames-order": "error",
-      "tailwindcss/enforces-negative-arbitrary-values": "error",
-      "tailwindcss/enforces-shorthand": "error",
-      "tailwindcss/no-arbitrary-value": "off",
-      "tailwindcss/no-contradicting-classname": "error",
-      "tailwindcss/no-custom-classname": "error",
-      "tailwindcss/no-unnecessary-arbitrary-value": "error",
       "unused-imports/no-unused-imports": "error",
 
       "unused-imports/no-unused-vars": [
@@ -469,9 +442,8 @@ module.exports = defineConfig([
     },
   },
 ]);
-`;
-
-const eslintConfig_node = `const { FlatCompat } = require("@eslint/eslintrc");
+`
+        : `const { FlatCompat } = require("@eslint/eslintrc");
 const js = require("@eslint/js");
 const typescriptEslint = require("@typescript-eslint/eslint-plugin");
 const tsParser = require("@typescript-eslint/parser");
@@ -497,8 +469,7 @@ module.exports = defineConfig([
     ignores: ["**/*.d.ts"],
 
     languageOptions: {
-      ecmaVersion: 5,
-      globals: {},
+      ecmaVersion: "latest",
       parser: tsParser,
       sourceType: "module",
     },
@@ -606,3 +577,4 @@ module.exports = defineConfig([
   },
 ]);
 `;
+}

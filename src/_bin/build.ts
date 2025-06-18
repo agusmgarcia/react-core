@@ -1,21 +1,19 @@
 import run from "./_run";
-import { execute, getCore } from "./utils";
+import { execute, getPackageJSON } from "./utils";
 
 export default async function build(): Promise<void> {
-  const core = await getCore();
+  const core = await getPackageJSON().then((json) => json.core);
 
   if (core === "app")
     await run(
       "build",
-      false,
-      () => execute("del .next out", true),
+      () => execute("del dist", true),
       () => execute("next build --no-lint", true),
     );
 
   if (core === "azure-func")
     await run(
       "build",
-      false,
       () => execute("del dist", true),
       () => execute("webpack --mode=production", true),
     );
@@ -23,7 +21,6 @@ export default async function build(): Promise<void> {
   if (core === "lib")
     await run(
       "build",
-      false,
       () => execute("del bin dist *.tgz", true),
       () => execute("webpack --mode=production", true),
     );
@@ -31,7 +28,6 @@ export default async function build(): Promise<void> {
   if (core === "node")
     await run(
       "build",
-      false,
       () => execute("del dist", true),
       () => execute("webpack --mode=production", true),
     );

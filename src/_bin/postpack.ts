@@ -1,12 +1,12 @@
 import run from "./_run";
-import { execute, files, getCore } from "./utils";
+import { execute, files, getPackageJSON } from "./utils";
 
 export default async function postpack(): Promise<void> {
-  if ((await getCore()) !== "lib") return;
+  const core = await getPackageJSON().then((json) => json.core);
+  if (core !== "lib") return;
 
   await run(
     "postpack",
-    false,
     () => execute(`del bin dist README.md CHANGELOG.md`, true),
     () => restorePackageJSON(),
   );

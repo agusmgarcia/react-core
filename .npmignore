@@ -6,6 +6,5 @@ package-lock.json
 postcss.config.js
 prettier.config.js
 src
-tailwind.config.js
 tsconfig.json
 webpack.config.js

@@ -1,31 +1,22 @@
-import { type AsyncFunc } from "#src/utils";
+import { folders } from "../utils";
+import createMiddleware, { type Context } from "./createMiddleware";
 
-import { files, getCore } from "../utils";
+const MIDDLEWARE = createMiddleware<string>({
+  path: "jest.config.js",
+  template: getTemplate,
+  valid: ["app", "azure-func", "lib", "node"],
+});
 
-export default async function jestMiddleware(
-  _: string,
-  next: AsyncFunc,
-  regenerate: "hard" | "soft" | undefined,
-  ignore: string[],
+export default async function jestConfigMiddleware(
+  context: Context,
 ): Promise<void> {
-  const core = await getCore();
-
-  await files.upsertFile(
-    "jest.config.js",
-    core === "app"
-      ? jestConfig_app
-      : core === "azure-func"
-        ? jestConfig_azure_func
-        : core === "lib"
-          ? jestConfig_lib
-          : jestConfig_node,
-    !!regenerate && !ignore.includes("jest.config.js"),
-  );
-
-  await next();
+  await MIDDLEWARE(context);
+  context.defer(() => folders.removeFolder(".swc"));
 }
 
-const jestConfig_app = `const nextJest = require("next/jest.js");
+function getTemplate(context: Context): string {
+  return context.core === "app"
+    ? `const nextJest = require("next/jest.js");
 
 const createJestConfig = nextJest({ dir: "./" });
 
@@ -43,9 +34,9 @@ const config = {
 };
 
 module.exports = createJestConfig(config);
-`;
-
-const jestConfig_azure_func = `const nextJest = require("next/jest.js");
+`
+    : context.core === "azure-func"
+      ? `const nextJest = require("next/jest.js");
 
 const createJestConfig = nextJest({ dir: "./" });
 
@@ -62,9 +53,9 @@ const config = {
 };
 
 module.exports = createJestConfig(config);
-`;
-
-const jestConfig_lib = `const nextJest = require("next/jest.js");
+`
+      : context.core === "lib"
+        ? `const nextJest = require("next/jest.js");
 
 const createJestConfig = nextJest({ dir: "./" });
 
@@ -81,9 +72,8 @@ const config = {
 };
 
 module.exports = createJestConfig(config);
-`;
-
-const jestConfig_node = `const nextJest = require("next/jest.js");
+`
+        : `const nextJest = require("next/jest.js");
 
 const createJestConfig = nextJest({ dir: "./" });
 
@@ -101,3 +91,4 @@ const config = {
 
 module.exports = createJestConfig(config);
 `;
+}

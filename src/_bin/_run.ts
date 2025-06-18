@@ -1,9 +1,7 @@
-import { Mutex } from "async-mutex";
-
-import { type AsyncFunc } from "#src/utils";
+import { type AsyncFunc, type Func } from "#src/utils";
 
 import * as middlewares from "./middlewares";
-import { args } from "./utils";
+import { getPackageJSON, git } from "./utils";
 
 export default async function run(
   command:
@@ -16,55 +14,58 @@ export default async function run(
     | "regenerate"
     | "start"
     | "test",
-  regenerate: boolean,
   ...commands: AsyncFunc[]
 ): Promise<void> {
-  const mutex: Mutex = ((globalThis as any).__AGUSMGARCIA__RUN__MUTEX__ ||=
-    new Mutex());
+  const list = new Array<Func | AsyncFunc>();
 
-  const force = args.has("force");
-  const ignore = args.get("ignore");
+  try {
+    const context = await createContext(command, list);
+    await Promise.all(Object.values(middlewares).map((m) => m(context)));
 
-  await mutex.runExclusive(async () => {
-    const middleware = concat(
-      command,
-      regenerate ? (force ? "hard" : "soft") : undefined,
-      ignore,
-      ...Object.values(middlewares),
-    );
-
-    await middleware(async () => {
-      try {
-        for (const cmd of commands) await cmd();
-      } catch (error: any) {
-        if (error.ignorable !== true) console.error(error);
-      }
-    });
-  });
+    if (command === "start") await executeDeferred(list);
+    for (const cmd of commands) await cmd();
+  } catch (error: any) {
+    if (error.ignorable !== true) console.error(error);
+  } finally {
+    if (command !== "start") await executeDeferred(list);
+  }
 }
 
-function concat(
-  command: string,
-  regenerate: "hard" | "soft" | undefined,
-  ignore: string[],
-  ...middlewares: AsyncFunc<
-    void,
-    [
-      _: string,
-      next: AsyncFunc,
-      regenerate: "hard" | "soft" | undefined,
-      ignore: string[],
-    ]
-  >[]
-): AsyncFunc<void, [callback: AsyncFunc]> {
-  return function (callback) {
-    let result = callback;
+async function createContext(
+  command:
+    | "build"
+    | "check"
+    | "deploy"
+    | "format"
+    | "postpack"
+    | "prepack"
+    | "regenerate"
+    | "start"
+    | "test",
+  list: (Func | AsyncFunc)[],
+): Promise<middlewares.MiddlewaresTypes.Context> {
+  const packageJSON = await getPackageJSON();
+  if (!packageJSON.core)
+    throw new Error("'core' property is missing within the 'package.json'");
 
-    for (let i = middlewares.length - 1; i >= 0; i--) {
-      const middleware = middlewares[i];
-      result = middleware.bind(undefined, command, result, regenerate, ignore);
-    }
+  const version = (await git.isInsideRepository())
+    ? await git
+        .getTags({ merged: true })
+        .then((tags) => tags.at(-1))
+        .then((tag) => git.getTagInfo(tag || "v0.0.0"))
+        .then((info) => `${info.major}.${info.minor}.${info.patch}`)
+    : "0.0.0";
 
-    return result();
+  return {
+    command,
+    core: packageJSON.core,
+    defer: (callback) => list.push(callback),
+    version,
   };
+}
+
+async function executeDeferred(list: (Func | AsyncFunc)[]): Promise<void> {
+  let promise = Promise.resolve();
+  for (let i = list.length - 1; i >= 0; i--) promise = promise.then(list[i]);
+  await promise;
 }

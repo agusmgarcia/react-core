@@ -1,0 +1,22 @@
+import createMiddleware from "./createMiddleware";
+
+export default createMiddleware<string[]>({
+  path: ".npmignore",
+  template: getTemplate,
+  valid: ["lib"],
+});
+
+function getTemplate(): string[] {
+  return [
+    "**/.*",
+    "dist/**/*.test.d.ts",
+    "eslint.config.js",
+    "jest.config.js",
+    "package-lock.json",
+    "postcss.config.js",
+    "prettier.config.js",
+    "src",
+    "tsconfig.json",
+    "webpack.config.js",
+  ];
+}

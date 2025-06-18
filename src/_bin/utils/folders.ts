@@ -44,7 +44,7 @@ export async function upsertFolder(path: string): Promise<void> {
 
   await new Promise<void>((resolve, reject) =>
     fs.mkdir(path, { recursive: false }, (error) =>
-      !error ? resolve() : reject(error),
+      !error || error.code === "EEXIST" ? resolve() : reject(error),
     ),
   );
 }
